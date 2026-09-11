@@ -1,0 +1,12 @@
+[
+  {
+    "fullName": "Sarah Jenkins",
+    "email": "sarah.caregiver@example.com",
+    "role": "caregiver"
+  },
+  {
+    "fullName": "David Thorne",
+    "email": "david.family@example.com",
+    "role": "family_member"
+  }
+]

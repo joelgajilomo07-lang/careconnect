@@ -1,0 +1,8 @@
+{
+  "status": "listening",
+  "targetVitalsLogId": "3950fb16-7489-4fbd-9b1d-bd44cda77433",
+  "patientName": "Test Patient",
+  "patientId": "afb3262b-c15d-46bd-885a-264b4987de01",
+  "caregiverId": "3cc800c5-709a-4ec0-bc24-9ed1f2249a6d",
+  "events": []
+}
