@@ -1,3 +1,5 @@
 export { InviteUserForm } from './InviteUserForm'
 export { CareTeamAssignmentForm } from './CareTeamAssignmentForm'
 export { CareTeamsTable } from './CareTeamsTable'
+export { RegisteredUsersTable } from './RegisteredUsersTable'
+export { AdminNav, AdminMobileNav } from './AdminNav'

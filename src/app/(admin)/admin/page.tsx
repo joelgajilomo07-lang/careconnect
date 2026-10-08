@@ -1,7 +1,6 @@
 import { requireRole } from '@/lib/auth/roleGuard'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { format } from 'date-fns'
 import {
   ShieldCheck,
   Users,
@@ -11,10 +10,10 @@ import {
   FileCheck2,
   ArrowRight,
   UserCheck,
-  Clock,
   Radio,
   UserPlus,
 } from 'lucide-react'
+import { RegisteredUsersTable } from '@/components/admin'
 
 export default async function AdminDashboardPage() {
   const { user } = await requireRole(['admin'])
@@ -25,7 +24,6 @@ export default async function AdminDashboardPage() {
     { count: totalPatients },
     { count: totalDoctors },
     { count: totalCaregivers },
-    { count: totalFamily },
     { count: totalCareTeams },
     { count: totalVitalsLogs },
     { count: totalReviews },
@@ -34,7 +32,6 @@ export default async function AdminDashboardPage() {
     supabase.from('users').select('id', { count: 'exact', head: true }).eq('role', 'patient'),
     supabase.from('users').select('id', { count: 'exact', head: true }).eq('role', 'doctor'),
     supabase.from('users').select('id', { count: 'exact', head: true }).eq('role', 'caregiver'),
-    supabase.from('users').select('id', { count: 'exact', head: true }).eq('role', 'family_member'),
     supabase.from('care_teams').select('id', { count: 'exact', head: true }).eq('is_active', true),
     supabase.from('vitals_logs').select('id', { count: 'exact', head: true }),
     supabase.from('medical_reviews').select('id', { count: 'exact', head: true }),
@@ -44,14 +41,6 @@ export default async function AdminDashboardPage() {
       .order('created_at', { ascending: false })
       .limit(10),
   ])
-
-  const roleStyles = {
-    admin: 'bg-slate-100 text-slate-800 border-slate-200',
-    doctor: 'bg-purple-50 text-purple-700 border-purple-200',
-    caregiver: 'bg-blue-50 text-blue-700 border-blue-200',
-    patient: 'bg-teal-50 text-teal-700 border-teal-200',
-    family_member: 'bg-amber-50 text-amber-700 border-amber-200',
-  }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:py-8 pb-24 sm:pb-12 space-y-8">
@@ -85,7 +74,6 @@ export default async function AdminDashboardPage() {
           </div>
         </div>
       </div>
-
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
@@ -186,100 +174,8 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* System Users Directory */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 shadow-sm space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-base font-bold text-gray-900">Registered System Users</h2>
-            <p className="text-xs text-gray-500">
-              All provisioned accounts with database roles and active status
-            </p>
-          </div>
-          <span className="text-xs text-gray-400">Showing recent 10 users</span>
-        </div>
-
-        {/* Mobile Card View (< sm) */}
-        <div className="block sm:hidden space-y-3">
-          {recentUsers && recentUsers.length > 0 ? (
-            recentUsers.map((u) => (
-              <div
-                key={u.id}
-                className="rounded-xl border border-gray-200 bg-gray-50/40 p-3.5 space-y-2.5 text-xs"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-gray-900">{u.full_name}</span>
-                  <span
-                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border capitalize ${
-                      roleStyles[u.role as keyof typeof roleStyles] || 'bg-gray-100 text-gray-700'
-                    }`}
-                  >
-                    {u.role.replace('_', ' ')}
-                  </span>
-                </div>
-                <div className="font-mono text-gray-600 truncate">{u.email}</div>
-                <div className="flex items-center justify-between pt-1 border-t border-gray-100 text-gray-500 text-[11px]">
-                  <span className="inline-flex items-center gap-1 text-emerald-700 font-medium">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                    {u.is_active ? 'Active' : 'Inactive'}
-                  </span>
-                  <span>{format(new Date(u.created_at), 'MMM dd, yyyy')}</span>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="py-6 text-center text-gray-400">No registered users found.</p>
-          )}
-        </div>
-
-        {/* Desktop / Tablet Table View (sm+) */}
-        <div className="hidden sm:block overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="border-b border-gray-200 bg-gray-50/75 text-gray-500 font-semibold">
-              <tr>
-                <th className="py-2.5 px-3">Name</th>
-                <th className="py-2.5 px-3">Email</th>
-                <th className="py-2.5 px-3">Role</th>
-                <th className="py-2.5 px-3">Status</th>
-                <th className="py-2.5 px-3 text-right">Created</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {recentUsers && recentUsers.length > 0 ? (
-                recentUsers.map((u) => (
-                  <tr key={u.id} className="hover:bg-gray-50/50 transition">
-                    <td className="py-3 px-3 font-medium text-gray-900">{u.full_name}</td>
-                    <td className="py-3 px-3 font-mono text-gray-600">{u.email}</td>
-                    <td className="py-3 px-3">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border capitalize ${
-                          roleStyles[u.role as keyof typeof roleStyles] || 'bg-gray-100 text-gray-700'
-                        }`}
-                      >
-                        {u.role.replace('_', ' ')}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3">
-                      <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                        {u.is_active ? 'Active' : 'Inactive'}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-right text-gray-400 whitespace-nowrap">
-                      {format(new Date(u.created_at), 'MMM dd, yyyy')}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="py-8 text-center text-gray-500">
-                    No registered users found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {/* System Users Directory with Interactive Role Accordions */}
+      <RegisteredUsersTable users={recentUsers || []} />
     </div>
   )
 }

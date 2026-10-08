@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useMemo } from 'react'
 import { removeCareTeamMemberAction } from '@/app/(admin)/actions'
 import type { Tables } from '@/types/database.types'
 import { format } from 'date-fns'
@@ -11,7 +11,9 @@ import {
   AlertCircle,
   Loader2,
   Search,
-  Filter,
+  ChevronDown,
+  ChevronUp,
+  User,
 } from 'lucide-react'
 
 type CareTeamRow = Tables<'care_teams'>
@@ -25,6 +27,20 @@ interface CareTeamsTableProps {
   assignments: CareTeamAssignmentWithUsers[]
 }
 
+interface PatientGroup {
+  patientId: string
+  patientName: string
+  patient: Tables<'users'> | null
+  assignments: CareTeamAssignmentWithUsers[]
+  counts: {
+    total: number
+    doctors: number
+    caregivers: number
+    family: number
+    active: number
+  }
+}
+
 export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
   const [isPending, startTransition] = useTransition()
   const [deactivatingId, setDeactivatingId] = useState<string | null>(null)
@@ -33,6 +49,9 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [roleFilter, setRoleFilter] = useState<'all' | 'doctor' | 'caregiver' | 'family_member'>('all')
   const [activeOnly, setActiveOnly] = useState(false)
+
+  // Track expanded state per patient
+  const [expandedPatients, setExpandedPatients] = useState<Record<string, boolean>>({})
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
@@ -43,19 +62,87 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
     family_member: 'bg-amber-50 text-amber-700 border-amber-200',
   }
 
-  // Filter assignments
-  const filteredAssignments = assignments.filter((a) => {
-    if (activeOnly && a.is_active !== true) return false
-    if (roleFilter !== 'all' && a.member_role !== roleFilter) return false
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase()
-      const patientMatch = a.patient?.full_name?.toLowerCase().includes(q)
-      const memberMatch = a.member?.full_name?.toLowerCase().includes(q)
-      const labelMatch = a.relationship_label?.toLowerCase().includes(q)
-      if (!patientMatch && !memberMatch && !labelMatch) return false
+  // Filter assignments based on search query, role filter, and active status
+  const filteredAssignments = useMemo(() => {
+    return assignments.filter((a) => {
+      if (activeOnly && a.is_active !== true) return false
+      if (roleFilter !== 'all' && a.member_role !== roleFilter) return false
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase()
+        const patientMatch = a.patient?.full_name?.toLowerCase().includes(q)
+        const memberMatch = a.member?.full_name?.toLowerCase().includes(q)
+        const labelMatch = a.relationship_label?.toLowerCase().includes(q)
+        if (!patientMatch && !memberMatch && !labelMatch) return false
+      }
+      return true
+    })
+  }, [assignments, activeOnly, roleFilter, searchQuery])
+
+  // Group filtered assignments by patient
+  const patientGroups = useMemo(() => {
+    const groupsMap = new Map<string, PatientGroup>()
+
+    for (const a of filteredAssignments) {
+      const pId = a.patient_id || a.patient?.id || 'unknown'
+      const pName = a.patient?.full_name || 'Unnamed Patient'
+
+      if (!groupsMap.has(pId)) {
+        groupsMap.set(pId, {
+          patientId: pId,
+          patientName: pName,
+          patient: a.patient,
+          assignments: [],
+          counts: {
+            total: 0,
+            doctors: 0,
+            caregivers: 0,
+            family: 0,
+            active: 0,
+          },
+        })
+      }
+
+      const group = groupsMap.get(pId)!
+      group.assignments.push(a)
+      group.counts.total += 1
+      if (a.is_active) group.counts.active += 1
+      if (a.member_role === 'doctor') group.counts.doctors += 1
+      else if (a.member_role === 'caregiver') group.counts.caregivers += 1
+      else if (a.member_role === 'family_member') group.counts.family += 1
     }
-    return true
-  })
+
+    return Array.from(groupsMap.values())
+  }, [filteredAssignments])
+
+  // Determine if a patient accordion is expanded
+  // Auto-expands when an active search query is present unless explicitly closed
+  const isPatientExpanded = (patientId: string) => {
+    if (searchQuery.trim()) {
+      return expandedPatients[patientId] !== false
+    }
+    return expandedPatients[patientId] ?? false
+  }
+
+  const allExpanded = patientGroups.length > 0 && patientGroups.every((g) => isPatientExpanded(g.patientId))
+
+  const toggleAll = () => {
+    const nextState = !allExpanded
+    const updated: Record<string, boolean> = {}
+    patientGroups.forEach((g) => {
+      updated[g.patientId] = nextState
+    })
+    setExpandedPatients(updated)
+  }
+
+  const togglePatient = (patientId: string) => {
+    setExpandedPatients((prev) => {
+      const current = isPatientExpanded(patientId)
+      return {
+        ...prev,
+        [patientId]: !current,
+      }
+    })
+  }
 
   function handleDeactivate(id: string) {
     setErrorMsg(null)
@@ -78,7 +165,7 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 shadow-sm space-y-4">
       {/* Header & Filter Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 pb-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-gray-100 pb-4">
         <div>
           <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
             <Users className="h-5 w-5 text-purple-600" />
@@ -105,7 +192,9 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
           {/* Role Filter */}
           <select
             value={roleFilter}
-            onChange={(e) => setRoleFilter(e.target.value as any)}
+            onChange={(e) =>
+              setRoleFilter(e.target.value as 'all' | 'doctor' | 'caregiver' | 'family_member')
+            }
             className="rounded-xl border border-gray-300 px-2.5 py-1.5 text-xs text-gray-700 bg-white focus:border-blue-600 focus:outline-none"
           >
             <option value="all">All Roles</option>
@@ -124,6 +213,28 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
             />
             <span>Active only</span>
           </label>
+
+          {/* Expand All / Collapse All Toggle Button */}
+          {patientGroups.length > 0 && (
+            <button
+              type="button"
+              onClick={toggleAll}
+              className="inline-flex items-center gap-1 rounded-xl border border-gray-300 bg-gray-50 px-2.5 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer select-none"
+              title={allExpanded ? 'Collapse all patient groups' : 'Expand all patient groups'}
+            >
+              {allExpanded ? (
+                <>
+                  <ChevronUp className="h-3.5 w-3.5 text-gray-500" />
+                  <span>Collapse All</span>
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-3.5 w-3.5 text-gray-500" />
+                  <span>Expand All</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
       </div>
 
@@ -142,215 +253,300 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
         </div>
       )}
 
-      {/* Table & Mobile Cards */}
-      {filteredAssignments.length === 0 ? (
+      {/* Patient Grouped Accordions */}
+      {patientGroups.length === 0 ? (
         <div className="py-8 text-center text-xs text-gray-400">
           No care team pairings match your search/filter criteria.
         </div>
       ) : (
-        <>
-          {/* Mobile Card View (< sm) */}
-          <div className="block sm:hidden space-y-3">
-            {filteredAssignments.map((assignment) => {
-              const isDeactivating = deactivatingId === assignment.id
-              const isConfirming = confirmingId === assignment.id
+        <div className="space-y-3">
+          {patientGroups.map((group) => {
+            const expanded = isPatientExpanded(group.patientId)
 
-              return (
+            return (
+              <div
+                key={group.patientId}
+                className="rounded-xl border border-gray-200 bg-white shadow-2xs overflow-hidden transition-all duration-150"
+              >
+                {/* Collapsible Patient Header (Dropdown Bar) */}
                 <div
-                  key={assignment.id}
-                  className="rounded-xl border border-gray-200 bg-gray-50/40 p-4 space-y-3 text-xs"
+                  onClick={() => togglePatient(group.patientId)}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-gray-50/70 hover:bg-gray-100/80 cursor-pointer select-none transition-colors border-b border-gray-100"
                 >
-                  <div className="flex items-start justify-between gap-2 border-b border-gray-100 pb-2.5">
-                    <div>
-                      <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Patient</span>
-                      <h4 className="font-bold text-gray-900 text-sm">{assignment.patient?.full_name || 'Patient'}</h4>
+                  {/* Patient Name & Composition */}
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-700">
+                      <User className="h-4.5 w-4.5" />
                     </div>
-                    <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border capitalize ${
-                        roleStyles[assignment.member_role as keyof typeof roleStyles] ||
-                        'bg-gray-100 text-gray-700'
-                      }`}
+                    <div className="min-w-0">
+                      <h3 className="font-bold text-gray-900 text-sm truncate">
+                        {group.patientName}
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {group.counts.total} Assigned Member{group.counts.total !== 1 ? 's' : ''}
+                        {' • '}
+                        {group.counts.active} Active
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Composition Pills & Expand/Collapse Icon */}
+                  <div className="flex items-center gap-2.5 shrink-0 self-end sm:self-auto">
+                    {/* Role count pills */}
+                    <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+                      {group.counts.doctors > 0 && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full font-semibold border bg-purple-50 text-purple-700 border-purple-200">
+                          {group.counts.doctors} Doctor{group.counts.doctors > 1 ? 's' : ''}
+                        </span>
+                      )}
+                      {group.counts.caregivers > 0 && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full font-semibold border bg-blue-50 text-blue-700 border-blue-200">
+                          {group.counts.caregivers} Caregiver{group.counts.caregivers > 1 ? 's' : ''}
+                        </span>
+                      )}
+                      {group.counts.family > 0 && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full font-semibold border bg-amber-50 text-amber-700 border-amber-200">
+                          {group.counts.family} Family
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Expand/Collapse Chevron Button */}
+                    <button
+                      type="button"
+                      aria-expanded={expanded}
+                      aria-label={expanded ? `Collapse ${group.patientName} care team` : `Expand ${group.patientName} care team`}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        togglePatient(group.patientId)
+                      }}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors cursor-pointer"
                     >
-                      {assignment.member_role.replace('_', ' ')}
-                    </span>
-                  </div>
-
-                  <div className="space-y-1">
-                    <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Assigned Member</span>
-                    <div className="font-semibold text-gray-800">{assignment.member?.full_name || 'Member'}</div>
-                    <div className="text-[11px] text-gray-500 font-mono truncate">{assignment.member?.email}</div>
-                    {assignment.relationship_label && (
-                      <div className="text-[11px] text-gray-600 italic mt-0.5">Role label: {assignment.relationship_label}</div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 text-gray-500">
-                    <div>
-                      {assignment.is_active ? (
-                        <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                          Active
-                        </span>
+                      {expanded ? (
+                        <ChevronUp className="h-4 w-4" />
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-[11px] text-gray-400 font-medium">
-                          <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
-                          Inactive
-                        </span>
+                        <ChevronDown className="h-4 w-4" />
                       )}
-                    </div>
-
-                    <div>
-                      {assignment.is_active ? (
-                        isConfirming ? (
-                          <div className="inline-flex items-center gap-2">
-                            <span className="text-[11px] text-red-600 font-medium">Confirm?</span>
-                            <button
-                              type="button"
-                              disabled={isPending}
-                              onClick={() => handleDeactivate(assignment.id)}
-                              className="min-h-[44px] px-3 rounded-lg bg-red-600 font-bold text-white shadow-sm hover:bg-red-700 active:bg-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-1 transition-colors duration-150"
-                            >
-                              {isDeactivating ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                'Yes'
-                              )}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => setConfirmingId(null)}
-                              className="min-h-[44px] px-3 rounded-lg border border-gray-300 font-medium text-gray-600 hover:bg-gray-100 hover:border-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-1 transition-colors duration-150"
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => setConfirmingId(assignment.id)}
-                            className="inline-flex items-center justify-center gap-1 min-h-[44px] px-3 rounded-lg border border-gray-200 text-xs font-medium text-gray-600 hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-1 transition-colors duration-150"
-                          >
-                            <UserX className="h-3.5 w-3.5" />
-                            <span>Deactivate</span>
-                          </button>
-                        )
-                      ) : (
-                        <span className="text-[11px] text-gray-400 italic">Archived</span>
-                      )}
-                    </div>
+                    </button>
                   </div>
                 </div>
-              )
-            })}
-          </div>
 
-          {/* Desktop / Tablet Table View (sm+) */}
-          <div className="hidden sm:block overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-gray-200 bg-gray-50/75 text-gray-500 font-semibold">
-                <tr>
-                  <th className="py-2.5 px-3">Patient</th>
-                  <th className="py-2.5 px-3">Team Member</th>
-                  <th className="py-2.5 px-3">Member Role</th>
-                  <th className="py-2.5 px-3">Relationship Label</th>
-                  <th className="py-2.5 px-3">Status</th>
-                  <th className="py-2.5 px-3">Assigned Date</th>
-                  <th className="py-2.5 px-3 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {filteredAssignments.map((assignment) => {
-                  const isDeactivating = deactivatingId === assignment.id
-                  const isConfirming = confirmingId === assignment.id
+                {/* Expanded Dropdown Body (Team Roster) */}
+                {expanded && (
+                  <div className="p-3 sm:p-4 bg-white space-y-3">
+                    {/* Mobile View (< sm) */}
+                    <div className="block sm:hidden space-y-3">
+                      {group.assignments.map((assignment) => {
+                        const isDeactivating = deactivatingId === assignment.id
+                        const isConfirming = confirmingId === assignment.id
 
-                  return (
-                    <tr key={assignment.id} className="hover:bg-gray-50/70 transition-colors duration-150">
-                      <td className="py-3 px-3 font-semibold text-gray-900 whitespace-nowrap">
-                        {assignment.patient?.full_name || 'Patient'}
-                      </td>
-                      <td className="py-3 px-3 whitespace-nowrap">
-                        <div className="font-medium text-gray-800">
-                          {assignment.member?.full_name || 'Member'}
-                        </div>
-                        <div className="text-[11px] text-gray-400 font-mono">
-                          {assignment.member?.email}
-                        </div>
-                      </td>
-                      <td className="py-3 px-3 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border capitalize ${
-                            roleStyles[assignment.member_role as keyof typeof roleStyles] ||
-                            'bg-gray-100 text-gray-700'
-                          }`}
-                        >
-                          {assignment.member_role.replace('_', ' ')}
-                        </span>
-                      </td>
-                      <td className="py-3 px-3 text-gray-600 whitespace-nowrap">
-                        {assignment.relationship_label || '—'}
-                      </td>
-                      <td className="py-3 px-3 whitespace-nowrap">
-                        {assignment.is_active ? (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                            Active
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-gray-400 font-medium">
-                            <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
-                            Inactive
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-3 px-3 text-gray-400 whitespace-nowrap">
-                        {format(new Date(assignment.assigned_at), 'MMM dd, yyyy · HH:mm')}
-                      </td>
-                      <td className="py-3 px-3 text-right whitespace-nowrap">
-                        {assignment.is_active ? (
-                          isConfirming ? (
-                            <div className="inline-flex items-center gap-1.5">
-                              <span className="text-[11px] text-red-600 font-medium">Deactivate?</span>
-                              <button
-                                type="button"
-                                disabled={isPending}
-                                onClick={() => handleDeactivate(assignment.id)}
-                                className="rounded-lg bg-red-600 px-2 py-1 text-[11px] font-bold text-white shadow-sm hover:bg-red-700 active:bg-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-1 transition-colors duration-150"
+                        return (
+                          <div
+                            key={assignment.id}
+                            className="rounded-xl border border-gray-200 bg-gray-50/40 p-3.5 space-y-2.5 text-xs"
+                          >
+                            <div className="flex items-start justify-between gap-2 border-b border-gray-100 pb-2">
+                              <div>
+                                <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+                                  Team Member
+                                </span>
+                                <h4 className="font-bold text-gray-900 text-sm">
+                                  {assignment.member?.full_name || 'Member'}
+                                </h4>
+                                <p className="text-[11px] text-gray-500 font-mono">
+                                  {assignment.member?.email}
+                                </p>
+                              </div>
+                              <span
+                                className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border capitalize ${
+                                  roleStyles[assignment.member_role as keyof typeof roleStyles] ||
+                                  'bg-gray-100 text-gray-700'
+                                }`}
                               >
-                                {isDeactivating ? (
-                                  <Loader2 className="h-3 w-3 animate-spin" />
-                                ) : (
-                                  'Yes'
-                                )}
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setConfirmingId(null)}
-                                className="rounded-lg border border-gray-300 px-2 py-1 text-[11px] font-medium text-gray-600 hover:bg-gray-100 hover:border-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-1 transition-colors duration-150"
-                              >
-                                Cancel
-                              </button>
+                                {assignment.member_role.replace('_', ' ')}
+                              </span>
                             </div>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() => setConfirmingId(assignment.id)}
-                              className="inline-flex items-center gap-1 rounded-lg border border-gray-200 px-2 py-1 text-xs font-medium text-gray-600 hover:border-red-300 hover:bg-red-50 hover:text-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-1 transition-colors duration-150"
-                            >
-                              <UserX className="h-3 w-3" />
-                              <span>Deactivate</span>
-                            </button>
-                          )
-                        ) : (
-                          <span className="text-[11px] text-gray-400 italic">Archived</span>
-                        )}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        </>
+
+                            {assignment.relationship_label && (
+                              <div className="text-gray-600">
+                                <span className="font-medium">Specialty / Role:</span>{' '}
+                                <span className="italic">{assignment.relationship_label}</span>
+                              </div>
+                            )}
+
+                            <div className="flex items-center justify-between pt-2 border-t border-gray-100 text-gray-500">
+                              <div>
+                                {assignment.is_active ? (
+                                  <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                    Active
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 text-[11px] text-gray-400 font-medium">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
+                                    Inactive
+                                  </span>
+                                )}
+                              </div>
+
+                              <div>
+                                {assignment.is_active ? (
+                                  isConfirming ? (
+                                    <div className="inline-flex items-center gap-2">
+                                      <span className="text-[11px] text-red-600 font-medium">Confirm?</span>
+                                      <button
+                                        type="button"
+                                        disabled={isPending}
+                                        onClick={() => handleDeactivate(assignment.id)}
+                                        className="min-h-[36px] px-2.5 rounded-lg bg-red-600 font-bold text-white shadow-sm hover:bg-red-700 active:bg-red-800 transition-colors"
+                                      >
+                                        {isDeactivating ? (
+                                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                        ) : (
+                                          'Yes'
+                                        )}
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => setConfirmingId(null)}
+                                        className="min-h-[36px] px-2.5 rounded-lg border border-gray-300 font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+                                      >
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => setConfirmingId(assignment.id)}
+                                      className="inline-flex items-center justify-center gap-1 min-h-[36px] px-2.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-600 hover:border-red-300 hover:bg-red-50 hover:text-red-700 transition-colors"
+                                    >
+                                      <UserX className="h-3.5 w-3.5" />
+                                      <span>Deactivate</span>
+                                    </button>
+                                  )
+                                ) : (
+                                  <span className="text-[11px] text-gray-400 italic">Archived</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+
+                    {/* Desktop / Tablet Table View (sm+) */}
+                    <div className="hidden sm:block overflow-x-auto">
+                      <table className="w-full text-left text-xs">
+                        <thead className="border-b border-gray-200 bg-gray-50/80 text-gray-500 font-semibold">
+                          <tr>
+                            <th className="py-2.5 px-3">Team Member</th>
+                            <th className="py-2.5 px-3">Member Role</th>
+                            <th className="py-2.5 px-3">Relationship / Specialty</th>
+                            <th className="py-2.5 px-3">Status</th>
+                            <th className="py-2.5 px-3">Assigned Date</th>
+                            <th className="py-2.5 px-3 text-right">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                          {group.assignments.map((assignment) => {
+                            const isDeactivating = deactivatingId === assignment.id
+                            const isConfirming = confirmingId === assignment.id
+
+                            return (
+                              <tr
+                                key={assignment.id}
+                                className="hover:bg-gray-50/70 transition-colors duration-150"
+                              >
+                                <td className="py-3 px-3 whitespace-nowrap">
+                                  <div className="font-semibold text-gray-900">
+                                    {assignment.member?.full_name || 'Member'}
+                                  </div>
+                                  <div className="text-[11px] text-gray-400 font-mono">
+                                    {assignment.member?.email}
+                                  </div>
+                                </td>
+                                <td className="py-3 px-3 whitespace-nowrap">
+                                  <span
+                                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border capitalize ${
+                                      roleStyles[assignment.member_role as keyof typeof roleStyles] ||
+                                      'bg-gray-100 text-gray-700'
+                                    }`}
+                                  >
+                                    {assignment.member_role.replace('_', ' ')}
+                                  </span>
+                                </td>
+                                <td className="py-3 px-3 text-gray-600 whitespace-nowrap">
+                                  {assignment.relationship_label || '—'}
+                                </td>
+                                <td className="py-3 px-3 whitespace-nowrap">
+                                  {assignment.is_active ? (
+                                    <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
+                                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                      Active
+                                    </span>
+                                  ) : (
+                                    <span className="inline-flex items-center gap-1 text-[11px] text-gray-400 font-medium">
+                                      <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
+                                      Inactive
+                                    </span>
+                                  )}
+                                </td>
+                                <td className="py-3 px-3 text-gray-400 whitespace-nowrap">
+                                  {format(new Date(assignment.assigned_at), 'MMM dd, yyyy · HH:mm')}
+                                </td>
+                                <td className="py-3 px-3 text-right whitespace-nowrap">
+                                  {assignment.is_active ? (
+                                    isConfirming ? (
+                                      <div className="inline-flex items-center gap-1.5">
+                                        <span className="text-[11px] text-red-600 font-medium">
+                                          Deactivate?
+                                        </span>
+                                        <button
+                                          type="button"
+                                          disabled={isPending}
+                                          onClick={() => handleDeactivate(assignment.id)}
+                                          className="rounded-lg bg-red-600 px-2 py-1 text-[11px] font-bold text-white shadow-sm hover:bg-red-700 active:bg-red-800 transition-colors"
+                                        >
+                                          {isDeactivating ? (
+                                            <Loader2 className="h-3 w-3 animate-spin" />
+                                          ) : (
+                                            'Yes'
+                                          )}
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => setConfirmingId(null)}
+                                          className="rounded-lg border border-gray-300 px-2 py-1 text-[11px] font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+                                        >
+                                          Cancel
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        onClick={() => setConfirmingId(assignment.id)}
+                                        className="inline-flex items-center gap-1 rounded-lg border border-gray-200 px-2.5 py-1 text-xs font-medium text-gray-600 hover:border-red-300 hover:bg-red-50 hover:text-red-700 transition-colors"
+                                      >
+                                        <UserX className="h-3 w-3" />
+                                        <span>Deactivate</span>
+                                      </button>
+                                    )
+                                  ) : (
+                                    <span className="text-[11px] text-gray-400 italic">Archived</span>
+                                  )}
+                                </td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
       )}
     </div>
   )

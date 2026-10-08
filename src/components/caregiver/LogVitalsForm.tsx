@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { submitVitalsLog } from '@/app/(caregiver)/actions'
-import { vitalsLogSchema, type VitalsLogFormValues } from '@/lib/validations/vitals'
-import { Activity, Heart, Thermometer, Droplets, FileText, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
+import { vitalsLogSchema } from '@/lib/validations/vitals'
+import { Activity, Heart, Thermometer, Droplets, FileText, CheckCircle2, AlertCircle, Loader2, User } from 'lucide-react'
 
 interface AssignedPatient {
   patientId: string
@@ -17,6 +17,91 @@ interface AssignedPatient {
 interface LogVitalsFormProps {
   patients: AssignedPatient[]
   defaultPatientId?: string
+}
+
+function getPatientDisplayName(patient: AssignedPatient): string {
+  const name = patient.fullName.trim()
+  if (/\(.*\)/.test(name)) {
+    return name
+  }
+
+  if (patient.relationshipLabel) {
+    const roleLower = patient.relationshipLabel.toLowerCase()
+    const isCaregiverStaffRole = [
+      'home health aide',
+      'primary day caregiver',
+      'night shift nurse',
+      'physical therapy assistant',
+      'caregiver',
+      'nurse',
+      'aide',
+    ].some((role) => roleLower.includes(role))
+
+    if (!isCaregiverStaffRole) {
+      return `${name} (${patient.relationshipLabel})`
+    }
+  }
+
+  return name
+}
+
+function PatientCareOverviewCard({ patient }: { patient: AssignedPatient }) {
+  return (
+    <div className="mt-4 rounded-xl border border-slate-200/90 bg-slate-50/70 p-4 transition-all">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teal-100/80 text-teal-700">
+            <User className="h-5 w-5 text-teal-600" />
+          </div>
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-wider text-teal-800">
+              Patient Care Overview
+            </span>
+            <h3 className="text-base font-bold text-slate-900">
+              {getPatientDisplayName(patient)}
+            </h3>
+            {patient.relationshipLabel && (
+              <p className="text-xs text-slate-500">
+                Care assignment: {patient.relationshipLabel}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {patient.currentStatus && (
+          <span
+            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border ${
+              patient.currentStatus === 'critical'
+                ? 'bg-rose-50 text-rose-700 border-rose-200'
+                : patient.currentStatus === 'warning'
+                ? 'bg-amber-50 text-amber-700 border-amber-200'
+                : patient.currentStatus === 'stable'
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                : 'bg-slate-100 text-slate-700 border-slate-200'
+            }`}
+          >
+            <span
+              className={`h-1.5 w-1.5 rounded-full ${
+                patient.currentStatus === 'critical'
+                  ? 'bg-rose-500'
+                  : patient.currentStatus === 'warning'
+                  ? 'bg-amber-500'
+                  : patient.currentStatus === 'stable'
+                  ? 'bg-emerald-500'
+                  : 'bg-slate-400'
+              }`}
+            />
+            {patient.currentStatus.charAt(0).toUpperCase() + patient.currentStatus.slice(1)}
+          </span>
+        )}
+      </div>
+
+      <div className="mt-3 pt-3 border-t border-slate-200/60 flex items-center justify-between text-xs text-slate-500">
+        <span>Routine health observations active</span>
+        <span>Ready for vitals entry</span>
+      </div>
+    </div>
+  )
 }
 
 export function LogVitalsForm({ patients, defaultPatientId }: LogVitalsFormProps) {
@@ -110,7 +195,7 @@ export function LogVitalsForm({ patients, defaultPatientId }: LogVitalsFormProps
     }
 
     // Success: reset form fields and notify user
-    setSuccessMessage(`Vitals successfully logged for ${selectedPatient?.fullName || 'patient'}!`)
+    setSuccessMessage(`Vitals successfully logged for ${selectedPatient ? getPatientDisplayName(selectedPatient) : 'patient'}!`)
     setFormData({
       bp_systolic: '',
       bp_diastolic: '',
@@ -147,37 +232,26 @@ export function LogVitalsForm({ patients, defaultPatientId }: LogVitalsFormProps
         </p>
 
         {patients.length > 1 ? (
-          <select
-            id="patient_id"
-            value={selectedPatientId}
-            onChange={(e) => setSelectedPatientId(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-base font-medium text-gray-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {patients.map(p => (
-              <option key={p.patientId} value={p.patientId}>
-                {p.fullName} {p.relationshipLabel ? `(${p.relationshipLabel})` : ''} — {p.primaryCondition || 'No condition specified'}
-              </option>
-            ))}
-          </select>
+          <>
+            <select
+              id="patient_id"
+              value={selectedPatientId}
+              onChange={(e) => setSelectedPatientId(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-base font-medium text-gray-900 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {patients.map(p => (
+                <option key={p.patientId} value={p.patientId}>
+                  {getPatientDisplayName(p)}
+                </option>
+              ))}
+            </select>
+
+            {/* Patient Care Overview Summary Card below dropdown */}
+            {selectedPatient && <PatientCareOverviewCard patient={selectedPatient} />}
+          </>
         ) : (
-          <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4 border border-gray-200">
-            <div>
-              <p className="text-base font-bold text-gray-900">{selectedPatient?.fullName}</p>
-              <p className="text-xs text-gray-500">
-                Condition: {selectedPatient?.primaryCondition || 'N/A'} {selectedPatient?.relationshipLabel ? `• Role: ${selectedPatient.relationshipLabel}` : ''}
-              </p>
-            </div>
-            {selectedPatient?.currentStatus && (
-              <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase ${
-                selectedPatient.currentStatus === 'critical' ? 'bg-red-100 text-red-800' :
-                selectedPatient.currentStatus === 'warning' ? 'bg-amber-100 text-amber-800' :
-                selectedPatient.currentStatus === 'stable' ? 'bg-emerald-100 text-emerald-800' :
-                'bg-gray-100 text-gray-800'
-              }`}>
-                {selectedPatient.currentStatus}
-              </span>
-            )}
-          </div>
+          /* Single Assigned Patient View */
+          selectedPatient && <PatientCareOverviewCard patient={selectedPatient} />
         )}
       </div>
 
