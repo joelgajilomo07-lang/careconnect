@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conceptual Framework - CareConnect Study</title>
+  <style>
+    /* Manuscript Preview Document Styling */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f0f2f5;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #111111;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Action Bar / Controls */
+    .controls-panel {
+      background: #ffffff;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      max-width: 960px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .controls-info h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111111;
+      margin-bottom: 4px;
+    }
+
+    .controls-info p {
+      font-size: 12px;
+      color: #555555;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #24292f;
+      color: #ffffff;
+      border: 1px solid #24292f;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.15s ease;
+    }
+
+    .btn:hover {
+      background: #444c56;
+      border-color: #444c56;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #24292f;
+      border: 1px solid #d0d7de;
+    }
+
+    .btn-secondary:hover {
+      background: #f6f8fa;
+      border-color: #bf040400;
+    }
+
+    /* Manuscript Page Container */
+    .page-container {
+      background: #ffffff;
+      border: 1px solid #d0d7de;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      width: 100%;
+      max-width: 960px;
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .figure-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .figure-wrapper svg {
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+      display: block;
+    }
+
+    /* Manuscript Insertion Instructions */
+    .manuscript-notes {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e1e4e8;
+      width: 100%;
+      max-width: 900px;
+      font-size: 12px;
+      color: #555555;
+      line-height: 1.6;
+    }
+
+    .manuscript-notes strong {
+      color: #111111;
+    }
+
+    /* Print Styles: Pure document without UI controls */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+
+      .controls-panel,
+      .manuscript-notes {
+        display: none !important;
+      }
+
+      .page-container {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+
+      .figure-wrapper svg {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Controls Panel -->
+  <div class="controls-panel">
+    <div class="controls-info">
+      <h1>Conceptual Framework Diagram (Figure 2)</h1>
+      <p>Academic deliverable for capstone manuscript &bull; Formatted for print legibility &amp; high-res export</p>
+    </div>
+    <div class="button-group">
+      <button class="btn" id="btn-export-png" onclick="exportHighResPNG(3)">
+        Export High-Res PNG (300 DPI)
+      </button>
+      <button class="btn btn-secondary" onclick="exportHighResPNG(4)">
+        Export Ultra-Res PNG (400 DPI)
+      </button>
+      <button class="btn btn-secondary" onclick="downloadStandaloneSVG()">
+        Download Standalone SVG
+      </button>
+      <button class="btn btn-secondary" onclick="window.print()">
+        Print / PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Document Page Mockup -->
+  <div class="page-container">
+    <div class="figure-wrapper" id="svg-container">
+      <svg id="conceptual-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 580" width="900" height="580">
+        <defs>
+          <style>
+            .box-heading {
+              font-family: Arial, Helvetica, sans-serif;
+              font-size: 13px;
+              font-weight: bold;
+              fill: #000000;
+              text-anchor: middle;
+              letter-spacing: 0.5px;
+            }
+            .body-text {
+              font-family: Arial, Helvetica, sans-serif;
+              font-size: 10px;
+              fill: #000000;
+            }
+            .cycle-center-text {
+              font-family: Arial, Helvetica, sans-serif;
+              font-size: 6.5px;
+              font-weight: bold;
+              fill: #000000;
+              text-anchor: middle;
+            }
+            .cycle-label {
+              font-family: Arial, Helvetica, sans-serif;
+              font-size: 8px;
+              font-weight: bold;
+              fill: #000000;
+            }
+            .caption-text {
+              font-family: Arial, Helvetica, sans-serif;
+              font-size: 12px;
+              fill: #000000;
+              text-anchor: middle;
+            }
+          </style>
+
+          <!-- Master Segment for 6-Segmented Clockwise Arrow Ring -->
+          <path id="cycle-segment"
+            d="M 35.23 -14.24 A 38 38 0 0 1 37.17 7.90 L 40.10 8.52 L 28.78 12.81 L 21.52 4.57 L 24.45 5.20 A 25 25 0 0 0 23.18 -9.37 Z"
+            fill="#ffffff" stroke="#000000" stroke-width="1" />
+        </defs>
+
+        <!-- Background Canvas -->
+        <rect width="900" height="580" fill="#ffffff" />
+
+        <!-- ======================================================== -->
+        <!-- BOX 1: INPUT (left)                                      -->
+        <!-- ======================================================== -->
+        <g id="box-input">
+          <rect x="25" y="35" width="250" height="480" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+          <text x="150" y="62" class="box-heading">INPUT</text>
+
+          <!-- Item 1 -->
+          <text x="39" y="96" class="body-text">Profile of the respondents</text>
+
+          <!-- Item 2 -->
+          <text x="39" y="126" class="body-text">Existing caregiver reporting and patient</text>
+          <text x="39" y="140" class="body-text">monitoring practices of Tender Touch</text>
+          <text x="39" y="154" class="body-text">Home Care Services</text>
+
+          <!-- Item 3 -->
+          <text x="39" y="184" class="body-text">Challenges encountered in the existing</text>
+          <text x="39" y="198" class="body-text">reporting and monitoring process</text>
+
+          <!-- Item 4 -->
+          <text x="39" y="228" class="body-text">Functional requirements</text>
+
+          <!-- Item 5 -->
+          <text x="39" y="258" class="body-text">Non-functional requirements</text>
+        </g>
+
+        <!-- ======================================================== -->
+        <!-- HOLLOW BLOCK ARROW 1: INPUT -> PROCESS                   -->
+        <!-- ======================================================== -->
+        <polygon
+          points="282,267 304,267 304,259 318,275 304,291 304,283 282,283"
+          fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+
+        <!-- ======================================================== -->
+        <!-- BOX 2: PROCESS (middle)                                  -->
+        <!-- ======================================================== -->
+        <g id="box-process">
+          <rect x="325" y="35" width="250" height="480" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+          <text x="450" y="62" class="box-heading">PROCESS</text>
+
+          <!-- Item 1 -->
+          <text x="339" y="92" class="body-text">System analysis and role-based access</text>
+          <text x="339" y="106" class="body-text">design</text>
+
+          <!-- Item 2 -->
+          <text x="339" y="132" class="body-text">Development, testing, and feedback using</text>
+          <text x="339" y="146" class="body-text">iterative and incremental development</text>
+
+          <!-- Cycle Graphic: Six-Segmented Arrow Ring -->
+          <g id="cycle-graphic" transform="translate(450, 226)">
+            <!-- 6 Segmented Arrows Flowing Clockwise -->
+            <use href="#cycle-segment" transform="rotate(-90)" />
+            <use href="#cycle-segment" transform="rotate(-30)" />
+            <use href="#cycle-segment" transform="rotate(30)" />
+            <use href="#cycle-segment" transform="rotate(90)" />
+            <use href="#cycle-segment" transform="rotate(150)" />
+            <use href="#cycle-segment" transform="rotate(210)" />
+
+            <!-- Center Label (Two Lines) -->
+            <text x="0" y="-3" class="cycle-center-text">ITERATIVE &amp;</text>
+            <text x="0" y="7" class="cycle-center-text">INCREMENTAL</text>
+
+            <!-- Segment Labels Clockwise -->
+            <!-- Requirements (Top) -->
+            <text x="0" y="-45" class="cycle-label" text-anchor="middle">Requirements</text>
+            <!-- Design (Upper-Right) -->
+            <text x="44" y="-20" class="cycle-label" text-anchor="start">Design</text>
+            <!-- Development (Lower-Right) -->
+            <text x="44" y="26" class="cycle-label" text-anchor="start">Development</text>
+            <!-- Testing (Bottom) -->
+            <text x="0" y="52" class="cycle-label" text-anchor="middle">Testing</text>
+            <!-- Deployment (Lower-Left) -->
+            <text x="-44" y="26" class="cycle-label" text-anchor="end">Deployment</text>
+            <!-- Review (Upper-Left) -->
+            <text x="-44" y="-20" class="cycle-label" text-anchor="end">Review</text>
+          </g>
+
+          <!-- Item 3 -->
+          <text x="339" y="302" class="body-text">Deployment and user orientation</text>
+
+          <!-- Item 4: Theoretical Foundations -->
+          <text x="339" y="328" class="body-text">Theoretical Foundations:</text>
+          <text x="339" y="342" class="body-text">Continuity of Care (Haggerty et al., 2003)</text>
+          <text x="339" y="356" class="body-text">Role-Based Access Control (Sandhu et al., 1996)</text>
+          <text x="339" y="370" class="body-text">Technology Acceptance Model (Davis, 1989)</text>
+
+          <!-- Item 5 -->
+          <text x="339" y="398" class="body-text">Software quality evaluation using</text>
+          <text x="339" y="412" class="body-text">ISO/IEC 25010</text>
+
+          <!-- Item 6 -->
+          <text x="339" y="440" class="body-text">User acceptance evaluation using the</text>
+          <text x="339" y="454" class="body-text">Technology Acceptance Model (TAM)</text>
+        </g>
+
+        <!-- ======================================================== -->
+        <!-- HOLLOW BLOCK ARROW 2: PROCESS -> OUTPUT                  -->
+        <!-- ======================================================== -->
+        <polygon
+          points="582,267 604,267 604,259 618,275 604,291 604,283 582,283"
+          fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+
+        <!-- ======================================================== -->
+        <!-- BOX 3: OUTPUT (right)                                    -->
+        <!-- ======================================================== -->
+        <g id="box-output">
+          <rect x="625" y="35" width="250" height="480" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+          <text x="750" y="62" class="box-heading">OUTPUT</text>
+
+          <!-- Item 1 -->
+          <text x="639" y="96" class="body-text">Developed and evaluated web-based</text>
+          <text x="639" y="110" class="body-text">caregiver reporting and patient monitoring</text>
+          <text x="639" y="124" class="body-text">system for five user roles</text>
+
+          <!-- Item 2 -->
+          <text x="639" y="154" class="body-text">Structured vital signs logging and doctor</text>
+          <text x="639" y="168" class="body-text">review of patient health status</text>
+
+          <!-- Item 3 -->
+          <text x="639" y="198" class="body-text">Real-time notifications and health status</text>
+          <text x="639" y="212" class="body-text">updates for patients and families</text>
+
+          <!-- Item 4 -->
+          <text x="639" y="242" class="body-text">Evaluation findings on software quality</text>
+          <text x="639" y="256" class="body-text">and user acceptance</text>
+
+          <!-- Item 5 -->
+          <text x="639" y="286" class="body-text">Enhancement recommendations</text>
+        </g>
+
+        <!-- ======================================================== -->
+        <!-- CAPTION                                                  -->
+        <!-- ======================================================== -->
+        <text x="450" y="545" class="caption-text"><tspan font-weight="bold">Figure 2.</tspan> <tspan font-style="italic">Conceptual Framework of the Study</tspan></text>
+      </svg>
+    </div>
+
+    <!-- Manuscript Guidance -->
+    <div class="manuscript-notes">
+      <p><strong>Microsoft Word Insertion:</strong> In Microsoft Word, select <em>Insert &gt; Pictures &gt; This Device</em> and select <code>conceptual-framework.svg</code>. SVGs inserted directly into Word remain scalable vector graphics without pixelation.</p>
+      <p><strong>Manuscript Format Compliance:</strong> Formatted with high-contrast grayscale geometry (thin black borders, white background, no shading, no nested boxes), plain sans-serif typography (Arial-like), and standard publication hierarchy suitable for black-and-white printing and A4 page scaling.</p>
+    </div>
+  </div>
+
+  <!-- High-Res Export Script -->
+  <script>
+    function exportHighResPNG(scaleFactor) {
+      const svgElement = document.getElementById('conceptual-svg');
+      const xmlSerializer = new XMLSerializer();
+      const svgString = xmlSerializer.serializeToString(svgElement);
+      const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+      const URL = window.URL || window.webkitURL || window;
+      const blobURL = URL.createObjectURL(svgBlob);
+
+      const image = new Image();
+      image.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 900 * scaleFactor;
+        canvas.height = 580 * scaleFactor;
+        const context = canvas.getContext('2d');
+
+        // High quality rendering
+        context.imageSmoothingEnabled = true;
+        context.imageSmoothingQuality = 'high';
+
+        // Draw white background
+        context.fillStyle = '#ffffff';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw image scaled
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        // Export as PNG
+        const pngURL = canvas.toDataURL('image/png');
+        const downloadLink = document.createElement('a');
+        downloadLink.download = `conceptual-framework-${scaleFactor * 100}dpi.png`;
+        downloadLink.href = pngURL;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        URL.revokeObjectURL(blobURL);
+      };
+      image.src = blobURL;
+    }
+
+    function downloadStandaloneSVG() {
+      const svgElement = document.getElementById('conceptual-svg');
+      const xmlSerializer = new XMLSerializer();
+      const svgString = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' + xmlSerializer.serializeToString(svgElement);
+      const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+      const downloadLink = document.createElement('a');
+      downloadLink.download = 'conceptual-framework.svg';
+      downloadLink.href = window.URL.createObjectURL(blob);
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    }
+  </script>
+</body>
+</html>

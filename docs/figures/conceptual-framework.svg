@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 580" width="900" height="580">
+  <defs>
+    <style>
+      .box-heading {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
+        font-weight: bold;
+        fill: #000000;
+        text-anchor: middle;
+        letter-spacing: 0.5px;
+      }
+      .body-text {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 10px;
+        fill: #000000;
+      }
+      .cycle-center-text {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 6.5px;
+        font-weight: bold;
+        fill: #000000;
+        text-anchor: middle;
+      }
+      .cycle-label {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 8px;
+        font-weight: bold;
+        fill: #000000;
+      }
+      .caption-text {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        fill: #000000;
+        text-anchor: middle;
+      }
+    </style>
+
+    <!-- Master Segment for 6-Segmented Clockwise Arrow Ring -->
+    <!-- Centered at origin (0,0); rotates by -90, -30, 30, 90, 150, 210 degrees -->
+    <path id="cycle-segment"
+      d="M 35.23 -14.24 A 38 38 0 0 1 37.17 7.90 L 40.10 8.52 L 28.78 12.81 L 21.52 4.57 L 24.45 5.20 A 25 25 0 0 0 23.18 -9.37 Z"
+      fill="#ffffff" stroke="#000000" stroke-width="1" />
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="900" height="580" fill="#ffffff" />
+
+  <!-- ======================================================== -->
+  <!-- BOX 1: INPUT (left)                                      -->
+  <!-- ======================================================== -->
+  <g id="box-input">
+    <rect x="25" y="35" width="250" height="480" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+    <text x="150" y="62" class="box-heading">INPUT</text>
+
+    <!-- Item 1 -->
+    <text x="39" y="96" class="body-text">Profile of the respondents</text>
+
+    <!-- Item 2 -->
+    <text x="39" y="126" class="body-text">Existing caregiver reporting and patient</text>
+    <text x="39" y="140" class="body-text">monitoring practices of Tender Touch</text>
+    <text x="39" y="154" class="body-text">Home Care Services</text>
+
+    <!-- Item 3 -->
+    <text x="39" y="184" class="body-text">Challenges encountered in the existing</text>
+    <text x="39" y="198" class="body-text">reporting and monitoring process</text>
+
+    <!-- Item 4 -->
+    <text x="39" y="228" class="body-text">Functional requirements</text>
+
+    <!-- Item 5 -->
+    <text x="39" y="258" class="body-text">Non-functional requirements</text>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- HOLLOW BLOCK ARROW 1: INPUT -> PROCESS                   -->
+  <!-- ======================================================== -->
+  <polygon
+    points="282,267 304,267 304,259 318,275 304,291 304,283 282,283"
+    fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+
+  <!-- ======================================================== -->
+  <!-- BOX 2: PROCESS (middle)                                  -->
+  <!-- ======================================================== -->
+  <g id="box-process">
+    <rect x="325" y="35" width="250" height="480" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+    <text x="450" y="62" class="box-heading">PROCESS</text>
+
+    <!-- Item 1 -->
+    <text x="339" y="92" class="body-text">System analysis and role-based access</text>
+    <text x="339" y="106" class="body-text">design</text>
+
+    <!-- Item 2 -->
+    <text x="339" y="132" class="body-text">Development, testing, and feedback using</text>
+    <text x="339" y="146" class="body-text">iterative and incremental development</text>
+
+    <!-- Cycle Graphic: Six-Segmented Arrow Ring -->
+    <g id="cycle-graphic" transform="translate(450, 226)">
+      <!-- 6 Segmented Arrows Flowing Clockwise -->
+      <use href="#cycle-segment" transform="rotate(-90)" />
+      <use href="#cycle-segment" transform="rotate(-30)" />
+      <use href="#cycle-segment" transform="rotate(30)" />
+      <use href="#cycle-segment" transform="rotate(90)" />
+      <use href="#cycle-segment" transform="rotate(150)" />
+      <use href="#cycle-segment" transform="rotate(210)" />
+
+      <!-- Center Label (Two Lines) -->
+      <text x="0" y="-3" class="cycle-center-text">ITERATIVE &amp;</text>
+      <text x="0" y="7" class="cycle-center-text">INCREMENTAL</text>
+
+      <!-- Segment Labels Clockwise -->
+      <!-- Requirements (Top) -->
+      <text x="0" y="-45" class="cycle-label" text-anchor="middle">Requirements</text>
+      <!-- Design (Upper-Right) -->
+      <text x="44" y="-20" class="cycle-label" text-anchor="start">Design</text>
+      <!-- Development (Lower-Right) -->
+      <text x="44" y="26" class="cycle-label" text-anchor="start">Development</text>
+      <!-- Testing (Bottom) -->
+      <text x="0" y="52" class="cycle-label" text-anchor="middle">Testing</text>
+      <!-- Deployment (Lower-Left) -->
+      <text x="-44" y="26" class="cycle-label" text-anchor="end">Deployment</text>
+      <!-- Review (Upper-Left) -->
+      <text x="-44" y="-20" class="cycle-label" text-anchor="end">Review</text>
+    </g>
+
+    <!-- Item 3 -->
+    <text x="339" y="302" class="body-text">Deployment and user orientation</text>
+
+    <!-- Item 4: Theoretical Foundations -->
+    <text x="339" y="328" class="body-text">Theoretical Foundations:</text>
+    <text x="339" y="342" class="body-text">Continuity of Care (Haggerty et al., 2003)</text>
+    <text x="339" y="356" class="body-text">Role-Based Access Control (Sandhu et al., 1996)</text>
+    <text x="339" y="370" class="body-text">Technology Acceptance Model (Davis, 1989)</text>
+
+    <!-- Item 5 -->
+    <text x="339" y="398" class="body-text">Software quality evaluation using</text>
+    <text x="339" y="412" class="body-text">ISO/IEC 25010</text>
+
+    <!-- Item 6 -->
+    <text x="339" y="440" class="body-text">User acceptance evaluation using the</text>
+    <text x="339" y="454" class="body-text">Technology Acceptance Model (TAM)</text>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- HOLLOW BLOCK ARROW 2: PROCESS -> OUTPUT                  -->
+  <!-- ======================================================== -->
+  <polygon
+    points="582,267 604,267 604,259 618,275 604,291 604,283 582,283"
+    fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+
+  <!-- ======================================================== -->
+  <!-- BOX 3: OUTPUT (right)                                    -->
+  <!-- ======================================================== -->
+  <g id="box-output">
+    <rect x="625" y="35" width="250" height="480" fill="#ffffff" stroke="#000000" stroke-width="1.2" />
+    <text x="750" y="62" class="box-heading">OUTPUT</text>
+
+    <!-- Item 1 -->
+    <text x="639" y="96" class="body-text">Developed and evaluated web-based</text>
+    <text x="639" y="110" class="body-text">caregiver reporting and patient monitoring</text>
+    <text x="639" y="124" class="body-text">system for five user roles</text>
+
+    <!-- Item 2 -->
+    <text x="639" y="154" class="body-text">Structured vital signs logging and doctor</text>
+    <text x="639" y="168" class="body-text">review of patient health status</text>
+
+    <!-- Item 3 -->
+    <text x="639" y="198" class="body-text">Real-time notifications and health status</text>
+    <text x="639" y="212" class="body-text">updates for patients and families</text>
+
+    <!-- Item 4 -->
+    <text x="639" y="242" class="body-text">Evaluation findings on software quality</text>
+    <text x="639" y="256" class="body-text">and user acceptance</text>
+
+    <!-- Item 5 -->
+    <text x="639" y="286" class="body-text">Enhancement recommendations</text>
+  </g>
+
+  <!-- ======================================================== -->
+  <!-- CAPTION                                                  -->
+  <!-- ======================================================== -->
+  <text x="450" y="545" class="caption-text"><tspan font-weight="bold">Figure 2.</tspan> <tspan font-style="italic">Conceptual Framework of the Study</tspan></text>
+</svg>
