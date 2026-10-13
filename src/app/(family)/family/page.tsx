@@ -171,7 +171,7 @@ export default async function FamilyDashboardPage({ searchParams }: FamilyPagePr
               </span>
             </div>
             <h1 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-[#1E2243]">
-              Loved One&apos;s Care Overview
+              Patient Care Overview
             </h1>
           </div>
 

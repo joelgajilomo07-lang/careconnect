@@ -44,7 +44,7 @@ export function FamilyPatientSelector({
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500">
-          Select Loved One ({patients.length} active profiles)
+          Patient Care ({patients.length} active profiles)
         </span>
         <span className="text-xs text-slate-400 font-medium">
           Switch patient view
