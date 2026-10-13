@@ -20,23 +20,23 @@ export function TriageFilterTabs({
   counts,
 }: TriageFilterTabsProps) {
   return (
-    <div className="flex flex-wrap items-center gap-2 border-b border-gray-200 pb-3">
+    <div className="flex flex-wrap items-center gap-2 border-b border-slate-200/80 pb-3">
       <button
         type="button"
         onClick={() => onFilterChange('needs_review')}
-        className={`flex items-center gap-2 rounded-xl px-4 py-2.5 min-h-[44px] text-xs sm:text-sm font-bold transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 ${
+        className={`flex items-center gap-2 rounded-xl px-4 py-2.5 min-h-[44px] text-sm sm:text-base font-bold transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5B5FE8] focus-visible:ring-offset-2 ${
           activeFilter === 'needs_review'
-            ? 'bg-blue-600 text-white shadow-sm'
-            : 'bg-white text-gray-700 hover:bg-gray-100 hover:border-gray-300 border border-gray-200'
+            ? 'bg-[#5B5FE8] text-white shadow-sm shadow-[#5B5FE8]/25'
+            : 'bg-white text-slate-700 hover:bg-[#EEF0FF]/40 hover:border-[#5B5FE8]/40 border border-slate-200/80'
         }`}
       >
         <Clock className="h-4 w-4" />
         <span>Needs Review</span>
         <span
-          className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+          className={`rounded-full px-2.5 py-0.5 text-xs sm:text-sm font-bold ${
             activeFilter === 'needs_review'
-              ? 'bg-blue-500 text-white'
-              : 'bg-blue-50 text-blue-700'
+              ? 'bg-white/20 text-white'
+              : 'bg-[#EEF0FF] text-[#5B5FE8]'
           }`}
         >
           {counts.needsReview}
@@ -46,19 +46,19 @@ export function TriageFilterTabs({
       <button
         type="button"
         onClick={() => onFilterChange('flagged')}
-        className={`flex items-center gap-2 rounded-xl px-4 py-2.5 min-h-[44px] text-xs sm:text-sm font-bold transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 ${
+        className={`flex items-center gap-2 rounded-xl px-4 py-2.5 min-h-[44px] text-sm sm:text-base font-bold transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5A524] focus-visible:ring-offset-2 ${
           activeFilter === 'flagged'
-            ? 'bg-amber-600 text-white shadow-sm'
-            : 'bg-white text-gray-700 hover:bg-gray-100 hover:border-gray-300 border border-gray-200'
+            ? 'bg-[#F5A524] text-white shadow-sm shadow-[#F5A524]/25'
+            : 'bg-white text-slate-700 hover:bg-[#FFFBEB] hover:border-[#F5A524]/40 border border-slate-200/80'
         }`}
       >
         <AlertCircle className="h-4 w-4" />
         <span>Flagged Readings</span>
         <span
-          className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+          className={`rounded-full px-2.5 py-0.5 text-xs sm:text-sm font-bold ${
             activeFilter === 'flagged'
-              ? 'bg-amber-500 text-white'
-              : 'bg-amber-50 text-amber-800'
+              ? 'bg-white/20 text-white'
+              : 'bg-[#FFFBEB] text-[#B45309]'
           }`}
         >
           {counts.flagged}
@@ -68,19 +68,19 @@ export function TriageFilterTabs({
       <button
         type="button"
         onClick={() => onFilterChange('all')}
-        className={`flex items-center gap-2 rounded-xl px-4 py-2.5 min-h-[44px] text-xs sm:text-sm font-bold transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 ${
+        className={`flex items-center gap-2 rounded-xl px-4 py-2.5 min-h-[44px] text-sm sm:text-base font-bold transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5B5FE8] focus-visible:ring-offset-2 ${
           activeFilter === 'all'
-            ? 'bg-gray-900 text-white shadow-sm'
-            : 'bg-white text-gray-700 hover:bg-gray-100 hover:border-gray-300 border border-gray-200'
+            ? 'bg-[#1E2243] text-white shadow-sm'
+            : 'bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 border border-slate-200/80'
         }`}
       >
         <ListFilter className="h-4 w-4" />
         <span>All Logs</span>
         <span
-          className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+          className={`rounded-full px-2.5 py-0.5 text-xs sm:text-sm font-bold ${
             activeFilter === 'all'
-              ? 'bg-gray-700 text-white'
-              : 'bg-gray-100 text-gray-700'
+              ? 'bg-white/20 text-white'
+              : 'bg-slate-100 text-slate-700'
           }`}
         >
           {counts.total}

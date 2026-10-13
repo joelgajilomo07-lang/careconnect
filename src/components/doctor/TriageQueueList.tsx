@@ -84,10 +84,10 @@ export function TriageQueueList({ items }: TriageQueueListProps) {
 
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center shadow-sm">
-        <Activity className="mx-auto h-12 w-12 text-gray-300" />
-        <h3 className="mt-3 text-base font-bold text-gray-900">No Vitals in Triage Queue</h3>
-        <p className="mt-1 text-xs text-gray-500 max-w-sm mx-auto">
+      <div className="rounded-2xl border border-slate-200/80 bg-white p-12 text-center shadow-sm">
+        <Activity className="mx-auto h-12 w-12 text-slate-300" />
+        <h3 className="mt-3 text-lg sm:text-xl font-black text-[#1E2243]">No Vitals in Triage Queue</h3>
+        <p className="mt-1 text-sm font-medium text-slate-500 max-w-sm mx-auto">
           There are currently no vitals logs recorded for patients on your active care teams.
         </p>
       </div>
@@ -98,7 +98,7 @@ export function TriageQueueList({ items }: TriageQueueListProps) {
     <div className="space-y-4">
       {/* Search Input */}
       <div className="relative">
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
           <Search className="h-4 w-4" />
         </div>
         <input
@@ -106,7 +106,7 @@ export function TriageQueueList({ items }: TriageQueueListProps) {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search by patient name, caregiver, or clinical notes..."
-          className="w-full rounded-xl border border-gray-300 bg-white pl-10 pr-10 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-xs transition-colors"
+          className="w-full rounded-xl border border-slate-200 bg-white pl-10 pr-10 py-3 text-sm sm:text-base font-medium text-[#1E2243] placeholder-slate-400 focus:border-[#5B5FE8] focus:outline-none focus:ring-2 focus:ring-[#5B5FE8]/15 shadow-xs transition-colors"
           aria-label="Search triage queue"
         />
         {searchQuery && (
@@ -114,7 +114,7 @@ export function TriageQueueList({ items }: TriageQueueListProps) {
             type="button"
             onClick={() => setSearchQuery('')}
             aria-label="Clear search"
-            className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+            className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -130,45 +130,45 @@ export function TriageQueueList({ items }: TriageQueueListProps) {
 
       {/* Triage Items List */}
       {filteredItems.length === 0 ? (
-        <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center shadow-sm">
+        <div className="rounded-2xl border border-slate-200/80 bg-white p-10 text-center shadow-sm">
           {searchQuery.trim().length > 0 ? (
             <div className="space-y-3">
-              <Search className="mx-auto h-10 w-10 text-gray-300" />
+              <Search className="mx-auto h-10 w-10 text-slate-300" />
               <div>
-                <h3 className="text-sm font-bold text-gray-900">No matching triage logs</h3>
-                <p className="mt-1 text-xs text-gray-500 max-w-sm mx-auto">
+                <h3 className="text-base sm:text-lg font-black text-[#1E2243]">No matching triage logs</h3>
+                <p className="mt-1 text-sm font-medium text-slate-500 max-w-sm mx-auto">
                   No vitals logs found matching &ldquo;{searchQuery}&rdquo;. Try checking the spelling or clearing your search.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-4 w-4" />
                 <span>Clear search</span>
               </button>
             </div>
           ) : filter === 'needs_review' ? (
             <>
-              <CheckCircle2 className="mx-auto h-10 w-10 text-emerald-500" />
-              <h3 className="mt-2 text-sm font-bold text-gray-900">Queue is Clear!</h3>
-              <p className="mt-0.5 text-xs text-gray-500">
+              <CheckCircle2 className="mx-auto h-10 w-10 text-[#2DD4BF]" />
+              <h3 className="mt-2 text-base sm:text-lg font-black text-[#1E2243]">Queue is Clear!</h3>
+              <p className="mt-0.5 text-sm font-medium text-slate-500">
                 All patient vitals logs in your queue have been clinically reviewed.
               </p>
             </>
           ) : filter === 'flagged' ? (
             <>
-              <CheckCircle2 className="mx-auto h-10 w-10 text-emerald-500" />
-              <h3 className="mt-2 text-sm font-bold text-gray-900">No Flagged Measurements</h3>
-              <p className="mt-0.5 text-xs text-gray-500">
+              <CheckCircle2 className="mx-auto h-10 w-10 text-[#2DD4BF]" />
+              <h3 className="mt-2 text-base sm:text-lg font-black text-[#1E2243]">No Flagged Measurements</h3>
+              <p className="mt-0.5 text-sm font-medium text-slate-500">
                 No recent vitals measurements currently fall outside typical baseline ranges.
               </p>
             </>
           ) : (
             <>
-              <AlertCircle className="mx-auto h-10 w-10 text-gray-300" />
-              <h3 className="mt-2 text-sm font-bold text-gray-900">No Logs Found</h3>
+              <AlertCircle className="mx-auto h-10 w-10 text-slate-300" />
+              <h3 className="mt-2 text-base sm:text-lg font-black text-[#1E2243]">No Logs Found</h3>
             </>
           )}
         </div>

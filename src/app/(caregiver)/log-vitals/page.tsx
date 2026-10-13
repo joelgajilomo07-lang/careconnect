@@ -18,27 +18,26 @@ export default async function LogVitalsPage({
   const { data: assignedPatients, error: patientsError } = await careTeamsService.getPatientsForCaregiver(user.id)
 
   return (
-    <div className="min-h-screen bg-[#F5F8FA] py-8 px-4 sm:px-6">
-      <div className="mx-auto max-w-4xl pb-24 sm:pb-12">
-        {/* Mobile-first Minimalist Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-3.5">
-            <div className="rounded-2xl bg-[#EAF4F1] p-3 text-[#5D817C] border border-[#8EBAAB]/40 shadow-xs">
-              <HeartPulse className="h-7 w-7" />
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-[#223852] tracking-tight">Log Patient Vitals</h1>
-              <p className="text-sm font-semibold text-[#5D817C] mt-0.5">Record daily clinical observations & bedside vitals</p>
-            </div>
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Page Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3.5">
+          <div className="rounded-2xl bg-[#EEF0FF] p-3 text-[#5B5FE8] border border-[#5B5FE8]/20 shadow-xs">
+            <HeartPulse className="h-7 w-7" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-black text-[#1E2243] tracking-tight">Log Patient Vitals</h1>
+            <p className="text-sm font-medium text-slate-500 mt-0.5">Record daily clinical observations & bedside vitals</p>
           </div>
         </div>
+      </div>
 
-        {patientsError && (
-          <div className="mb-6 rounded-2xl border border-[#D9776A] bg-[#FCEFEB] p-4 text-sm text-[#8E281B]">
-            <p className="font-semibold">Unable to load assigned patients</p>
-            <p className="text-xs mt-1">{patientsError}</p>
-          </div>
-        )}
+      {patientsError && (
+        <div className="rounded-2xl border border-[#F25F5C]/30 bg-[#F25F5C]/10 p-4 text-sm text-[#B91C1C]">
+          <p className="font-semibold">Unable to load assigned patients</p>
+          <p className="text-xs mt-1">{patientsError}</p>
+        </div>
+      )}
 
         {/* Vitals Form with Patient Selector */}
         <LogVitalsForm
@@ -50,7 +49,6 @@ export default async function LogVitalsPage({
             staffId: `STF-${user.id.slice(0, 8).toUpperCase()}`,
           }}
         />
-      </div>
     </div>
   )
 }

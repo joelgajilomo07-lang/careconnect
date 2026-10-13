@@ -23,10 +23,10 @@ export default async function CaregiverHistoryPage({
   if (assignedPatients.length === 0) {
     return (
       <div className="mx-auto max-w-4xl px-4 py-8 sm:py-12">
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-8 text-center">
-          <AlertCircle className="mx-auto h-12 w-12 text-amber-600" />
-          <h3 className="mt-3 text-lg font-bold text-amber-900">No Assigned Patients</h3>
-          <p className="mt-1 text-sm text-amber-700 max-w-md mx-auto">
+        <div className="rounded-2xl border border-[#F5A524]/30 bg-[#FFFBEB] p-8 text-center">
+          <AlertCircle className="mx-auto h-12 w-12 text-[#F5A524]" />
+          <h3 className="mt-3 text-xl font-black text-amber-950">No Assigned Patients</h3>
+          <p className="mt-1 text-base text-amber-800 max-w-md mx-auto font-medium">
             You are not currently assigned to any active patient care teams. Please contact an administrator to assign you to a patient before viewing history.
           </p>
         </div>
@@ -46,14 +46,14 @@ export default async function CaregiverHistoryPage({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-blue-100 p-2.5 text-blue-600">
-            <History className="h-6 w-6" />
+          <div className="rounded-2xl bg-[#EEF0FF] p-3 text-[#5B5FE8] border border-[#5B5FE8]/20 shadow-xs">
+            <History className="h-7 w-7" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
+            <h1 className="text-2xl sm:text-3xl font-black text-[#1E2243] tracking-tight">
               Vitals History & Trends
             </h1>
-            <p className="text-xs text-gray-500">
+            <p className="text-sm font-medium text-slate-500 mt-0.5">
               Viewing historical clinical measurements for your assigned patients
             </p>
           </div>
@@ -62,7 +62,7 @@ export default async function CaregiverHistoryPage({
         {/* Quick link to log new vitals */}
         <Link
           href={`/log-vitals?patientId=${selectedPatient.patientId}`}
-          className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs sm:text-sm font-bold text-white shadow-sm hover:bg-blue-700 active:bg-blue-800 transition-colors cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-2 rounded-xl bg-[#5B5FE8] px-5 py-3 text-sm sm:text-base font-bold text-white shadow-sm shadow-[#5B5FE8]/25 hover:bg-[#4A4ED4] active:bg-[#3D41BD] transition-all cursor-pointer self-start sm:self-auto"
         >
           <PlusCircle className="h-4 w-4" />
           <span>Log New Vitals</span>
@@ -77,11 +77,11 @@ export default async function CaregiverHistoryPage({
 
       {/* Error handling if fetching logs failed */}
       {logsError && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 flex items-start gap-3">
-          <AlertCircle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+        <div className="rounded-2xl border border-[#F25F5C]/30 bg-[#FFF1F2] p-4 text-base text-rose-950 flex items-start gap-3">
+          <AlertCircle className="h-5 w-5 text-[#F25F5C] shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold">Unable to load vitals records</p>
-            <p className="text-xs mt-0.5">{logsError}</p>
+            <p className="font-bold">Unable to load vitals records</p>
+            <p className="text-sm text-rose-800 mt-0.5">{logsError}</p>
           </div>
         </div>
       )}

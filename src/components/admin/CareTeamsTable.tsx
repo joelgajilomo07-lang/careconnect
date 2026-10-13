@@ -167,11 +167,11 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
       {/* Header & Filter Controls */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-gray-100 pb-4">
         <div>
-          <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-lg sm:text-xl font-black text-[#1E2243] flex items-center gap-2">
             <Users className="h-5 w-5 text-purple-600" />
             All Care Team Pairings
           </h2>
-          <p className="text-xs text-gray-500">
+          <p className="text-sm font-medium text-slate-500">
             Active pairings establish database visibility across triage queues, charts, and alerts
           </p>
         </div>
@@ -179,13 +179,13 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
         <div className="flex flex-wrap items-center gap-2">
           {/* Search Box */}
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-gray-400" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
             <input
               type="text"
               placeholder="Search patient, staff, or label..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="rounded-xl border border-gray-300 pl-8 pr-3 py-1.5 text-xs text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 w-44 sm:w-56"
+              className="rounded-xl border border-gray-300 pl-9 pr-3 py-2 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 w-52 sm:w-64"
             />
           </div>
 
@@ -195,7 +195,7 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
             onChange={(e) =>
               setRoleFilter(e.target.value as 'all' | 'doctor' | 'caregiver' | 'family_member')
             }
-            className="rounded-xl border border-gray-300 px-2.5 py-1.5 text-xs text-gray-700 bg-white focus:border-blue-600 focus:outline-none"
+            className="rounded-xl border border-gray-300 px-3 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white focus:border-blue-600 focus:outline-none"
           >
             <option value="all">All Roles</option>
             <option value="doctor">Doctors</option>
@@ -204,12 +204,12 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
           </select>
 
           {/* Active Only Toggle */}
-          <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer select-none">
+          <label className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-600 cursor-pointer select-none">
             <input
               type="checkbox"
               checked={activeOnly}
               onChange={(e) => setActiveOnly(e.target.checked)}
-              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5"
+              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
             />
             <span>Active only</span>
           </label>
@@ -219,17 +219,17 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
             <button
               type="button"
               onClick={toggleAll}
-              className="inline-flex items-center gap-1 rounded-xl border border-gray-300 bg-gray-50 px-2.5 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer select-none"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-gray-300 bg-gray-50 px-3 py-2 text-xs sm:text-sm font-bold text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer select-none"
               title={allExpanded ? 'Collapse all patient groups' : 'Expand all patient groups'}
             >
               {allExpanded ? (
                 <>
-                  <ChevronUp className="h-3.5 w-3.5 text-gray-500" />
+                  <ChevronUp className="h-4 w-4 text-gray-500" />
                   <span>Collapse All</span>
                 </>
               ) : (
                 <>
-                  <ChevronDown className="h-3.5 w-3.5 text-gray-500" />
+                  <ChevronDown className="h-4 w-4 text-gray-500" />
                   <span>Expand All</span>
                 </>
               )}
@@ -240,22 +240,22 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
 
       {/* Feedback alerts */}
       {successMsg && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-800 flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-          <span>{successMsg}</span>
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3.5 text-sm text-emerald-800 flex items-center gap-2">
+          <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+          <span className="font-bold">{successMsg}</span>
         </div>
       )}
 
       {errorMsg && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-800 flex items-center gap-2">
-          <AlertCircle className="h-4 w-4 text-red-600 shrink-0" />
-          <span>{errorMsg}</span>
+        <div className="rounded-xl border border-red-200 bg-red-50 p-3.5 text-sm text-red-800 flex items-center gap-2">
+          <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
+          <span className="font-semibold">{errorMsg}</span>
         </div>
       )}
 
       {/* Patient Grouped Accordions */}
       {patientGroups.length === 0 ? (
-        <div className="py-8 text-center text-xs text-gray-400">
+        <div className="py-8 text-center text-sm font-medium text-gray-400">
           No care team pairings match your search/filter criteria.
         </div>
       ) : (
@@ -275,14 +275,14 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
                 >
                   {/* Patient Name & Composition */}
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-700">
-                      <User className="h-4.5 w-4.5" />
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-700">
+                      <User className="h-5 w-5" />
                     </div>
                     <div className="min-w-0">
-                      <h3 className="font-bold text-gray-900 text-sm truncate">
+                      <h3 className="font-black text-[#1E2243] text-sm sm:text-base truncate">
                         {group.patientName}
                       </h3>
-                      <p className="text-xs text-gray-500 mt-0.5">
+                      <p className="text-xs sm:text-sm font-medium text-slate-500 mt-0.5">
                         {group.counts.total} Assigned Member{group.counts.total !== 1 ? 's' : ''}
                         {' • '}
                         {group.counts.active} Active
@@ -293,19 +293,19 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
                   {/* Composition Pills & Expand/Collapse Icon */}
                   <div className="flex items-center gap-2.5 shrink-0 self-end sm:self-auto">
                     {/* Role count pills */}
-                    <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+                    <div className="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm">
                       {group.counts.doctors > 0 && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full font-semibold border bg-purple-50 text-purple-700 border-purple-200">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-full font-bold border bg-purple-50 text-purple-700 border-purple-200">
                           {group.counts.doctors} Doctor{group.counts.doctors > 1 ? 's' : ''}
                         </span>
                       )}
                       {group.counts.caregivers > 0 && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full font-semibold border bg-blue-50 text-blue-700 border-blue-200">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-full font-bold border bg-blue-50 text-blue-700 border-blue-200">
                           {group.counts.caregivers} Caregiver{group.counts.caregivers > 1 ? 's' : ''}
                         </span>
                       )}
                       {group.counts.family > 0 && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full font-semibold border bg-amber-50 text-amber-700 border-amber-200">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-full font-bold border bg-amber-50 text-amber-700 border-amber-200">
                           {group.counts.family} Family
                         </span>
                       )}
@@ -343,22 +343,22 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
                         return (
                           <div
                             key={assignment.id}
-                            className="rounded-xl border border-gray-200 bg-gray-50/40 p-3.5 space-y-2.5 text-xs"
+                            className="rounded-xl border border-gray-200 bg-gray-50/40 p-4 space-y-3 text-sm"
                           >
-                            <div className="flex items-start justify-between gap-2 border-b border-gray-100 pb-2">
+                            <div className="flex items-start justify-between gap-2 border-b border-gray-100 pb-2.5">
                               <div>
-                                <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+                                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
                                   Team Member
                                 </span>
-                                <h4 className="font-bold text-gray-900 text-sm">
+                                <h4 className="font-bold text-[#1E2243] text-sm sm:text-base mt-0.5">
                                   {assignment.member?.full_name || 'Member'}
                                 </h4>
-                                <p className="text-[11px] text-gray-500 font-mono">
+                                <p className="text-xs sm:text-sm text-slate-500 font-mono mt-0.5">
                                   {assignment.member?.email}
                                 </p>
                               </div>
                               <span
-                                className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border capitalize ${
+                                className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs sm:text-sm font-bold border capitalize ${
                                   roleStyles[assignment.member_role as keyof typeof roleStyles] ||
                                   'bg-gray-100 text-gray-700'
                                 }`}
@@ -368,22 +368,22 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
                             </div>
 
                             {assignment.relationship_label && (
-                              <div className="text-gray-600">
-                                <span className="font-medium">Specialty / Role:</span>{' '}
+                              <div className="text-slate-700 text-sm">
+                                <span className="font-bold">Specialty / Role:</span>{' '}
                                 <span className="italic">{assignment.relationship_label}</span>
                               </div>
                             )}
 
-                            <div className="flex items-center justify-between pt-2 border-t border-gray-100 text-gray-500">
+                            <div className="flex items-center justify-between pt-2.5 border-t border-gray-100 text-slate-600">
                               <div>
                                 {assignment.is_active ? (
-                                  <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                  <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-emerald-700 font-bold">
+                                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
                                     Active
                                   </span>
                                 ) : (
-                                  <span className="inline-flex items-center gap-1 text-[11px] text-gray-400 font-medium">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
+                                  <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-slate-400 font-bold">
+                                    <span className="h-2 w-2 rounded-full bg-gray-300" />
                                     Inactive
                                   </span>
                                 )}
@@ -393,15 +393,15 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
                                 {assignment.is_active ? (
                                   isConfirming ? (
                                     <div className="inline-flex items-center gap-2">
-                                      <span className="text-[11px] text-red-600 font-medium">Confirm?</span>
+                                      <span className="text-xs sm:text-sm text-red-600 font-bold">Confirm?</span>
                                       <button
                                         type="button"
                                         disabled={isPending}
                                         onClick={() => handleDeactivate(assignment.id)}
-                                        className="min-h-[36px] px-2.5 rounded-lg bg-red-600 font-bold text-white shadow-sm hover:bg-red-700 active:bg-red-800 transition-colors"
+                                        className="min-h-[40px] px-3 rounded-lg bg-red-600 text-xs sm:text-sm font-bold text-white shadow-sm hover:bg-red-700 active:bg-red-800 transition-colors"
                                       >
                                         {isDeactivating ? (
-                                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                          <Loader2 className="h-4 w-4 animate-spin" />
                                         ) : (
                                           'Yes'
                                         )}
@@ -409,7 +409,7 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
                                       <button
                                         type="button"
                                         onClick={() => setConfirmingId(null)}
-                                        className="min-h-[36px] px-2.5 rounded-lg border border-gray-300 font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+                                        className="min-h-[40px] px-3 rounded-lg border border-gray-300 text-xs sm:text-sm font-bold text-gray-600 hover:bg-gray-100 transition-colors"
                                       >
                                         Cancel
                                       </button>
@@ -418,14 +418,14 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
                                     <button
                                       type="button"
                                       onClick={() => setConfirmingId(assignment.id)}
-                                      className="inline-flex items-center justify-center gap-1 min-h-[36px] px-2.5 rounded-lg border border-gray-200 text-xs font-medium text-gray-600 hover:border-red-300 hover:bg-red-50 hover:text-red-700 transition-colors"
+                                      className="inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3.5 rounded-lg border border-gray-200 text-xs sm:text-sm font-bold text-gray-700 hover:border-red-300 hover:bg-red-50 hover:text-red-700 transition-colors"
                                     >
-                                      <UserX className="h-3.5 w-3.5" />
+                                      <UserX className="h-4 w-4" />
                                       <span>Deactivate</span>
                                     </button>
                                   )
                                 ) : (
-                                  <span className="text-[11px] text-gray-400 italic">Archived</span>
+                                  <span className="text-xs sm:text-sm text-slate-400 italic">Archived</span>
                                 )}
                               </div>
                             </div>
@@ -436,15 +436,15 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
 
                     {/* Desktop / Tablet Table View (sm+) */}
                     <div className="hidden sm:block overflow-x-auto">
-                      <table className="w-full text-left text-xs">
-                        <thead className="border-b border-gray-200 bg-gray-50/80 text-gray-500 font-semibold">
+                      <table className="w-full text-left text-sm">
+                        <thead className="border-b border-gray-200 bg-gray-50/80 text-slate-500 font-bold text-xs uppercase tracking-wider">
                           <tr>
-                            <th className="py-2.5 px-3">Team Member</th>
-                            <th className="py-2.5 px-3">Member Role</th>
-                            <th className="py-2.5 px-3">Relationship / Specialty</th>
-                            <th className="py-2.5 px-3">Status</th>
-                            <th className="py-2.5 px-3">Assigned Date</th>
-                            <th className="py-2.5 px-3 text-right">Action</th>
+                            <th className="py-3 px-4">Team Member</th>
+                            <th className="py-3 px-4">Member Role</th>
+                            <th className="py-3 px-4">Relationship / Specialty</th>
+                            <th className="py-3 px-4">Status</th>
+                            <th className="py-3 px-4">Assigned Date</th>
+                            <th className="py-3 px-4 text-right">Action</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
@@ -457,17 +457,17 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
                                 key={assignment.id}
                                 className="hover:bg-gray-50/70 transition-colors duration-150"
                               >
-                                <td className="py-3 px-3 whitespace-nowrap">
-                                  <div className="font-semibold text-gray-900">
+                                <td className="py-3.5 px-4 whitespace-nowrap">
+                                  <div className="font-bold text-[#1E2243] text-sm sm:text-base">
                                     {assignment.member?.full_name || 'Member'}
                                   </div>
-                                  <div className="text-[11px] text-gray-400 font-mono">
+                                  <div className="text-xs sm:text-sm text-slate-500 font-mono">
                                     {assignment.member?.email}
                                   </div>
                                 </td>
-                                <td className="py-3 px-3 whitespace-nowrap">
+                                <td className="py-3.5 px-4 whitespace-nowrap">
                                   <span
-                                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border capitalize ${
+                                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs sm:text-sm font-bold border capitalize ${
                                       roleStyles[assignment.member_role as keyof typeof roleStyles] ||
                                       'bg-gray-100 text-gray-700'
                                     }`}
@@ -475,40 +475,40 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
                                     {assignment.member_role.replace('_', ' ')}
                                   </span>
                                 </td>
-                                <td className="py-3 px-3 text-gray-600 whitespace-nowrap">
+                                <td className="py-3.5 px-4 text-slate-700 font-medium whitespace-nowrap text-sm">
                                   {assignment.relationship_label || '—'}
                                 </td>
-                                <td className="py-3 px-3 whitespace-nowrap">
+                                <td className="py-3.5 px-4 whitespace-nowrap">
                                   {assignment.is_active ? (
-                                    <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
-                                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                    <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-emerald-700 font-bold">
+                                      <span className="h-2 w-2 rounded-full bg-emerald-500" />
                                       Active
                                     </span>
                                   ) : (
-                                    <span className="inline-flex items-center gap-1 text-[11px] text-gray-400 font-medium">
-                                      <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
+                                    <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-slate-400 font-bold">
+                                      <span className="h-2 w-2 rounded-full bg-gray-300" />
                                       Inactive
                                     </span>
                                   )}
                                 </td>
-                                <td className="py-3 px-3 text-gray-400 whitespace-nowrap">
+                                <td className="py-3.5 px-4 text-slate-500 font-medium whitespace-nowrap text-xs sm:text-sm">
                                   {format(new Date(assignment.assigned_at), 'MMM dd, yyyy · HH:mm')}
                                 </td>
-                                <td className="py-3 px-3 text-right whitespace-nowrap">
+                                <td className="py-3.5 px-4 text-right whitespace-nowrap">
                                   {assignment.is_active ? (
                                     isConfirming ? (
-                                      <div className="inline-flex items-center gap-1.5">
-                                        <span className="text-[11px] text-red-600 font-medium">
+                                      <div className="inline-flex items-center gap-2">
+                                        <span className="text-xs sm:text-sm text-red-600 font-bold">
                                           Deactivate?
                                         </span>
                                         <button
                                           type="button"
                                           disabled={isPending}
                                           onClick={() => handleDeactivate(assignment.id)}
-                                          className="rounded-lg bg-red-600 px-2 py-1 text-[11px] font-bold text-white shadow-sm hover:bg-red-700 active:bg-red-800 transition-colors"
+                                          className="rounded-lg bg-red-600 px-3 py-1.5 text-xs sm:text-sm font-bold text-white shadow-sm hover:bg-red-700 active:bg-red-800 transition-colors"
                                         >
                                           {isDeactivating ? (
-                                            <Loader2 className="h-3 w-3 animate-spin" />
+                                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
                                           ) : (
                                             'Yes'
                                           )}
@@ -516,7 +516,7 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
                                         <button
                                           type="button"
                                           onClick={() => setConfirmingId(null)}
-                                          className="rounded-lg border border-gray-300 px-2 py-1 text-[11px] font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+                                          className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs sm:text-sm font-bold text-gray-600 hover:bg-gray-100 transition-colors"
                                         >
                                           Cancel
                                         </button>
@@ -525,14 +525,14 @@ export function CareTeamsTable({ assignments }: CareTeamsTableProps) {
                                       <button
                                         type="button"
                                         onClick={() => setConfirmingId(assignment.id)}
-                                        className="inline-flex items-center gap-1 rounded-lg border border-gray-200 px-2.5 py-1 text-xs font-medium text-gray-600 hover:border-red-300 hover:bg-red-50 hover:text-red-700 transition-colors"
+                                        className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs sm:text-sm font-bold text-gray-700 hover:border-red-300 hover:bg-red-50 hover:text-red-700 transition-colors"
                                       >
-                                        <UserX className="h-3 w-3" />
+                                        <UserX className="h-3.5 w-3.5" />
                                         <span>Deactivate</span>
                                       </button>
                                     )
                                   ) : (
-                                    <span className="text-[11px] text-gray-400 italic">Archived</span>
+                                    <span className="text-xs sm:text-sm text-slate-400 italic">Archived</span>
                                   )}
                                 </td>
                               </tr>

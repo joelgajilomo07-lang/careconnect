@@ -80,24 +80,24 @@ export function ReviewForm({ vitalsLog }: ReviewFormProps) {
       value: 'stable',
       label: 'Stable',
       description: 'Vitals within expected recovery baseline. Continue standard monitoring.',
-      badgeColor: 'text-emerald-700 bg-emerald-50 border-emerald-200',
-      borderColor: 'peer-checked:border-emerald-500 peer-checked:bg-emerald-50/40',
+      badgeColor: 'text-[#0F766E] bg-[#2DD4BF]/10 border-[#2DD4BF]/30',
+      borderColor: 'peer-checked:border-[#2DD4BF] peer-checked:bg-[#2DD4BF]/5',
       icon: CheckCircle2,
     },
     {
       value: 'warning',
       label: 'Warning',
       description: 'Borderline or elevated readings. Requires close monitoring or medication adjustment.',
-      badgeColor: 'text-amber-700 bg-amber-50 border-amber-200',
-      borderColor: 'peer-checked:border-amber-500 peer-checked:bg-amber-50/40',
+      badgeColor: 'text-[#B45309] bg-[#F5A524]/10 border-[#F5A524]/30',
+      borderColor: 'peer-checked:border-[#F5A524] peer-checked:bg-[#F5A524]/5',
       icon: AlertTriangle,
     },
     {
       value: 'critical',
       label: 'Critical',
       description: 'Severe decompensation or acute danger. Dispatches immediate alerts to full care team.',
-      badgeColor: 'text-red-700 bg-red-50 border-red-200',
-      borderColor: 'peer-checked:border-red-500 peer-checked:bg-red-50/40',
+      badgeColor: 'text-[#B91C1C] bg-[#F25F5C]/10 border-[#F25F5C]/30',
+      borderColor: 'peer-checked:border-[#F25F5C] peer-checked:bg-[#F25F5C]/5',
       icon: AlertOctagon,
     },
   ]
@@ -105,14 +105,14 @@ export function ReviewForm({ vitalsLog }: ReviewFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Status Selection Cards */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 shadow-sm space-y-4">
+      <div className="rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm space-y-4">
         <div className="flex items-center gap-2">
-          <Stethoscope className="h-5 w-5 text-purple-600" />
-          <h2 className="text-base font-bold text-gray-900">
+          <Stethoscope className="h-5 w-5 text-[#5B5FE8]" />
+          <h2 className="text-lg sm:text-xl font-black text-[#1E2243]">
             1. Assign Clinical Patient Status
           </h2>
         </div>
-        <p className="text-xs text-gray-500">
+        <p className="text-sm font-medium text-slate-500">
           This updates the official patient status badge across the entire platform and notifies the patient&apos;s care team.
         </p>
 
@@ -123,10 +123,10 @@ export function ReviewForm({ vitalsLog }: ReviewFormProps) {
             return (
               <label
                 key={opt.value}
-                className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-150 focus-within:ring-2 focus-within:ring-purple-500 focus-within:ring-offset-2 ${
+                className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all duration-150 focus-within:ring-2 focus-within:ring-[#5B5FE8] focus-within:ring-offset-2 ${
                   isSelected
                     ? opt.borderColor.replace('peer-checked:', '')
-                    : 'border-gray-200 hover:border-purple-300 bg-white'
+                    : 'border-slate-200 hover:border-[#5B5FE8]/40 bg-white'
                 }`}
               >
                 <input
@@ -144,20 +144,20 @@ export function ReviewForm({ vitalsLog }: ReviewFormProps) {
                 />
                 <div className="flex items-center justify-between mb-2">
                   <span
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${opt.badgeColor}`}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs sm:text-sm font-bold border ${opt.badgeColor}`}
                   >
-                    <Icon className="h-3.5 w-3.5" />
+                    <Icon className="h-4 w-4" />
                     {opt.label}
                   </span>
                   <div
                     className={`h-4 w-4 rounded-full border flex items-center justify-center ${
-                      isSelected ? 'border-purple-600 bg-purple-600' : 'border-gray-300'
+                      isSelected ? 'border-[#5B5FE8] bg-[#5B5FE8]' : 'border-slate-300'
                     }`}
                   >
                     {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
                   </div>
                 </div>
-                <p className="text-xs text-gray-600 leading-relaxed mt-1">
+                <p className="text-sm text-slate-600 leading-relaxed mt-1 font-medium">
                   {opt.description}
                 </p>
               </label>
@@ -166,11 +166,11 @@ export function ReviewForm({ vitalsLog }: ReviewFormProps) {
         </div>
 
         {selectedStatus === 'critical' && (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-3.5 text-xs text-red-800 flex items-start gap-2.5">
-            <ShieldAlert className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
+          <div className="rounded-xl border border-[#F25F5C]/30 bg-[#FFF1F2] p-4 text-sm text-rose-950 flex items-start gap-2.5">
+            <ShieldAlert className="h-5 w-5 text-[#F25F5C] shrink-0 mt-0.5" />
             <div>
-              <p className="font-semibold">High-Priority Alert Triggered</p>
-              <p className="mt-0.5 text-red-700 leading-relaxed">
+              <p className="font-black text-base text-rose-950">High-Priority Alert Triggered</p>
+              <p className="mt-0.5 text-rose-800 leading-relaxed font-medium">
                 Critical status notifies the care team in-app across all portals. For immediate clinical response, follow standard institutional escalation protocols.
               </p>
             </div>
@@ -179,24 +179,24 @@ export function ReviewForm({ vitalsLog }: ReviewFormProps) {
       </div>
 
       {/* Urgent Flag Checkbox */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 shadow-sm">
+      <div className="rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm">
         <label className="flex items-start gap-3 cursor-pointer select-none">
           <input
             type="checkbox"
             checked={isUrgent}
             onChange={(e) => setIsUrgent(e.target.checked)}
-            className="mt-1 h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500 focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-1"
+            className="mt-1 h-5 w-5 rounded border-slate-300 text-[#5B5FE8] focus:ring-[#5B5FE8] focus-visible:ring-2 focus-visible:ring-[#5B5FE8] focus-visible:ring-offset-1 accent-[#5B5FE8]"
           />
           <div className="space-y-0.5">
-            <span className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+            <span className="text-base font-bold text-[#1E2243] flex items-center gap-2">
               Flag as Urgent Escalation
               {isUrgent && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-700">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold bg-[#F25F5C]/10 text-[#B91C1C] border border-[#F25F5C]/30">
                   URGENT
                 </span>
               )}
             </span>
-            <p className="text-xs text-gray-500">
+            <p className="text-sm text-slate-500 font-medium">
               Marks the review as urgent and delivers a high-priority in-app notification to the care team.
             </p>
           </div>
@@ -204,17 +204,17 @@ export function ReviewForm({ vitalsLog }: ReviewFormProps) {
       </div>
 
       {/* Clinical Feedback & Instructions */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 shadow-sm space-y-3">
+      <div className="rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-purple-600" />
-            <label htmlFor="feedback_notes" className="text-base font-bold text-gray-900">
+            <FileText className="h-5 w-5 text-[#5B5FE8]" />
+            <label htmlFor="feedback_notes" className="text-lg sm:text-xl font-black text-[#1E2243]">
               2. Clinical Feedback & Treatment Notes
             </label>
           </div>
-          <span className="text-xs text-gray-400">Required</span>
+          <span className="text-xs sm:text-sm text-slate-500 font-bold uppercase tracking-wider">Required</span>
         </div>
-        <p className="text-xs text-gray-500">
+        <p className="text-sm font-medium text-slate-500">
           Provide specific instructions for the care team (e.g. medication adjustment, repeat measurements, or immediate bedside protocols).
         </p>
         <textarea
@@ -223,28 +223,28 @@ export function ReviewForm({ vitalsLog }: ReviewFormProps) {
           value={feedbackNotes}
           onChange={(e) => setFeedbackNotes(e.target.value)}
           placeholder="e.g. Blood pressure remains elevated. Recheck manual cuff reading in 30 minutes. If systolic remains >160, administer prescribed 10mg amlodipine dose."
-          className="w-full rounded-xl border border-gray-300 p-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-200"
+          className="w-full rounded-xl border border-slate-200 p-4 text-sm sm:text-base text-[#1E2243] placeholder:text-slate-400 focus:border-[#5B5FE8] focus:outline-none focus:ring-2 focus:ring-[#5B5FE8]/15 font-medium"
           required
         />
       </div>
 
       {/* Error & Success Banners */}
       {errorMessage && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 flex items-start gap-2.5">
-          <AlertTriangle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+        <div className="rounded-xl border border-[#F25F5C]/30 bg-[#FFF1F2] p-4 text-sm text-rose-950 flex items-start gap-2.5">
+          <AlertTriangle className="h-5 w-5 text-[#F25F5C] shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold">Review Submission Failed</p>
-            <p className="text-xs mt-0.5">{errorMessage}</p>
+            <p className="font-black text-base text-rose-950">Review Submission Failed</p>
+            <p className="text-sm text-rose-800 mt-0.5 font-medium">{errorMessage}</p>
           </div>
         </div>
       )}
 
       {successMessage && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800 flex items-start gap-2.5">
-          <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
+        <div className="rounded-xl border border-[#2DD4BF]/30 bg-[#F0FDFA] p-4 text-sm text-teal-950 flex items-start gap-2.5">
+          <CheckCircle2 className="h-5 w-5 text-[#2DD4BF] shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold">Success</p>
-            <p className="text-xs mt-0.5">{successMessage}</p>
+            <p className="font-black text-base text-teal-950">Success</p>
+            <p className="text-sm text-teal-800 mt-0.5 font-medium">{successMessage}</p>
           </div>
         </div>
       )}
@@ -253,7 +253,7 @@ export function ReviewForm({ vitalsLog }: ReviewFormProps) {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
         <Link
           href="/triage"
-          className="inline-flex items-center gap-2 min-h-[48px] rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 transition-colors duration-150 w-full sm:w-auto justify-center"
+          className="inline-flex items-center gap-2 min-h-[48px] rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm sm:text-base font-bold text-slate-700 hover:bg-slate-50 hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5B5FE8] transition-colors duration-150 w-full sm:w-auto justify-center"
         >
           <ArrowLeft className="h-4 w-4" />
           Cancel & Return to Triage
@@ -262,16 +262,16 @@ export function ReviewForm({ vitalsLog }: ReviewFormProps) {
         <button
           type="submit"
           disabled={isPending || !feedbackNotes.trim()}
-          className="inline-flex items-center gap-2 min-h-[48px] rounded-xl bg-purple-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-purple-700 active:bg-purple-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150 w-full sm:w-auto justify-center"
+          className="inline-flex items-center gap-2 min-h-[48px] rounded-xl bg-[#5B5FE8] px-6 py-2.5 text-sm sm:text-base font-bold text-white shadow-sm shadow-[#5B5FE8]/25 hover:bg-[#4A4ED4] active:bg-[#3D41BD] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5B5FE8] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150 w-full sm:w-auto justify-center cursor-pointer"
         >
           {isPending ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-5 w-5 animate-spin" />
               Recording Clinical Review...
             </>
           ) : (
             <>
-              <Send className="h-4 w-4" />
+              <Send className="h-5 w-5" />
               Confirm & Submit Review
             </>
           )}

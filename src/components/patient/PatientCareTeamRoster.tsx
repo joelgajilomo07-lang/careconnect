@@ -13,39 +13,39 @@ export function PatientCareTeamRoster({ members }: PatientCareTeamRosterProps) {
   const familyContacts = activeMembers.filter((m) => m.member_role === 'family_member')
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 shadow-sm space-y-6">
+    <div className="rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-xs space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-gray-100 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-100 pb-4">
         <div>
-          <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
-            <Users className="h-5 w-5 text-teal-600" />
+          <h2 className="text-lg sm:text-xl font-black text-[#1E2243] flex items-center gap-2">
+            <Users className="h-5 w-5 text-[#5B5FE8]" />
             My Care Team & Support Contacts
           </h2>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-sm font-medium text-slate-500 mt-0.5">
             Your designated clinical care providers and registered emergency family contacts
           </p>
         </div>
-        <div className="flex items-center gap-1.5 text-xs text-teal-700 bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-200/60 font-medium">
-          <ShieldCheck className="h-4 w-4 shrink-0 text-teal-600" />
+        <div className="flex items-center gap-1.5 text-xs sm:text-sm text-[#0F766E] bg-[#2DD4BF]/10 px-3.5 py-1.5 rounded-xl border border-[#2DD4BF]/30 font-bold">
+          <ShieldCheck className="h-4 w-4 shrink-0 text-[#2DD4BF]" />
           <span>Verified Care Team</span>
         </div>
       </div>
 
       {/* Clinical Boundary Notification Notice */}
-      <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-4 text-xs text-blue-900 flex items-start gap-3">
-        <Clock className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+      <div className="rounded-xl border border-[#5B5FE8]/20 bg-[#EEF0FF]/50 p-4 sm:p-5 text-sm text-[#1E2243] flex items-start gap-3">
+        <Clock className="h-5 w-5 text-[#5B5FE8] shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <span className="font-bold text-blue-950">Centralized Clinical Communication Notice:</span>
-          <p className="text-blue-800/90 leading-relaxed">
+          <span className="font-black text-[#1E2243] text-sm sm:text-base">Centralized Clinical Communication Notice:</span>
+          <p className="text-slate-700 leading-relaxed font-medium">
             Direct clinical inquiries are managed via the Central Clinic Station and 24/7 Nurses&apos; Desk. 
-            For life-threatening emergencies, please call <strong className="font-bold text-blue-950">911</strong> immediately.
+            For life-threatening emergencies, please call <strong className="font-black text-[#1E2243]">911</strong> immediately.
           </p>
         </div>
       </div>
 
       {activeMembers.length === 0 ? (
-        <div className="py-8 text-center text-sm text-gray-400">
-          <AlertCircle className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+        <div className="rounded-2xl border border-dashed border-slate-200 bg-white py-8 text-center text-sm font-medium text-slate-500">
+          <AlertCircle className="h-8 w-8 mx-auto mb-2 text-slate-300" />
           No care team members assigned yet. Please contact your clinic administration.
         </div>
       ) : (
@@ -54,19 +54,19 @@ export function PatientCareTeamRoster({ members }: PatientCareTeamRosterProps) {
           {doctors.map((doc) => (
             <div
               key={doc.id}
-              className="flex flex-col justify-between rounded-xl border border-purple-100 bg-gradient-to-b from-purple-50/30 to-white p-4 shadow-sm hover:border-purple-200 transition"
+              className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs hover:border-[#5B5FE8]/40 hover:shadow-sm transition"
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-100 text-purple-700 font-bold">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF0FF] text-[#5B5FE8] font-bold">
                       <Stethoscope className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-gray-900 leading-tight">
+                      <h3 className="text-base font-black text-[#1E2243] leading-tight">
                         {doc.member?.full_name || 'Attending Physician'}
                       </h3>
-                      <span className="text-[11px] font-semibold text-purple-700 bg-purple-100/70 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                      <span className="text-xs font-bold text-[#5B5FE8] bg-[#EEF0FF] border border-[#5B5FE8]/20 px-2.5 py-0.5 rounded-md inline-block mt-0.5">
                         Attending Physician
                       </span>
                     </div>
@@ -74,23 +74,23 @@ export function PatientCareTeamRoster({ members }: PatientCareTeamRosterProps) {
                 </div>
 
                 {doc.relationship_label && (
-                  <p className="text-xs text-gray-600 italic">
+                  <p className="text-xs sm:text-sm text-slate-500 italic font-medium">
                     Focus: {doc.relationship_label}
                   </p>
                 )}
 
-                <div className="rounded-lg border border-purple-100/70 bg-white p-2.5 text-xs space-y-1.5">
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <Phone className="h-3.5 w-3.5 text-purple-600 shrink-0" />
-                    <span className="font-medium text-gray-900">Clinic Desk: (555) 019-2834</span>
+                <div className="rounded-xl border border-slate-200/60 bg-slate-50/60 p-3 text-sm space-y-1.5">
+                  <div className="flex items-center gap-2 text-slate-700">
+                    <Phone className="h-4 w-4 text-[#5B5FE8] shrink-0" />
+                    <span className="font-bold text-[#1E2243]">Clinic Desk: (555) 019-2834</span>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-500 text-[11px]">
-                    <Clock className="h-3.5 w-3.5 text-purple-400 shrink-0" />
+                  <div className="flex items-center gap-2 text-slate-500 text-xs font-medium">
+                    <Clock className="h-4 w-4 text-slate-400 shrink-0" />
                     <span>Mon–Fri, 8:00 AM – 5:00 PM</span>
                   </div>
                 </div>
               </div>
-              <p className="mt-3 text-[10px] text-gray-400 border-t border-gray-100 pt-2">
+              <p className="mt-3 text-xs text-slate-400 border-t border-slate-100 pt-2 font-medium">
                 Routine messages & prescriptions routed via Clinic Desk
               </p>
             </div>
@@ -100,19 +100,19 @@ export function PatientCareTeamRoster({ members }: PatientCareTeamRosterProps) {
           {caregivers.map((cg) => (
             <div
               key={cg.id}
-              className="flex flex-col justify-between rounded-xl border border-teal-100 bg-gradient-to-b from-teal-50/30 to-white p-4 shadow-sm hover:border-teal-200 transition"
+              className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs hover:border-[#2DD4BF]/50 hover:shadow-sm transition"
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-100 text-teal-700 font-bold">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2DD4BF]/15 text-[#0F766E] font-bold">
                       <HeartHandshake className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-gray-900 leading-tight">
+                      <h3 className="text-base font-black text-[#1E2243] leading-tight">
                         {cg.member?.full_name || 'Caregiver'}
                       </h3>
-                      <span className="text-[11px] font-semibold text-teal-700 bg-teal-100/70 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                      <span className="text-xs font-bold text-[#0F766E] bg-[#2DD4BF]/10 border border-[#2DD4BF]/30 px-2.5 py-0.5 rounded-md inline-block mt-0.5">
                         Primary Caregiver
                       </span>
                     </div>
@@ -120,23 +120,23 @@ export function PatientCareTeamRoster({ members }: PatientCareTeamRosterProps) {
                 </div>
 
                 {cg.relationship_label && (
-                  <p className="text-xs text-gray-600 italic">
+                  <p className="text-xs sm:text-sm text-slate-500 italic font-medium">
                     Assignment: {cg.relationship_label}
                   </p>
                 )}
 
-                <div className="rounded-lg border border-teal-100/70 bg-white p-2.5 text-xs space-y-1.5">
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <Phone className="h-3.5 w-3.5 text-teal-600 shrink-0" />
-                    <span className="font-medium text-gray-900">Nurses&apos; Station: (555) 019-2835</span>
+                <div className="rounded-xl border border-slate-200/60 bg-slate-50/60 p-3 text-sm space-y-1.5">
+                  <div className="flex items-center gap-2 text-slate-700">
+                    <Phone className="h-4 w-4 text-[#2DD4BF] shrink-0" />
+                    <span className="font-bold text-[#1E2243]">Nurses&apos; Station: (555) 019-2835</span>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-500 text-[11px]">
-                    <Clock className="h-3.5 w-3.5 text-teal-400 shrink-0" />
+                  <div className="flex items-center gap-2 text-slate-500 text-xs font-medium">
+                    <Clock className="h-4 w-4 text-slate-400 shrink-0" />
                     <span>24/7 Floor Duty & Immediate Inquiries</span>
                   </div>
                 </div>
               </div>
-              <p className="mt-3 text-[10px] text-gray-400 border-t border-gray-100 pt-2">
+              <p className="mt-3 text-xs text-slate-400 border-t border-slate-100 pt-2 font-medium">
                 Care requests managed via Central Nursing Desk
               </p>
             </div>
@@ -146,53 +146,53 @@ export function PatientCareTeamRoster({ members }: PatientCareTeamRosterProps) {
           {familyContacts.map((fc) => (
             <div
               key={fc.id}
-              className="flex flex-col justify-between rounded-xl border border-amber-100 bg-gradient-to-b from-amber-50/30 to-white p-4 shadow-sm hover:border-amber-200 transition"
+              className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-5 shadow-xs hover:border-[#F5A524]/50 hover:shadow-sm transition"
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100 text-amber-700 font-bold">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F5A524]/15 text-[#B45309] font-bold">
                       <Users className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-gray-900 leading-tight">
+                      <h3 className="text-base font-black text-[#1E2243] leading-tight">
                         {fc.member?.full_name || 'Family Contact'}
                       </h3>
-                      <span className="text-[11px] font-semibold text-amber-800 bg-amber-100/70 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                      <span className="text-xs font-bold text-[#B45309] bg-[#F5A524]/10 border border-[#F5A524]/30 px-2.5 py-0.5 rounded-md inline-block mt-0.5">
                         {fc.relationship_label || 'Emergency Contact / Kin'}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-amber-100/70 bg-white p-2.5 text-xs space-y-1.5">
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <Phone className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-                    <span className="font-medium text-gray-900">
+                <div className="rounded-xl border border-slate-200/60 bg-slate-50/60 p-3 text-sm space-y-2">
+                  <div className="flex items-center gap-2 text-slate-700">
+                    <Phone className="h-4 w-4 text-[#F5A524] shrink-0" />
+                    <span className="font-bold text-[#1E2243]">
                       {fc.member?.phone ? (
-                        <a href={`tel:${fc.member.phone}`} className="hover:underline text-amber-900">
+                        <a href={`tel:${fc.member.phone}`} className="hover:underline text-[#1E2243]">
                           {fc.member.phone}
                         </a>
                       ) : (
-                        <span className="text-gray-400">No direct phone listed</span>
+                        <span className="text-slate-400 font-normal">No direct phone listed</span>
                       )}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <Mail className="h-3.5 w-3.5 text-amber-600 shrink-0" />
-                    <span className="truncate text-gray-600">
+                  <div className="flex items-center gap-2 text-slate-700">
+                    <Mail className="h-4 w-4 text-[#F5A524] shrink-0" />
+                    <span className="truncate text-slate-700 font-medium">
                       {fc.member?.email ? (
-                        <a href={`mailto:${fc.member.email}`} className="hover:underline text-amber-900">
+                        <a href={`mailto:${fc.member.email}`} className="hover:underline text-[#1E2243]">
                           {fc.member.email}
                         </a>
                       ) : (
-                        <span className="text-gray-400">No email listed</span>
+                        <span className="text-slate-400 font-normal">No email listed</span>
                       )}
                     </span>
                   </div>
                 </div>
               </div>
-              <p className="mt-3 text-[10px] text-amber-700 font-medium border-t border-gray-100 pt-2">
+              <p className="mt-3 text-xs text-[#B45309] font-bold border-t border-slate-100 pt-2">
                 Emergency Kin Contact
               </p>
             </div>

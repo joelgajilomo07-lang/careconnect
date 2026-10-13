@@ -192,8 +192,8 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
       {/* Directory Header with Quick Search Bar & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 pb-4">
         <div>
-          <h2 className="text-base font-bold text-gray-900">Registered System Users</h2>
-          <p className="text-xs text-gray-500">
+          <h2 className="text-lg sm:text-xl font-black text-[#1E2243]">Registered System Users</h2>
+          <p className="text-sm font-medium text-slate-500">
             All provisioned accounts with database roles and active status
           </p>
         </div>
@@ -201,22 +201,22 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
         <div className="flex flex-wrap items-center gap-2">
           {/* Quick Search Input */}
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-gray-400" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
             <input
               type="text"
               placeholder="Search by name or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="rounded-xl border border-gray-300 pl-8 pr-8 py-1.5 text-xs text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 w-52 sm:w-64"
+              className="rounded-xl border border-gray-300 pl-9 pr-8 py-2 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 w-56 sm:w-72"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
                 aria-label="Clear search"
-                className="absolute right-2 top-2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 cursor-pointer"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-4 w-4" />
               </button>
             )}
           </div>
@@ -225,17 +225,17 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
           <button
             type="button"
             onClick={toggleAllRoles}
-            className="inline-flex items-center gap-1 rounded-xl border border-gray-300 bg-gray-50 px-2.5 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer select-none"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-gray-300 bg-gray-50 px-3 py-2 text-xs sm:text-sm font-bold text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer select-none"
             title={allRolesExpanded ? 'Collapse all role groups' : 'Expand all role groups'}
           >
             {allRolesExpanded ? (
               <>
-                <ChevronUp className="h-3.5 w-3.5 text-gray-500" />
+                <ChevronUp className="h-4 w-4 text-gray-500" />
                 <span>Collapse All</span>
               </>
             ) : (
               <>
-                <ChevronDown className="h-3.5 w-3.5 text-gray-500" />
+                <ChevronDown className="h-4 w-4 text-gray-500" />
                 <span>Expand All</span>
               </>
             )}
@@ -247,16 +247,16 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
       {filteredUsers.length === 0 ? (
         <div className="py-10 text-center space-y-2">
           <Search className="mx-auto h-8 w-8 text-gray-300" />
-          <p className="text-sm font-semibold text-gray-800">No matching users found</p>
-          <p className="text-xs text-gray-400">
+          <p className="text-base font-bold text-gray-800">No matching users found</p>
+          <p className="text-sm font-medium text-gray-500">
             No accounts matched &ldquo;{searchQuery}&rdquo;. Try clearing your search term.
           </p>
           <button
             type="button"
             onClick={() => setSearchQuery('')}
-            className="mt-2 inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+            className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3.5 py-1.5 text-xs sm:text-sm font-bold text-gray-700 hover:bg-gray-50 cursor-pointer"
           >
-            <X className="h-3 w-3" />
+            <X className="h-3.5 w-3.5" />
             <span>Clear search filter</span>
           </button>
         </div>
@@ -283,25 +283,25 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
                 {/* Role Group Accordion Header */}
                 <div
                   onClick={() => toggleRole(def.key)}
-                  className={`flex items-center justify-between p-3.5 bg-gray-50/60 cursor-pointer select-none transition-colors border-b border-gray-100 ${def.headerBg}`}
+                  className={`flex items-center justify-between p-3.5 sm:p-4 bg-gray-50/60 cursor-pointer select-none transition-colors border-b border-gray-100 ${def.headerBg}`}
                 >
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-3">
                     <div
-                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${def.iconColor}`}
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${def.iconColor}`}
                     >
-                      <RoleIcon className="h-4 w-4" />
+                      <RoleIcon className="h-4.5 w-4.5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 text-xs sm:text-sm flex items-center gap-2">
+                      <h3 className="font-black text-[#1E2243] text-sm sm:text-base flex items-center gap-2">
                         <span>{def.title}</span>
                       </h3>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2.5">
                     {/* User Count Pill */}
                     <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border ${def.badgeStyle}`}
+                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs sm:text-sm font-bold border ${def.badgeStyle}`}
                     >
                       {count} {count === 1 ? def.labelSingular : def.labelPlural}
                     </span>
@@ -315,12 +315,12 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
                         e.stopPropagation()
                         toggleRole(def.key)
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
                     >
                       {isExpanded ? (
-                        <ChevronUp className="h-3.5 w-3.5" />
+                        <ChevronUp className="h-4 w-4" />
                       ) : (
-                        <ChevronDown className="h-3.5 w-3.5" />
+                        <ChevronDown className="h-4 w-4" />
                       )}
                     </button>
                   </div>
@@ -330,7 +330,7 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
                 {isExpanded && (
                   <div className="divide-y divide-gray-100">
                     {count === 0 ? (
-                      <div className="py-4 text-center text-xs text-gray-400">
+                      <div className="py-4 text-center text-sm font-medium text-gray-400">
                         No {def.labelPlural.toLowerCase()} registered in the system yet.
                       </div>
                     ) : (
@@ -342,17 +342,17 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
                             {/* User Row (Clickable) */}
                             <div
                               onClick={() => toggleUserRow(u.id)}
-                              className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 gap-2.5 cursor-pointer select-none"
+                              className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 gap-3 cursor-pointer select-none"
                             >
                               <div className="flex items-center gap-3 min-w-0">
-                                <div className="h-8 w-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-xs shrink-0 border border-slate-200">
+                                <div className="h-9 w-9 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-black text-sm shrink-0 border border-slate-200">
                                   {u.full_name ? u.full_name.charAt(0).toUpperCase() : 'U'}
                                 </div>
                                 <div className="min-w-0">
-                                  <p className="font-semibold text-gray-900 text-xs sm:text-sm truncate">
+                                  <p className="font-bold text-[#1E2243] text-sm sm:text-base truncate">
                                     {u.full_name}
                                   </p>
-                                  <p className="font-mono text-[11px] text-gray-500 truncate">
+                                  <p className="font-mono text-xs sm:text-sm text-slate-500 truncate">
                                     {u.email}
                                   </p>
                                 </div>
@@ -361,9 +361,9 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
                               <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 self-end sm:self-auto w-full sm:w-auto">
                                 <div className="flex items-center gap-3">
                                   {/* Status Pill */}
-                                  <span className="inline-flex items-center gap-1 text-[11px] font-medium text-gray-600">
+                                  <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-600">
                                     <span
-                                      className={`h-1.5 w-1.5 rounded-full ${
+                                      className={`h-2 w-2 rounded-full ${
                                         u.is_active ? 'bg-emerald-500' : 'bg-gray-300'
                                       }`}
                                     />
@@ -371,7 +371,7 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
                                   </span>
 
                                   {/* Created Date */}
-                                  <span className="text-[11px] text-gray-400 whitespace-nowrap hidden sm:inline-block">
+                                  <span className="text-xs sm:text-sm font-medium text-slate-500 whitespace-nowrap hidden sm:inline-block">
                                     Joined {format(new Date(u.created_at), 'MMM dd, yyyy')}
                                   </span>
                                 </div>
@@ -385,12 +385,12 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
                                   }}
                                   aria-expanded={isUserRowOpen}
                                   aria-label={isUserRowOpen ? `Collapse ${u.full_name} details` : `Expand ${u.full_name} details`}
-                                  className="flex h-6 w-6 items-center justify-center rounded text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                                  className="flex h-7 w-7 items-center justify-center rounded text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
                                 >
                                   {isUserRowOpen ? (
-                                    <ChevronUp className="h-3.5 w-3.5" />
+                                    <ChevronUp className="h-4 w-4" />
                                   ) : (
-                                    <ChevronDown className="h-3.5 w-3.5" />
+                                    <ChevronDown className="h-4 w-4" />
                                   )}
                                 </button>
                               </div>
@@ -398,13 +398,13 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
 
                             {/* Expanded User Details Drawer */}
                             {isUserRowOpen && (
-                              <div className="bg-slate-50/70 p-3.5 sm:px-5 border-t border-slate-100/80 text-xs space-y-3">
+                              <div className="bg-slate-50/70 p-4 sm:px-6 border-t border-slate-100/80 text-sm space-y-3">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-600">
                                   {/* User UUID */}
-                                  <div className="flex items-center gap-1.5 font-mono text-[11px]">
-                                    <Fingerprint className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                                  <div className="flex items-center gap-1.5 font-mono text-xs sm:text-sm">
+                                    <Fingerprint className="h-4 w-4 text-slate-400 shrink-0" />
                                     <span className="text-slate-400 select-none">ID:</span>
-                                    <span className="truncate text-slate-700">{u.id}</span>
+                                    <span className="truncate text-slate-800 font-medium">{u.id}</span>
                                     <button
                                       type="button"
                                       onClick={() => copyToClipboard(u.id)}
@@ -412,34 +412,34 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
                                       title="Copy User ID"
                                     >
                                       {copiedId === u.id ? (
-                                        <Check className="h-3 w-3 text-emerald-600" />
+                                        <Check className="h-3.5 w-3.5 text-emerald-600" />
                                       ) : (
-                                        <Copy className="h-3 w-3" />
+                                        <Copy className="h-3.5 w-3.5" />
                                       )}
                                     </button>
                                   </div>
 
                                   {/* Joined Full Date */}
-                                  <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                                    <Calendar className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                                  <div className="flex items-center gap-1.5 text-xs sm:text-sm text-slate-600 font-medium">
+                                    <Calendar className="h-4 w-4 text-slate-400 shrink-0" />
                                     <span>Created: {format(new Date(u.created_at), 'PPP pp')}</span>
                                   </div>
                                 </div>
 
                                 {/* Quick Action Links */}
-                                <div className="pt-2 border-t border-slate-200/60 flex flex-wrap items-center gap-2">
+                                <div className="pt-2 border-t border-slate-200/60 flex flex-wrap items-center gap-2.5">
                                   {u.role === 'patient' && (
                                     <>
                                       <Link
                                         href={`/patients/${u.id}`}
-                                        className="inline-flex items-center gap-1 rounded-lg bg-teal-600 px-3 py-1.5 text-xs font-semibold text-white shadow-2xs hover:bg-teal-700 transition"
+                                        className="inline-flex items-center gap-1.5 rounded-lg bg-teal-600 px-3.5 py-2 text-xs sm:text-sm font-bold text-white shadow-2xs hover:bg-teal-700 transition"
                                       >
                                         <span>View Patient Chart</span>
-                                        <ArrowRight className="h-3 w-3" />
+                                        <ArrowRight className="h-3.5 w-3.5" />
                                       </Link>
                                       <Link
                                         href="/care-teams"
-                                        className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition"
+                                        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-bold text-slate-700 hover:bg-slate-50 transition"
                                       >
                                         <span>Manage Care Circle</span>
                                       </Link>
@@ -449,25 +449,25 @@ export function RegisteredUsersTable({ users }: RegisteredUsersTableProps) {
                                   {(u.role === 'caregiver' || u.role === 'doctor') && (
                                     <Link
                                       href="/care-teams"
-                                      className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-2xs hover:bg-blue-700 transition"
+                                      className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-2 text-xs sm:text-sm font-bold text-white shadow-2xs hover:bg-blue-700 transition"
                                     >
                                       <span>Manage Assignments</span>
-                                      <ArrowRight className="h-3 w-3" />
+                                      <ArrowRight className="h-3.5 w-3.5" />
                                     </Link>
                                   )}
 
                                   {u.role === 'family_member' && (
                                     <Link
                                       href="/care-teams"
-                                      className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition"
+                                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-bold text-slate-700 hover:bg-slate-50 transition"
                                     >
                                       <span>Assign to Patient</span>
-                                      <ArrowRight className="h-3 w-3" />
+                                      <ArrowRight className="h-3.5 w-3.5" />
                                     </Link>
                                   )}
 
                                   {u.role === 'admin' && (
-                                    <span className="text-[11px] text-slate-500 italic">
+                                    <span className="text-xs sm:text-sm text-slate-500 font-medium italic">
                                       System Administrator • Full audit and provisioning access
                                     </span>
                                   )}

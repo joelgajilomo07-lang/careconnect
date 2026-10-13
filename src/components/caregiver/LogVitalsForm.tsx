@@ -285,38 +285,38 @@ const getStatusBadgeConfig = (status: string | null | undefined) => {
     case 'stable':
       return {
         label: 'STABLE',
-        pillBg: 'bg-[#EAF7F2] border-[#A2D5C3]',
-        iconBg: 'bg-[#34A87A]',
-        textColor: 'text-[#1F5443]',
-        dividerColor: 'bg-[#8EBAAB]/60',
+        pillBg: 'bg-[#2DD4BF]/10 border-[#2DD4BF]/30',
+        iconBg: 'bg-[#2DD4BF]',
+        textColor: 'text-[#0F766E]',
+        dividerColor: 'bg-[#2DD4BF]/40',
         Icon: HeartPulse,
       }
     case 'warning':
       return {
         label: 'WARNING',
-        pillBg: 'bg-[#FDF7EA] border-[#F4D396]',
-        iconBg: 'bg-[#E0A030]',
-        textColor: 'text-[#7A4F0B]',
-        dividerColor: 'bg-[#D19E4A]/60',
+        pillBg: 'bg-[#F5A524]/10 border-[#F5A524]/30',
+        iconBg: 'bg-[#F5A524]',
+        textColor: 'text-[#B45309]',
+        dividerColor: 'bg-[#F5A524]/40',
         Icon: AlertTriangle,
       }
     case 'critical':
       return {
         label: 'CRITICAL',
-        pillBg: 'bg-[#FDEFEF] border-[#F7A8A8]',
-        iconBg: 'bg-[#D95B5B]',
-        textColor: 'text-[#821E1E]',
-        dividerColor: 'bg-[#D97777]/60',
+        pillBg: 'bg-[#F25F5C]/10 border-[#F25F5C]/30',
+        iconBg: 'bg-[#F25F5C]',
+        textColor: 'text-[#B91C1C]',
+        dividerColor: 'bg-[#F25F5C]/40',
         Icon: AlertCircle,
       }
     case 'unassessed':
     default:
       return {
         label: 'UNASSESSED',
-        pillBg: 'bg-[#F1F5F9] border-[#CBD5E1]',
-        iconBg: 'bg-[#64748B]',
-        textColor: 'text-[#334155]',
-        dividerColor: 'bg-[#94A3B8]/60',
+        pillBg: 'bg-slate-100 border-slate-200',
+        iconBg: 'bg-slate-400',
+        textColor: 'text-slate-600',
+        dividerColor: 'bg-slate-300',
         Icon: Clock,
       }
   }
@@ -450,18 +450,18 @@ function CustomSelect({
         aria-label={ariaLabel}
         onClick={() => setIsOpen((prev) => !prev)}
         onKeyDown={handleTriggerKeyDown}
-        className={`w-full min-h-[56px] py-3.5 px-4 text-base sm:text-lg font-bold text-[#223852] rounded-2xl border-2 bg-[#FAFDFD] focus:outline-none transition-all cursor-pointer flex items-center justify-between gap-2 text-left ${
+        className={`w-full min-h-[56px] py-3.5 px-4 text-base sm:text-lg font-bold text-[#1E2243] rounded-2xl border bg-slate-50/50 focus:outline-none transition-all cursor-pointer flex items-center justify-between gap-2 text-left ${
           isOpen
-            ? 'border-[#759EC7] bg-white ring-4 ring-[#759EC7]/20'
-            : 'border-[#D9E6E2] hover:border-[#8EBAAB]/80 focus:border-[#759EC7] focus:bg-white focus:ring-4 focus:ring-[#759EC7]/20'
+            ? 'border-[#5B5FE8] bg-white ring-4 ring-[#5B5FE8]/15'
+            : 'border-slate-200 hover:border-[#5B5FE8]/50 focus:border-[#5B5FE8] focus:bg-white focus:ring-4 focus:ring-[#5B5FE8]/15'
         }`}
       >
         <span className="truncate">
           {selectedOption ? selectedOption.label : placeholder || ''}
         </span>
         <ChevronDown
-          className={`h-5 w-5 text-[#5D817C] shrink-0 transition-transform duration-200 ${
-            isOpen ? 'rotate-180 text-[#223852]' : ''
+          className={`h-5 w-5 text-slate-400 shrink-0 transition-transform duration-200 ${
+            isOpen ? 'rotate-180 text-[#5B5FE8]' : ''
           }`}
         />
       </button>
@@ -471,7 +471,7 @@ function CustomSelect({
           ref={listRef}
           role="listbox"
           tabIndex={-1}
-          className="absolute z-50 left-0 right-0 top-full mt-2 max-h-60 overflow-y-auto rounded-2xl border-2 border-[#D9E6E2] bg-white shadow-xl py-1.5 focus:outline-none animate-in fade-in zoom-in-95 duration-100"
+          className="absolute z-50 left-0 right-0 top-full mt-2 max-h-60 overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-xl py-1.5 focus:outline-none animate-in fade-in zoom-in-95 duration-100"
         >
           {options.map((opt, idx) => {
             const isSelected = opt.value === value
@@ -490,15 +490,15 @@ function CustomSelect({
                 onMouseEnter={() => setHighlightedIndex(idx)}
                 className={`w-full text-left px-4 py-3 text-base sm:text-lg transition-colors cursor-pointer flex items-center justify-between ${
                   isSelected
-                    ? 'bg-[#EAF4F1] text-[#223852] font-black'
+                    ? 'bg-[#EEF0FF] text-[#5B5FE8] font-black'
                     : isHighlighted
-                    ? 'bg-[#FAFDFD] text-[#223852] font-bold'
-                    : 'text-[#223852] font-bold hover:bg-[#EAF4F1]'
+                    ? 'bg-slate-50 text-[#1E2243] font-bold'
+                    : 'text-[#1E2243] font-bold hover:bg-[#EEF0FF] hover:text-[#5B5FE8]'
                 }`}
               >
                 <span className="truncate">{opt.label}</span>
                 {isSelected && (
-                  <Check className="h-4 w-4 text-[#223852] stroke-[2.5] shrink-0 ml-2" />
+                  <Check className="h-4 w-4 text-[#5B5FE8] stroke-[2.5] shrink-0 ml-2" />
                 )}
               </button>
             )
@@ -895,15 +895,15 @@ export function LogVitalsForm({
     const heightM = h / 100
     const val = parseFloat((w / (heightM * heightM)).toFixed(1))
     if (val < 18.5) {
-      return { bmi: val, classification: 'Underweight', pillColor: 'bg-[#759EC7] text-[#223852]' }
+      return { bmi: val, classification: 'Underweight', pillColor: 'bg-[#EEF0FF] text-[#5B5FE8]' }
     }
     if (val < 25) {
-      return { bmi: val, classification: 'Normal', pillColor: 'bg-[#8EBAAB] text-[#223852]' }
+      return { bmi: val, classification: 'Normal', pillColor: 'bg-[#2DD4BF]/20 text-[#0F766E]' }
     }
     if (val < 30) {
-      return { bmi: val, classification: 'Overweight', pillColor: 'bg-[#C4C674] text-[#223852]' }
+      return { bmi: val, classification: 'Overweight', pillColor: 'bg-[#F5A524]/20 text-[#B45309]' }
     }
-    return { bmi: val, classification: 'Obese', pillColor: 'bg-[#D9776A] text-white' }
+    return { bmi: val, classification: 'Obese', pillColor: 'bg-[#F25F5C]/20 text-[#B91C1C]' }
   }, [formData.weight_kg, formData.height_cm])
 
   // Real-time heuristic vitals check
@@ -1125,29 +1125,29 @@ export function LogVitalsForm({
     if (numSys !== null && numDia !== null && !isNaN(numSys) && !isNaN(numDia)) {
       if (numSys >= 140 || numDia >= 90) {
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FCEFEB] border border-[#D9776A] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#8E281B]">
-            <AlertTriangle className="h-4 w-4 text-[#D9776A]" /> Elevated (High)
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F25F5C]/10 border border-[#F25F5C]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B91C1C]">
+            <AlertTriangle className="h-4 w-4 text-[#F25F5C]" /> Elevated (High)
           </span>
         )
       }
       if (numSys >= 130 || numDia >= 85) {
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F6F7E4] border border-[#C4C674] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#55581A]">
-            <AlertTriangle className="h-4 w-4 text-[#9FA13B]" /> Elevated
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5A524]/10 border border-[#F5A524]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B45309]">
+            <AlertTriangle className="h-4 w-4 text-[#F5A524]" /> Elevated
           </span>
         )
       }
       if (numSys < 90 || numDia < 60) {
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F6F7E4] border border-[#C4C674] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#55581A]">
-            <AlertTriangle className="h-4 w-4 text-[#9FA13B]" /> Low
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5A524]/10 border border-[#F5A524]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B45309]">
+            <AlertTriangle className="h-4 w-4 text-[#F5A524]" /> Low
           </span>
         )
       }
       if (numSys >= 90 && numSys <= 120 && numDia >= 60 && numDia <= 80) {
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAF4F1] border border-[#8EBAAB] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#345B50]">
-            <CheckCircle2 className="h-4 w-4 text-[#5D817C]" /> Normal
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#2DD4BF]/10 border border-[#2DD4BF]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#0F766E]">
+            <CheckCircle2 className="h-4 w-4 text-[#2DD4BF]" /> Normal
           </span>
         )
       }
@@ -1159,28 +1159,28 @@ export function LogVitalsForm({
     if (!formData.heart_rate || numHr === null || isNaN(numHr) || numHr <= 0) return null
     if (numHr > 120) {
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FCEFEB] border border-[#D9776A] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#8E281B]">
-          <AlertTriangle className="h-4 w-4 text-[#D9776A]" /> High ({numHr} bpm)
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F25F5C]/10 border border-[#F25F5C]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B91C1C]">
+          <AlertTriangle className="h-4 w-4 text-[#F25F5C]" /> High ({numHr} bpm)
         </span>
       )
     }
     if (numHr > 100) {
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F6F7E4] border border-[#C4C674] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#55581A]">
-          <AlertTriangle className="h-4 w-4 text-[#9FA13B]" /> Elevated
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5A524]/10 border border-[#F5A524]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B45309]">
+          <AlertTriangle className="h-4 w-4 text-[#F5A524]" /> Elevated
         </span>
       )
     }
     if (numHr < 60) {
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F6F7E4] border border-[#C4C674] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#55581A]">
-          <AlertTriangle className="h-4 w-4 text-[#9FA13B]" /> Low
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5A524]/10 border border-[#F5A524]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B45309]">
+          <AlertTriangle className="h-4 w-4 text-[#F5A524]" /> Low
         </span>
       )
     }
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAF4F1] border border-[#8EBAAB] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#345B50]">
-        <CheckCircle2 className="h-4 w-4 text-[#5D817C]" /> Normal
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#2DD4BF]/10 border border-[#2DD4BF]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#0F766E]">
+        <CheckCircle2 className="h-4 w-4 text-[#2DD4BF]" /> Normal
       </span>
     )
   }
@@ -1189,21 +1189,21 @@ export function LogVitalsForm({
     if (!formData.spo2 || numSpo2 === null || isNaN(numSpo2) || numSpo2 <= 0) return null
     if (numSpo2 < 90) {
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FCEFEB] border border-[#D9776A] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#8E281B]">
-          <AlertTriangle className="h-4 w-4 text-[#D9776A]" /> Critical Low
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F25F5C]/10 border border-[#F25F5C]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B91C1C]">
+          <AlertTriangle className="h-4 w-4 text-[#F25F5C]" /> Critical Low
         </span>
       )
     }
     if (numSpo2 < 95) {
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F6F7E4] border border-[#C4C674] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#55581A]">
-          <AlertTriangle className="h-4 w-4 text-[#9FA13B]" /> Low (&lt;95%)
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5A524]/10 border border-[#F5A524]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B45309]">
+          <AlertTriangle className="h-4 w-4 text-[#F5A524]" /> Low (&lt;95%)
         </span>
       )
     }
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAF4F1] border border-[#8EBAAB] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#345B50]">
-        <CheckCircle2 className="h-4 w-4 text-[#5D817C]" /> Normal
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#2DD4BF]/10 border border-[#2DD4BF]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#0F766E]">
+        <CheckCircle2 className="h-4 w-4 text-[#2DD4BF]" /> Normal
       </span>
     )
   }
@@ -1212,28 +1212,28 @@ export function LogVitalsForm({
     if (!formData.temperature_c || numTempC === null || isNaN(numTempC) || numTempC <= 0) return null
     if (numTempC >= 38.0) {
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FCEFEB] border border-[#D9776A] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#8E281B]">
-          <AlertTriangle className="h-4 w-4 text-[#D9776A]" /> High Fever
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F25F5C]/10 border border-[#F25F5C]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B91C1C]">
+          <AlertTriangle className="h-4 w-4 text-[#F25F5C]" /> High Fever
         </span>
       )
     }
     if (numTempC > 37.5) {
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F6F7E4] border border-[#C4C674] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#55581A]">
-          <AlertTriangle className="h-4 w-4 text-[#9FA13B]" /> Elevated
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5A524]/10 border border-[#F5A524]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B45309]">
+          <AlertTriangle className="h-4 w-4 text-[#F5A524]" /> Elevated
         </span>
       )
     }
     if (numTempC < 36.0) {
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F6F7E4] border border-[#C4C674] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#55581A]">
-          <AlertTriangle className="h-4 w-4 text-[#9FA13B]" /> Low
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5A524]/10 border border-[#F5A524]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B45309]">
+          <AlertTriangle className="h-4 w-4 text-[#F5A524]" /> Low
         </span>
       )
     }
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAF4F1] border border-[#8EBAAB] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#345B50]">
-        <CheckCircle2 className="h-4 w-4 text-[#5D817C]" /> Normal
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#2DD4BF]/10 border border-[#2DD4BF]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#0F766E]">
+        <CheckCircle2 className="h-4 w-4 text-[#2DD4BF]" /> Normal
       </span>
     )
   }
@@ -1244,38 +1244,38 @@ export function LogVitalsForm({
     if (isNaN(rr) || rr <= 0) return null
     if (rr > 24) {
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FCEFEB] border border-[#D9776A] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#8E281B]">
-          <AlertTriangle className="h-4 w-4 text-[#D9776A]" /> Tachypnea ({rr})
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F25F5C]/10 border border-[#F25F5C]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B91C1C]">
+          <AlertTriangle className="h-4 w-4 text-[#F25F5C]" /> Tachypnea ({rr})
         </span>
       )
     }
     if (rr > 20) {
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F6F7E4] border border-[#C4C674] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#55581A]">
-          <AlertTriangle className="h-4 w-4 text-[#9FA13B]" /> Elevated
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5A524]/10 border border-[#F5A524]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B45309]">
+          <AlertTriangle className="h-4 w-4 text-[#F5A524]" /> Elevated
         </span>
       )
     }
     if (rr < 12) {
       return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F6F7E4] border border-[#C4C674] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#55581A]">
-          <AlertTriangle className="h-4 w-4 text-[#9FA13B]" /> Low (&lt;12)
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#F5A524]/10 border border-[#F5A524]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#B45309]">
+          <AlertTriangle className="h-4 w-4 text-[#F5A524]" /> Low (&lt;12)
         </span>
       )
     }
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAF4F1] border border-[#8EBAAB] px-3 py-1 text-sm font-black uppercase tracking-wider text-[#345B50]">
-        <CheckCircle2 className="h-4 w-4 text-[#5D817C]" /> Normal
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#2DD4BF]/10 border border-[#2DD4BF]/30 px-3 py-1 text-sm font-black uppercase tracking-wider text-[#0F766E]">
+        <CheckCircle2 className="h-4 w-4 text-[#2DD4BF]" /> Normal
       </span>
     )
   }
 
   if (patients.length === 0) {
     return (
-      <div className="rounded-3xl border-2 border-[#D9E6E2] bg-[#FAFDFD] p-8 text-center shadow-sm">
-        <AlertCircle className="mx-auto h-12 w-12 text-[#5D817C]" />
-        <h3 className="mt-4 text-xl font-black text-[#223852]">No Assigned Patients</h3>
-        <p className="mt-2 text-base font-bold text-[#5D817C]">
+      <div className="rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xs">
+        <AlertCircle className="mx-auto h-12 w-12 text-[#5B5FE8]" />
+        <h3 className="mt-4 text-xl font-black text-[#1E2243]">No Assigned Patients</h3>
+        <p className="mt-2 text-base font-semibold text-slate-500">
           You are not currently assigned to any active patient care teams. Please contact an administrator to assign you to a patient.
         </p>
       </div>
@@ -1295,10 +1295,10 @@ export function LogVitalsForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* SECTION 1: Patient Information Card */}
-      <div className="rounded-3xl border-2 border-[#D9E6E2] bg-white p-6 sm:p-8 shadow-sm space-y-6">
+      <div className="rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <h2 className="text-xl sm:text-2xl font-black text-[#223852] flex items-center gap-2.5">
-            <User className="h-6 w-6 text-[#5D817C] shrink-0" />
+          <h2 className="text-xl sm:text-2xl font-black text-[#1E2243] flex items-center gap-2.5">
+            <User className="h-6 w-6 text-[#5B5FE8] shrink-0" />
             1. Patient Information
           </h2>
           {selectedPatient && (() => {
@@ -1325,7 +1325,7 @@ export function LogVitalsForm({
         </div>
 
         <div>
-          <label htmlFor="patient_id" className="block text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C] mb-2">
+          <label htmlFor="patient_id" className="block text-xs sm:text-sm font-bold uppercase tracking-wide text-slate-500 mb-2">
             Select Patient
           </label>
           <CustomSelect
@@ -1343,14 +1343,14 @@ export function LogVitalsForm({
 
         {/* Compact Summary Row & Toggle */}
         {selectedPatient && (
-          <div className="mt-4 flex items-center justify-between pt-4 border-t border-[#D9E6E2]">
-            <p className="text-sm font-bold text-[#5D817C]">
-              MRN: <span className="font-black text-[#223852]">{selectedPatient?.patientId ? `MRN-${selectedPatient.patientId.slice(0, 8).toUpperCase()}` : 'N/A'}</span>
+          <div className="mt-4 flex items-center justify-between pt-4 border-t border-slate-100">
+            <p className="text-sm font-bold text-slate-500">
+              MRN: <span className="font-black text-[#1E2243]">{selectedPatient?.patientId ? `MRN-${selectedPatient.patientId.slice(0, 8).toUpperCase()}` : 'N/A'}</span>
             </p>
             <button
               type="button"
               onClick={() => setShowPatientDetails((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 text-sm sm:text-base font-black text-[#36557A] hover:text-[#223852] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-sm sm:text-base font-bold text-[#5B5FE8] hover:text-[#4A4ED4] transition-colors cursor-pointer"
             >
               <span>{showPatientDetails ? 'Hide Patient Details' : 'View Patient Details'}</span>
               <ChevronDown
@@ -1364,43 +1364,43 @@ export function LogVitalsForm({
 
         {/* Collapsible Full Patient Details */}
         {showPatientDetails && selectedPatient && (
-          <div className="mt-4 pt-4 border-t border-[#D9E6E2] grid grid-cols-2 sm:grid-cols-4 gap-3.5 animate-in fade-in duration-200">
+          <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-3.5 animate-in fade-in duration-200">
             {/* Patient MRN */}
-            <div className="rounded-2xl border border-[#D9E6E2] bg-[#FAFDFD] p-4">
-              <span className="block text-xs sm:text-sm font-black uppercase tracking-wider text-[#5D817C] mb-1">
+            <div className="rounded-2xl border border-slate-200/80 bg-slate-50/60 p-4">
+              <span className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 mb-1">
                 Patient MRN
               </span>
-              <span className="block text-base sm:text-lg font-black text-[#223852]">
+              <span className="block text-base sm:text-lg font-black text-[#1E2243]">
                 {selectedPatient?.patientId ? `MRN-${selectedPatient.patientId.slice(0, 8).toUpperCase()}` : 'N/A'}
               </span>
             </div>
 
             {/* Age & Sex */}
-            <div className="rounded-2xl border border-[#D9E6E2] bg-[#FAFDFD] p-4">
-              <span className="block text-xs sm:text-sm font-black uppercase tracking-wider text-[#5D817C] mb-1">
+            <div className="rounded-2xl border border-slate-200/80 bg-slate-50/60 p-4">
+              <span className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 mb-1">
                 Age & Sex
               </span>
-              <span className="block text-base sm:text-lg font-black text-[#223852]">
+              <span className="block text-base sm:text-lg font-black text-[#1E2243]">
                 {patientAge !== null ? `${patientAge} yrs • ` : ''}{selectedPatient?.sex || 'N/A'}
               </span>
             </div>
 
             {/* Room / Bed */}
-            <div className="rounded-2xl border border-[#D9E6E2] bg-[#FAFDFD] p-4">
-              <span className="block text-xs sm:text-sm font-black uppercase tracking-wider text-[#5D817C] mb-1">
+            <div className="rounded-2xl border border-slate-200/80 bg-slate-50/60 p-4">
+              <span className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 mb-1">
                 Room / Bed
               </span>
-              <span className="block text-base sm:text-lg font-black text-[#223852]">
+              <span className="block text-base sm:text-lg font-black text-[#1E2243]">
                 {selectedPatient?.roomBed || 'General Care'}
               </span>
             </div>
 
             {/* Primary Condition */}
-            <div className="rounded-2xl border border-[#D9E6E2] bg-[#FAFDFD] p-4">
-              <span className="block text-xs sm:text-sm font-black uppercase tracking-wider text-[#5D817C] mb-1">
+            <div className="rounded-2xl border border-slate-200/80 bg-slate-50/60 p-4">
+              <span className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 mb-1">
                 Primary Condition
               </span>
-              <span className="block text-base sm:text-lg font-black text-[#223852] break-words">
+              <span className="block text-base sm:text-lg font-black text-[#1E2243] break-words">
                 {selectedPatient?.primaryCondition || 'None documented'}
               </span>
             </div>
@@ -1409,25 +1409,25 @@ export function LogVitalsForm({
       </div>
 
       {/* SECTION 2: Vital Signs Measurements Card */}
-      <div className="rounded-3xl border-2 border-[#D9E6E2] bg-white p-6 sm:p-8 shadow-sm space-y-7">
-        <h2 className="text-xl sm:text-2xl font-black text-[#223852] flex items-center gap-2.5">
-          <Activity className="h-6 w-6 text-[#5D817C] shrink-0" />
+      <div className="rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs space-y-7">
+        <h2 className="text-xl sm:text-2xl font-black text-[#1E2243] flex items-center gap-2.5">
+          <Activity className="h-6 w-6 text-[#5B5FE8] shrink-0" />
           2. Vital Signs Measurements
         </h2>
 
         {/* Blood Pressure Duo */}
         <div>
           <div className="flex items-center justify-between mb-2.5">
-            <label className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-[#223852]">
-              <Activity className="h-5 w-5 text-[#5D817C]" />
+            <label className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-[#1E2243]">
+              <Activity className="h-5 w-5 text-[#5B5FE8]" />
               Blood Pressure
-              <span className="text-xs sm:text-sm font-black px-3 py-0.5 rounded-full bg-[#EAF4F1] text-[#345B50] border border-[#8EBAAB]/50">mmHg</span>
+              <span className="text-xs sm:text-sm font-bold px-3 py-0.5 rounded-full bg-[#EEF0FF] text-[#5B5FE8] border border-[#5B5FE8]/20">mmHg</span>
             </label>
             {renderBpBadge()}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <span className="text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C] mb-1.5 block">
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-wide text-slate-500 mb-1.5 block">
                 Systolic (Top)
               </span>
               <input
@@ -1437,21 +1437,21 @@ export function LogVitalsForm({
                 placeholder="120"
                 value={formData.bp_systolic}
                 onChange={handleChange}
-                className={`mt-1 block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#223852] tracking-tight rounded-2xl border-2 bg-[#FAFDFD] focus:bg-white focus:outline-none focus:ring-4 transition-all ${
+                className={`mt-1 block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#1E2243] tracking-tight rounded-2xl border bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-4 transition-all ${
                   validationErrors.bp_systolic
-                    ? 'border-[#D9776A] focus:ring-[#D9776A]/20 bg-[#FCEFEB]/40'
-                    : 'border-[#D9E6E2] focus:border-[#759EC7] focus:ring-[#759EC7]/20'
+                    ? 'border-[#F25F5C] focus:ring-[#F25F5C]/20 bg-[#F25F5C]/5 text-[#F25F5C]'
+                    : 'border-slate-200 focus:border-[#5B5FE8] focus:ring-[#5B5FE8]/15'
                 }`}
               />
-              <span className="mt-2 inline-block text-xs sm:text-sm font-bold text-[#345B50] bg-[#EAF4F1] px-3 py-1 rounded-xl border border-[#8EBAAB]/40">
+              <span className="mt-2 inline-block text-xs sm:text-sm font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-xl">
                 Normal range: 90–120 mmHg
               </span>
               {validationErrors.bp_systolic && (
-                <p className="mt-1.5 text-sm text-[#D9776A] font-bold">{validationErrors.bp_systolic}</p>
+                <p className="mt-1.5 text-sm text-[#F25F5C] font-bold">{validationErrors.bp_systolic}</p>
               )}
             </div>
             <div>
-              <span className="text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C] mb-1.5 block">
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-wide text-slate-500 mb-1.5 block">
                 Diastolic (Bottom)
               </span>
               <input
@@ -1461,31 +1461,31 @@ export function LogVitalsForm({
                 placeholder="80"
                 value={formData.bp_diastolic}
                 onChange={handleChange}
-                className={`mt-1 block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#223852] tracking-tight rounded-2xl border-2 bg-[#FAFDFD] focus:bg-white focus:outline-none focus:ring-4 transition-all ${
+                className={`mt-1 block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#1E2243] tracking-tight rounded-2xl border bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-4 transition-all ${
                   validationErrors.bp_diastolic
-                    ? 'border-[#D9776A] focus:ring-[#D9776A]/20 bg-[#FCEFEB]/40'
-                    : 'border-[#D9E6E2] focus:border-[#759EC7] focus:ring-[#759EC7]/20'
+                    ? 'border-[#F25F5C] focus:ring-[#F25F5C]/20 bg-[#F25F5C]/5 text-[#F25F5C]'
+                    : 'border-slate-200 focus:border-[#5B5FE8] focus:ring-[#5B5FE8]/15'
                 }`}
               />
-              <span className="mt-2 inline-block text-xs sm:text-sm font-bold text-[#345B50] bg-[#EAF4F1] px-3 py-1 rounded-xl border border-[#8EBAAB]/40">
+              <span className="mt-2 inline-block text-xs sm:text-sm font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-xl">
                 Normal range: 60–80 mmHg
               </span>
               {validationErrors.bp_diastolic && (
-                <p className="mt-1.5 text-sm text-[#D9776A] font-bold">{validationErrors.bp_diastolic}</p>
+                <p className="mt-1.5 text-sm text-[#F25F5C] font-bold">{validationErrors.bp_diastolic}</p>
               )}
             </div>
           </div>
-          <p className="mt-3 text-sm font-bold text-[#5D817C]">Normal clinical baseline: 90–120 / 60–80 mmHg</p>
+          <p className="mt-3 text-sm font-medium text-slate-400">Normal clinical baseline: 90–120 / 60–80 mmHg</p>
         </div>
 
         {/* Heart Rate & SpO2 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label htmlFor="heart_rate" className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-[#223852]">
-                <Heart className="h-5 w-5 text-[#5D817C]" />
+              <label htmlFor="heart_rate" className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-[#1E2243]">
+                <Heart className="h-5 w-5 text-[#5B5FE8]" />
                 Heart Rate
-                <span className="text-xs sm:text-sm font-black px-3 py-0.5 rounded-full bg-[#EAF4F1] text-[#345B50] border border-[#8EBAAB]/50">bpm</span>
+                <span className="text-xs sm:text-sm font-bold px-3 py-0.5 rounded-full bg-[#EEF0FF] text-[#5B5FE8] border border-[#5B5FE8]/20">bpm</span>
               </label>
               {renderHrBadge()}
             </div>
@@ -1497,26 +1497,26 @@ export function LogVitalsForm({
               placeholder="72"
               value={formData.heart_rate}
               onChange={handleChange}
-              className={`block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#223852] tracking-tight rounded-2xl border-2 bg-[#FAFDFD] focus:bg-white focus:outline-none focus:ring-4 transition-all ${
+              className={`block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#1E2243] tracking-tight rounded-2xl border bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-4 transition-all ${
                 validationErrors.heart_rate
-                  ? 'border-[#D9776A] focus:ring-[#D9776A]/20 bg-[#FCEFEB]/40'
-                  : 'border-[#D9E6E2] focus:border-[#759EC7] focus:ring-[#759EC7]/20'
+                  ? 'border-[#F25F5C] focus:ring-[#F25F5C]/20 bg-[#F25F5C]/5 text-[#F25F5C]'
+                  : 'border-slate-200 focus:border-[#5B5FE8] focus:ring-[#5B5FE8]/15'
               }`}
             />
-            <span className="mt-2 inline-block text-xs sm:text-sm font-bold text-[#345B50] bg-[#EAF4F1] px-3 py-1 rounded-xl border border-[#8EBAAB]/40">
+            <span className="mt-2 inline-block text-xs sm:text-sm font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-xl">
               Normal range: 60–100 bpm (resting)
             </span>
             {validationErrors.heart_rate && (
-              <p className="mt-1.5 text-sm text-[#D9776A] font-bold">{validationErrors.heart_rate}</p>
+              <p className="mt-1.5 text-sm text-[#F25F5C] font-bold">{validationErrors.heart_rate}</p>
             )}
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label htmlFor="spo2" className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-[#223852]">
-                <Droplets className="h-5 w-5 text-[#5D817C]" />
+              <label htmlFor="spo2" className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-[#1E2243]">
+                <Droplets className="h-5 w-5 text-[#5B5FE8]" />
                 Oxygen SpO₂
-                <span className="text-xs sm:text-sm font-black px-3 py-0.5 rounded-full bg-[#EAF4F1] text-[#345B50] border border-[#8EBAAB]/50">%</span>
+                <span className="text-xs sm:text-sm font-bold px-3 py-0.5 rounded-full bg-[#EEF0FF] text-[#5B5FE8] border border-[#5B5FE8]/20">%</span>
               </label>
               {renderSpo2Badge()}
             </div>
@@ -1528,17 +1528,17 @@ export function LogVitalsForm({
               placeholder="98"
               value={formData.spo2}
               onChange={handleChange}
-              className={`block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#223852] tracking-tight rounded-2xl border-2 bg-[#FAFDFD] focus:bg-white focus:outline-none focus:ring-4 transition-all ${
+              className={`block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#1E2243] tracking-tight rounded-2xl border bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-4 transition-all ${
                 validationErrors.spo2
-                  ? 'border-[#D9776A] focus:ring-[#D9776A]/20 bg-[#FCEFEB]/40'
-                  : 'border-[#D9E6E2] focus:border-[#759EC7] focus:ring-[#759EC7]/20'
+                  ? 'border-[#F25F5C] focus:ring-[#F25F5C]/20 bg-[#F25F5C]/5 text-[#F25F5C]'
+                  : 'border-slate-200 focus:border-[#5B5FE8] focus:ring-[#5B5FE8]/15'
               }`}
             />
-            <span className="mt-2 inline-block text-xs sm:text-sm font-bold text-[#345B50] bg-[#EAF4F1] px-3 py-1 rounded-xl border border-[#8EBAAB]/40">
+            <span className="mt-2 inline-block text-xs sm:text-sm font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-xl">
               Normal range: 95%–100%
             </span>
             {validationErrors.spo2 && (
-              <p className="mt-1.5 text-sm text-[#D9776A] font-bold">{validationErrors.spo2}</p>
+              <p className="mt-1.5 text-sm text-[#F25F5C] font-bold">{validationErrors.spo2}</p>
             )}
           </div>
         </div>
@@ -1548,16 +1548,16 @@ export function LogVitalsForm({
           <div>
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <label htmlFor="temperature_c" className="flex items-center gap-1.5 text-base sm:text-lg font-extrabold text-[#223852]">
-                  <Thermometer className="h-5 w-5 text-[#5D817C]" />
+                <label htmlFor="temperature_c" className="flex items-center gap-1.5 text-base sm:text-lg font-extrabold text-[#1E2243]">
+                  <Thermometer className="h-5 w-5 text-[#5B5FE8]" />
                   Body Temperature
                 </label>
-                <div role="group" aria-label="Temperature unit selection" className="inline-flex rounded-xl border border-[#D9E6E2] bg-[#F5F8FA] p-0.5 text-sm font-extrabold">
+                <div role="group" aria-label="Temperature unit selection" className="inline-flex rounded-xl border border-slate-200 bg-slate-100 p-0.5 text-sm font-bold">
                   <button
                     type="button"
                     onClick={() => handleUnitToggle('C')}
-                    className={`px-3 py-1 rounded-lg font-black transition-all ${
-                      tempUnit === 'C' ? 'bg-[#759EC7] text-white shadow-xs' : 'text-[#5D817C] hover:text-[#223852]'
+                    className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                      tempUnit === 'C' ? 'bg-[#5B5FE8] text-white shadow-xs' : 'text-slate-500 hover:text-[#1E2243]'
                     }`}
                   >
                     °C
@@ -1565,8 +1565,8 @@ export function LogVitalsForm({
                   <button
                     type="button"
                     onClick={() => handleUnitToggle('F')}
-                    className={`px-3 py-1 rounded-lg font-black transition-all ${
-                      tempUnit === 'F' ? 'bg-[#759EC7] text-white shadow-xs' : 'text-[#5D817C] hover:text-[#223852]'
+                    className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                      tempUnit === 'F' ? 'bg-[#5B5FE8] text-white shadow-xs' : 'text-slate-500 hover:text-[#1E2243]'
                     }`}
                   >
                     °F
@@ -1584,26 +1584,26 @@ export function LogVitalsForm({
               placeholder={tempUnit === 'C' ? '36.8' : '98.2'}
               value={tempDisplay}
               onChange={handleChange}
-              className={`block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#223852] tracking-tight rounded-2xl border-2 bg-[#FAFDFD] focus:bg-white focus:outline-none focus:ring-4 transition-all ${
+              className={`block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#1E2243] tracking-tight rounded-2xl border bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-4 transition-all ${
                 validationErrors.temperature_c
-                  ? 'border-[#D9776A] focus:ring-[#D9776A]/20 bg-[#FCEFEB]/40'
-                  : 'border-[#D9E6E2] focus:border-[#759EC7] focus:ring-[#759EC7]/20'
+                  ? 'border-[#F25F5C] focus:ring-[#F25F5C]/20 bg-[#F25F5C]/5 text-[#F25F5C]'
+                  : 'border-slate-200 focus:border-[#5B5FE8] focus:ring-[#5B5FE8]/15'
               }`}
             />
-            <span className="mt-2 inline-block text-xs sm:text-sm font-bold text-[#345B50] bg-[#EAF4F1] px-3 py-1 rounded-xl border border-[#8EBAAB]/40">
+            <span className="mt-2 inline-block text-xs sm:text-sm font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-xl">
               Normal range: 36.1°C–37.2°C (97.0°F–99.0°F)
             </span>
             {validationErrors.temperature_c && (
-              <p className="mt-1.5 text-sm text-[#D9776A] font-bold">{validationErrors.temperature_c}</p>
+              <p className="mt-1.5 text-sm text-[#F25F5C] font-bold">{validationErrors.temperature_c}</p>
             )}
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label htmlFor="respiratory_rate" className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-[#223852]">
-                <Wind className="h-5 w-5 text-[#5D817C]" />
+              <label htmlFor="respiratory_rate" className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-[#1E2243]">
+                <Wind className="h-5 w-5 text-[#5B5FE8]" />
                 Respiration
-                <span className="text-xs sm:text-sm font-black px-3 py-0.5 rounded-full bg-[#EAF4F1] text-[#345B50] border border-[#8EBAAB]/50">breaths/min</span>
+                <span className="text-xs sm:text-sm font-bold px-3 py-0.5 rounded-full bg-[#EEF0FF] text-[#5B5FE8] border border-[#5B5FE8]/20">breaths/min</span>
               </label>
               {renderRespBadge()}
             </div>
@@ -1615,17 +1615,17 @@ export function LogVitalsForm({
               placeholder="16"
               value={formData.respiratory_rate}
               onChange={handleChange}
-              className={`block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#223852] tracking-tight rounded-2xl border-2 bg-[#FAFDFD] focus:bg-white focus:outline-none focus:ring-4 transition-all ${
+              className={`block w-full min-h-[64px] py-4 px-5 text-2xl sm:text-3xl font-black text-[#1E2243] tracking-tight rounded-2xl border bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-4 transition-all ${
                 validationErrors.respiratory_rate
-                  ? 'border-[#D9776A] focus:ring-[#D9776A]/20 bg-[#FCEFEB]/40'
-                  : 'border-[#D9E6E2] focus:border-[#759EC7] focus:ring-[#759EC7]/20'
+                  ? 'border-[#F25F5C] focus:ring-[#F25F5C]/20 bg-[#F25F5C]/5 text-[#F25F5C]'
+                  : 'border-slate-200 focus:border-[#5B5FE8] focus:ring-[#5B5FE8]/15'
               }`}
             />
-            <span className="mt-2 inline-block text-xs sm:text-sm font-bold text-[#345B50] bg-[#EAF4F1] px-3 py-1 rounded-xl border border-[#8EBAAB]/40">
+            <span className="mt-2 inline-block text-xs sm:text-sm font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-xl">
               Normal range: 12–20 breaths/min
             </span>
             {validationErrors.respiratory_rate && (
-              <p className="mt-1.5 text-sm text-[#D9776A] font-bold">{validationErrors.respiratory_rate}</p>
+              <p className="mt-1.5 text-sm text-[#F25F5C] font-bold">{validationErrors.respiratory_rate}</p>
             )}
           </div>
         </div>
@@ -1633,12 +1633,12 @@ export function LogVitalsForm({
         {/* Pain Score (0–10 Scale) with color-coded touch tiles */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <label className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-[#223852]">
-              <Smile className="h-5 w-5 text-[#5D817C]" />
+            <label className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-[#1E2243]">
+              <Smile className="h-5 w-5 text-[#5B5FE8]" />
               Pain Score (0–10 Scale)
             </label>
             {formData.pain_score !== '' && (
-              <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-[#345B50] bg-[#EAF4F1] border border-[#8EBAAB] px-3.5 py-1 rounded-full">
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#5B5FE8] bg-[#EEF0FF] border border-[#5B5FE8]/30 px-3.5 py-1 rounded-full">
                 Selected: {PAIN_LEVELS[Number(formData.pain_score)]?.label}
               </span>
             )}
@@ -1653,18 +1653,18 @@ export function LogVitalsForm({
               let subLabelColor = ''
               if (isSelected) {
                 if (isLow) {
-                  selectedClass = 'bg-[#8EBAAB] border-[#8EBAAB] text-white shadow-md scale-105'
+                  selectedClass = 'bg-[#2DD4BF] border-[#2DD4BF] text-white shadow-md scale-105'
                   subLabelColor = 'text-white'
                 } else if (isMid) {
-                  selectedClass = 'bg-[#C4C674] border-[#C4C674] text-white shadow-md scale-105'
+                  selectedClass = 'bg-[#F5A524] border-[#F5A524] text-white shadow-md scale-105'
                   subLabelColor = 'text-white'
                 } else {
-                  selectedClass = 'bg-[#D9776A] border-[#D9776A] text-white shadow-md scale-105'
+                  selectedClass = 'bg-[#F25F5C] border-[#F25F5C] text-white shadow-md scale-105'
                   subLabelColor = 'text-white'
                 }
               } else {
-                selectedClass = 'border-2 border-[#D9E6E2] bg-white text-[#223852] hover:border-[#759EC7] font-extrabold'
-                subLabelColor = 'text-[#5D817C]'
+                selectedClass = 'border border-slate-200 bg-slate-50 text-[#1E2243] hover:border-[#5B5FE8]/50 font-black'
+                subLabelColor = 'text-slate-400'
               }
 
               return (
@@ -1677,7 +1677,7 @@ export function LogVitalsForm({
                       pain_score: isSelected ? '' : String(level.score),
                     }))
                   }
-                  className={`min-h-[68px] min-w-[50px] sm:min-w-[58px] rounded-2xl font-black border-2 transition-all flex flex-col items-center justify-center p-1.5 cursor-pointer ${selectedClass}`}
+                  className={`min-h-[68px] min-w-[50px] sm:min-w-[58px] rounded-2xl font-black border transition-all flex flex-col items-center justify-center p-1.5 cursor-pointer ${selectedClass}`}
                 >
                   <span className="text-xl sm:text-2xl font-black leading-none">{level.score}</span>
                   <span className={`text-xs sm:text-sm font-black uppercase tracking-tight truncate w-full text-center mt-0.5 ${subLabelColor}`}>
@@ -1688,13 +1688,13 @@ export function LogVitalsForm({
             })}
           </div>
           {validationErrors.pain_score && (
-            <p className="mt-2 text-sm text-[#D9776A] font-bold">{validationErrors.pain_score}</p>
+            <p className="mt-2 text-sm text-[#F25F5C] font-bold">{validationErrors.pain_score}</p>
           )}
         </div>
       </div>
 
       {/* SECTION 3: Body Measurements & BMI */}
-      <div className="rounded-3xl border-2 border-[#D9E6E2] bg-white p-6 sm:p-8 shadow-sm space-y-4">
+      <div className="rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs space-y-4">
         {/* Scoped CSS to eliminate native number spinner arrows */}
         <style>{`
           #weight_kg::-webkit-outer-spin-button,
@@ -1710,8 +1710,8 @@ export function LogVitalsForm({
           }
         `}</style>
 
-        <h2 className="text-xl sm:text-2xl font-black text-[#223852] flex items-center gap-2.5">
-          <Scale className="h-6 w-6 text-[#5D817C]" />
+        <h2 className="text-xl sm:text-2xl font-black text-[#1E2243] flex items-center gap-2.5">
+          <Scale className="h-6 w-6 text-[#5B5FE8]" />
           3. Body Measurements & BMI
         </h2>
 
@@ -1719,10 +1719,10 @@ export function LogVitalsForm({
           {/* Column 1: Weight */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label htmlFor="weight_kg" className="text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C]">
+              <label htmlFor="weight_kg" className="text-xs sm:text-sm font-bold uppercase tracking-wide text-slate-500">
                 Weight
               </label>
-              <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-[#EAF4F1] text-[#345B50] border border-[#8EBAAB]/50">
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#EEF0FF] text-[#5B5FE8] border border-[#5B5FE8]/20">
                 KG
               </span>
             </div>
@@ -1736,10 +1736,10 @@ export function LogVitalsForm({
                 placeholder="70"
                 value={formData.weight_kg}
                 onChange={handleChange}
-                className={`block w-full min-h-[64px] rounded-2xl border-2 bg-[#FAFDFD] pl-5 pr-14 py-3.5 text-2xl sm:text-3xl font-black tracking-tight text-[#223852] focus:border-[#759EC7] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#759EC7]/20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 ${
+                className={`block w-full min-h-[64px] rounded-2xl border bg-slate-50/50 pl-5 pr-14 py-3.5 text-2xl sm:text-3xl font-black tracking-tight text-[#1E2243] focus:border-[#5B5FE8] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#5B5FE8]/15 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 ${
                   validationErrors.weight_kg
-                    ? 'border-[#D9776A] focus:ring-[#D9776A]/20 bg-[#FCEFEB]/40'
-                    : 'border-[#D9E6E2]'
+                    ? 'border-[#F25F5C] focus:ring-[#F25F5C]/20 bg-[#F25F5C]/5 text-[#F25F5C]'
+                    : 'border-slate-200'
                 }`}
               />
               <button
@@ -1747,11 +1747,11 @@ export function LogVitalsForm({
                 onClick={() => setIsWeightOpen((prev) => !prev)}
                 aria-label="Toggle weight options dropdown"
                 aria-expanded={isWeightOpen}
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center rounded-xl text-[#5D817C] hover:text-[#223852] hover:bg-[#EAF4F1] active:bg-[#D9E6E2] transition-colors cursor-pointer"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center rounded-xl text-slate-400 hover:text-[#5B5FE8] hover:bg-[#EEF0FF] active:bg-[#EEF0FF]/80 transition-colors cursor-pointer"
               >
                 <ChevronDown
-                  className={`h-6 w-6 transform transition-transform duration-200 ${
-                    isWeightOpen ? 'rotate-180 text-[#223852]' : ''
+                  className={`h-5 w-5 transform transition-transform duration-200 ${
+                    isWeightOpen ? 'rotate-180 text-[#5B5FE8]' : ''
                   }`}
                 />
               </button>
@@ -1759,7 +1759,7 @@ export function LogVitalsForm({
               {isWeightOpen && (
                 <div
                   ref={weightListRef}
-                  className="absolute z-50 left-0 right-0 top-full mt-2 max-h-60 overflow-y-auto rounded-2xl border-2 border-[#D9E6E2] bg-white shadow-xl py-1.5 focus:outline-none"
+                  className="absolute z-50 left-0 right-0 top-full mt-2 max-h-60 overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-xl py-1.5 focus:outline-none"
                 >
                   {WEIGHT_OPTIONS.map((val) => {
                     const isSelected = currentWeightNum === val
@@ -1769,17 +1769,17 @@ export function LogVitalsForm({
                         type="button"
                         data-selected={isSelected ? 'true' : undefined}
                         onClick={() => handleSelectWeight(val)}
-                        className={`w-full text-left px-5 py-2.5 text-lg font-black transition-colors cursor-pointer flex items-center justify-between ${
+                        className={`w-full text-left px-5 py-2.5 text-base sm:text-lg font-bold transition-colors cursor-pointer flex items-center justify-between ${
                           isSelected
-                            ? 'bg-[#EAF4F1] text-[#345B50]'
-                            : 'text-[#223852] hover:bg-[#FAFDFD] hover:text-[#345B50]'
+                            ? 'bg-[#EEF0FF] text-[#5B5FE8]'
+                            : 'text-[#1E2243] hover:bg-slate-50'
                         }`}
                       >
                         <div className="flex items-baseline gap-1.5">
                           <span>{val}</span>
-                          <span className="text-xs font-bold text-[#5D817C]">kg</span>
+                          <span className="text-xs font-semibold text-slate-400">kg</span>
                         </div>
-                        {isSelected && <Check className="h-4 w-4 text-[#345B50] shrink-0" />}
+                        {isSelected && <Check className="h-4 w-4 text-[#5B5FE8] shrink-0" />}
                       </button>
                     )
                   })}
@@ -1787,17 +1787,17 @@ export function LogVitalsForm({
               )}
             </div>
             {validationErrors.weight_kg && (
-              <p className="mt-1.5 text-sm text-[#D9776A] font-bold">{validationErrors.weight_kg}</p>
+              <p className="mt-1.5 text-sm text-[#F25F5C] font-bold">{validationErrors.weight_kg}</p>
             )}
           </div>
 
           {/* Column 2: Height */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label htmlFor="height_cm" className="text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C]">
+              <label htmlFor="height_cm" className="text-xs sm:text-sm font-bold uppercase tracking-wide text-slate-500">
                 Height
               </label>
-              <span className="text-xs font-black px-2.5 py-0.5 rounded-full bg-[#EAF4F1] text-[#345B50] border border-[#8EBAAB]/50">
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#EEF0FF] text-[#5B5FE8] border border-[#5B5FE8]/20">
                 CM
               </span>
             </div>
@@ -1811,10 +1811,10 @@ export function LogVitalsForm({
                 placeholder="170"
                 value={formData.height_cm}
                 onChange={handleChange}
-                className={`block w-full min-h-[64px] rounded-2xl border-2 bg-[#FAFDFD] pl-5 pr-14 py-3.5 text-2xl sm:text-3xl font-black tracking-tight text-[#223852] focus:border-[#759EC7] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#759EC7]/20 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 ${
+                className={`block w-full min-h-[64px] rounded-2xl border bg-slate-50/50 pl-5 pr-14 py-3.5 text-2xl sm:text-3xl font-black tracking-tight text-[#1E2243] focus:border-[#5B5FE8] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#5B5FE8]/15 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0 ${
                   validationErrors.height_cm
-                    ? 'border-[#D9776A] focus:ring-[#D9776A]/20 bg-[#FCEFEB]/40'
-                    : 'border-[#D9E6E2]'
+                    ? 'border-[#F25F5C] focus:ring-[#F25F5C]/20 bg-[#F25F5C]/5 text-[#F25F5C]'
+                    : 'border-slate-200'
                 }`}
               />
               <button
@@ -1822,11 +1822,11 @@ export function LogVitalsForm({
                 onClick={() => setIsHeightOpen((prev) => !prev)}
                 aria-label="Toggle height options dropdown"
                 aria-expanded={isHeightOpen}
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center rounded-xl text-[#5D817C] hover:text-[#223852] hover:bg-[#EAF4F1] active:bg-[#D9E6E2] transition-colors cursor-pointer"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center rounded-xl text-slate-400 hover:text-[#5B5FE8] hover:bg-[#EEF0FF] active:bg-[#EEF0FF]/80 transition-colors cursor-pointer"
               >
                 <ChevronDown
-                  className={`h-6 w-6 transform transition-transform duration-200 ${
-                    isHeightOpen ? 'rotate-180 text-[#223852]' : ''
+                  className={`h-5 w-5 transform transition-transform duration-200 ${
+                    isHeightOpen ? 'rotate-180 text-[#5B5FE8]' : ''
                   }`}
                 />
               </button>
@@ -1834,7 +1834,7 @@ export function LogVitalsForm({
               {isHeightOpen && (
                 <div
                   ref={heightListRef}
-                  className="absolute z-50 left-0 right-0 top-full mt-2 max-h-60 overflow-y-auto rounded-2xl border-2 border-[#D9E6E2] bg-white shadow-xl py-1.5 focus:outline-none"
+                  className="absolute z-50 left-0 right-0 top-full mt-2 max-h-60 overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-xl py-1.5 focus:outline-none"
                 >
                   {HEIGHT_OPTIONS.map((val) => {
                     const isSelected = currentHeightNum === val
@@ -1844,17 +1844,17 @@ export function LogVitalsForm({
                         type="button"
                         data-selected={isSelected ? 'true' : undefined}
                         onClick={() => handleSelectHeight(val)}
-                        className={`w-full text-left px-5 py-2.5 text-lg font-black transition-colors cursor-pointer flex items-center justify-between ${
+                        className={`w-full text-left px-5 py-2.5 text-base sm:text-lg font-bold transition-colors cursor-pointer flex items-center justify-between ${
                           isSelected
-                            ? 'bg-[#EAF4F1] text-[#345B50]'
-                            : 'text-[#223852] hover:bg-[#FAFDFD] hover:text-[#345B50]'
+                            ? 'bg-[#EEF0FF] text-[#5B5FE8]'
+                            : 'text-[#1E2243] hover:bg-slate-50'
                         }`}
                       >
                         <div className="flex items-baseline gap-1.5">
                           <span>{val}</span>
-                          <span className="text-xs font-bold text-[#5D817C]">cm</span>
+                          <span className="text-xs font-semibold text-slate-400">cm</span>
                         </div>
-                        {isSelected && <Check className="h-4 w-4 text-[#345B50] shrink-0" />}
+                        {isSelected && <Check className="h-4 w-4 text-[#5B5FE8] shrink-0" />}
                       </button>
                     )
                   })}
@@ -1862,23 +1862,23 @@ export function LogVitalsForm({
               )}
             </div>
             {validationErrors.height_cm && (
-              <p className="mt-1.5 text-sm text-[#D9776A] font-bold">{validationErrors.height_cm}</p>
+              <p className="mt-1.5 text-sm text-[#F25F5C] font-bold">{validationErrors.height_cm}</p>
             )}
           </div>
 
           {/* Column 3: Auto-Calculated BMI Card */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C]">
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-wide text-slate-500">
                 Calculated BMI
               </span>
-              <span className="text-xs font-semibold text-[#5D817C]">
+              <span className="text-xs font-medium text-slate-400">
                 kg/m²
               </span>
             </div>
-            <div className="min-h-[64px] rounded-2xl bg-[#223852] px-5 py-3 text-white flex items-center justify-between shadow-sm border border-[#18293D]">
+            <div className="min-h-[64px] rounded-2xl bg-[#1E2243] px-5 py-3 text-white flex items-center justify-between shadow-sm border border-slate-800">
               <div className="flex flex-col justify-center">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#8EBAAB]">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
                   BMI Score
                 </span>
                 <span className="text-2xl sm:text-3xl font-black tracking-tight text-white leading-none mt-0.5">
@@ -1891,12 +1891,12 @@ export function LogVitalsForm({
                 <span
                   className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-sm ${
                     bmiCategory === 'Normal'
-                      ? 'bg-[#8EBAAB] text-[#1B362F]'
+                      ? 'bg-[#2DD4BF] text-[#0F766E]'
                       : bmiCategory === 'Overweight'
-                      ? 'bg-[#C4C674] text-[#3A3C13]'
+                      ? 'bg-[#F5A524] text-white'
                       : bmiCategory === 'Underweight'
-                      ? 'bg-[#759EC7] text-white'
-                      : 'bg-[#D9776A] text-white'
+                      ? 'bg-[#EEF0FF] text-[#5B5FE8]'
+                      : 'bg-[#F25F5C] text-white'
                   }`}
                 >
                   {bmiCategory}
@@ -1908,19 +1908,19 @@ export function LogVitalsForm({
       </div>
 
       {/* SECTION 4: Clinical Measurement Details */}
-      <div className="rounded-3xl border-2 border-[#D9E6E2] bg-white p-6 sm:p-8 shadow-sm space-y-6">
+      <div className="rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl sm:text-2xl font-black text-[#223852] flex items-center gap-2.5">
-            <Compass className="h-6 w-6 text-[#5D817C] shrink-0" />
+          <h2 className="text-xl sm:text-2xl font-black text-[#1E2243] flex items-center gap-2.5">
+            <Compass className="h-6 w-6 text-[#5B5FE8] shrink-0" />
             4. Clinical Measurement Details
           </h2>
-          <span className="text-xs sm:text-sm font-semibold text-[#5D817C]">Defaulted for routine rounds</span>
+          <span className="text-xs sm:text-sm font-medium text-slate-400">Defaulted for routine rounds</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <div>
-            <label htmlFor="measured_at" className="block text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C] mb-2 flex items-center gap-2">
-              <Clock className="h-4 w-4 text-[#5D817C]" /> Date & Time Taken
+            <label htmlFor="measured_at" className="block text-xs sm:text-sm font-bold uppercase tracking-wide text-slate-500 mb-2 flex items-center gap-2">
+              <Clock className="h-4 w-4 text-[#5B5FE8]" /> Date & Time Taken
             </label>
             <div className="relative" ref={datePickerContainerRef}>
               <input
@@ -1934,25 +1934,25 @@ export function LogVitalsForm({
                   if (!isDatePickerOpen) setIsDatePickerOpen(true)
                 }}
                 placeholder="DD/MM/YYYY hh:mm am/pm"
-                className="w-full min-h-[56px] py-3.5 pl-4 pr-12 text-base sm:text-lg font-bold text-[#223852] rounded-2xl border-2 border-[#D9E6E2] bg-[#FAFDFD] focus:border-[#759EC7] focus:bg-white focus:ring-4 focus:ring-[#759EC7]/20 focus:outline-none transition-all cursor-pointer"
+                className="w-full min-h-[56px] py-3.5 pl-4 pr-12 text-base sm:text-lg font-bold text-[#1E2243] rounded-2xl border border-slate-200 bg-slate-50/50 focus:border-[#5B5FE8] focus:bg-white focus:ring-4 focus:ring-[#5B5FE8]/15 focus:outline-none transition-all cursor-pointer"
               />
               <button
                 type="button"
                 onClick={() => setIsDatePickerOpen((prev) => !prev)}
                 aria-label="Toggle custom date & time picker"
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 flex items-center justify-center rounded-xl text-[#5D817C] hover:text-[#223852] hover:bg-[#EAF4F1] transition-colors cursor-pointer"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 flex items-center justify-center rounded-xl text-slate-400 hover:text-[#5B5FE8] hover:bg-[#EEF0FF] transition-colors cursor-pointer"
               >
                 <Calendar className="h-5 w-5" />
               </button>
 
               {isDatePickerOpen && (
-                <div className="absolute z-50 left-0 top-full mt-2 w-[calc(100vw-2.5rem)] sm:w-[450px] max-w-[450px] rounded-3xl border-2 border-[#D9E6E2] bg-white p-4 sm:p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+                <div className="absolute z-50 left-0 top-full mt-2 w-[calc(100vw-2.5rem)] sm:w-[450px] max-w-[450px] rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
                   <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-stretch">
                     {/* Calendar Portion */}
                     <div className="flex-1 min-w-[230px]">
                       {/* Month/Year Header */}
                       <div className="flex items-center justify-between mb-2.5 px-1">
-                        <span className="text-sm sm:text-base font-black text-[#223852]">
+                        <span className="text-sm sm:text-base font-black text-[#1E2243]">
                           {MONTH_NAMES[viewMonth - 1]} {viewYear}
                         </span>
                         <div className="flex items-center gap-1">
@@ -1960,7 +1960,7 @@ export function LogVitalsForm({
                             type="button"
                             onClick={handlePrevMonth}
                             aria-label="Previous month"
-                            className="h-8 w-8 flex items-center justify-center rounded-xl text-[#5D817C] hover:text-[#223852] hover:bg-[#EAF4F1] transition-colors cursor-pointer"
+                            className="h-8 w-8 flex items-center justify-center rounded-xl text-slate-500 hover:text-[#5B5FE8] hover:bg-[#EEF0FF] transition-colors cursor-pointer"
                           >
                             <ChevronLeft className="h-4 w-4" />
                           </button>
@@ -1968,7 +1968,7 @@ export function LogVitalsForm({
                             type="button"
                             onClick={handleNextMonth}
                             aria-label="Next month"
-                            className="h-8 w-8 flex items-center justify-center rounded-xl text-[#5D817C] hover:text-[#223852] hover:bg-[#EAF4F1] transition-colors cursor-pointer"
+                            className="h-8 w-8 flex items-center justify-center rounded-xl text-slate-500 hover:text-[#5B5FE8] hover:bg-[#EEF0FF] transition-colors cursor-pointer"
                           >
                             <ChevronRight className="h-4 w-4" />
                           </button>
@@ -1978,7 +1978,7 @@ export function LogVitalsForm({
                       {/* Day of Week Headers */}
                       <div className="grid grid-cols-7 gap-1 text-center mb-1.5">
                         {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-                          <span key={d} className="text-xs font-black uppercase tracking-wider text-[#5D817C]/80 py-0.5">
+                          <span key={d} className="text-xs font-bold uppercase tracking-wider text-slate-400 py-0.5">
                             {d}
                           </span>
                         ))}
@@ -1996,13 +1996,13 @@ export function LogVitalsForm({
                             today.getMonth() + 1 === cell.month &&
                             today.getDate() === cell.day
 
-                          let cellStyle = 'text-[#223852] font-bold hover:bg-[#EAF4F1]'
+                          let cellStyle = 'text-[#1E2243] font-bold hover:bg-[#EEF0FF]'
                           if (isSelected) {
-                            cellStyle = 'bg-[#223852] text-white font-black shadow-sm ring-1 ring-[#18293D]'
+                            cellStyle = 'bg-[#5B5FE8] text-white font-black shadow-sm'
                           } else if (isToday) {
-                            cellStyle = 'border-2 border-[#5D817C] bg-[#EAF4F1] text-[#223852] font-black'
+                            cellStyle = 'border-2 border-[#5B5FE8] bg-[#EEF0FF] text-[#5B5FE8] font-black'
                           } else if (!cell.isCurrentMonth) {
-                            cellStyle = 'text-[#5D817C]/40 font-medium hover:bg-[#FAFDFD]'
+                            cellStyle = 'text-slate-300 font-medium hover:bg-slate-50'
                           }
 
                           return (
@@ -2019,18 +2019,18 @@ export function LogVitalsForm({
                       </div>
 
                       {/* Clear & Today Actions */}
-                      <div className="flex items-center justify-between pt-3 mt-3 border-t border-[#D9E6E2]">
+                      <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-100">
                         <button
                           type="button"
                           onClick={handleClearDate}
-                          className="text-xs sm:text-sm font-extrabold text-[#5D817C] hover:text-[#D9776A] transition-colors cursor-pointer"
+                          className="text-xs sm:text-sm font-bold text-slate-400 hover:text-[#F25F5C] transition-colors cursor-pointer"
                         >
                           Clear
                         </button>
                         <button
                           type="button"
                           onClick={handleTodayDate}
-                          className="text-xs sm:text-sm font-black text-[#36557A] hover:text-[#223852] transition-colors cursor-pointer"
+                          className="text-xs sm:text-sm font-bold text-[#5B5FE8] hover:text-[#4A4ED4] transition-colors cursor-pointer"
                         >
                           Today
                         </button>
@@ -2038,21 +2038,21 @@ export function LogVitalsForm({
                     </div>
 
                     {/* Divider: vertical on desktop, horizontal on mobile */}
-                    <div className="hidden sm:block w-px bg-[#D9E6E2] self-stretch my-1" />
-                    <div className="sm:hidden h-px bg-[#D9E6E2] w-full my-1" />
+                    <div className="hidden sm:block w-px bg-slate-200 self-stretch my-1" />
+                    <div className="sm:hidden h-px bg-slate-200 w-full my-1" />
 
                     {/* Time Selection Portion */}
                     <div className="flex flex-col justify-between">
-                      <div className="text-xs font-black uppercase tracking-wider text-[#5D817C] mb-2 sm:mb-2.5 text-center sm:text-left">
+                      <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 sm:mb-2.5 text-center sm:text-left">
                         Time Selection
                       </div>
                       <div className="flex gap-2 justify-center flex-1 items-start">
                         {/* Hours Column (01-12) */}
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-[#5D817C] mb-1">Hr</span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Hr</span>
                           <div
                             ref={hourColRef}
-                            className="w-10 sm:w-11 max-h-[165px] sm:max-h-[195px] overflow-y-auto space-y-1 py-1 px-0.5 rounded-xl border border-[#D9E6E2]/70 bg-[#FAFDFD]"
+                            className="w-10 sm:w-11 max-h-[165px] sm:max-h-[195px] overflow-y-auto space-y-1 py-1 px-0.5 rounded-xl border border-slate-200 bg-slate-50/60"
                           >
                             {HOURS_12.map((hStr) => {
                               const hNum = parseInt(hStr, 10)
@@ -2066,8 +2066,8 @@ export function LogVitalsForm({
                                   onClick={() => handleSelectHour(hNum)}
                                   className={`w-full py-1.5 rounded-lg text-xs sm:text-sm font-black transition-colors cursor-pointer text-center ${
                                     isSelected
-                                      ? 'bg-[#223852] text-white shadow-xs'
-                                      : 'text-[#223852] hover:bg-[#EAF4F1]'
+                                      ? 'bg-[#5B5FE8] text-white shadow-xs'
+                                      : 'text-[#1E2243] hover:bg-[#EEF0FF]'
                                   }`}
                                 >
                                   {hStr}
@@ -2079,10 +2079,10 @@ export function LogVitalsForm({
 
                         {/* Minutes Column (00-59) */}
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-[#5D817C] mb-1">Min</span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Min</span>
                           <div
                             ref={minColRef}
-                            className="w-10 sm:w-11 max-h-[165px] sm:max-h-[195px] overflow-y-auto space-y-1 py-1 px-0.5 rounded-xl border border-[#D9E6E2]/70 bg-[#FAFDFD]"
+                            className="w-10 sm:w-11 max-h-[165px] sm:max-h-[195px] overflow-y-auto space-y-1 py-1 px-0.5 rounded-xl border border-slate-200 bg-slate-50/60"
                           >
                             {MINUTES_60.map((mStr) => {
                               const mNum = parseInt(mStr, 10)
@@ -2095,8 +2095,8 @@ export function LogVitalsForm({
                                   onClick={() => handleSelectMinute(mNum)}
                                   className={`w-full py-1.5 rounded-lg text-xs sm:text-sm font-black transition-colors cursor-pointer text-center ${
                                     isSelected
-                                      ? 'bg-[#223852] text-white shadow-xs'
-                                      : 'text-[#223852] hover:bg-[#EAF4F1]'
+                                      ? 'bg-[#5B5FE8] text-white shadow-xs'
+                                      : 'text-[#1E2243] hover:bg-[#EEF0FF]'
                                   }`}
                                 >
                                   {mStr}
@@ -2108,10 +2108,10 @@ export function LogVitalsForm({
 
                         {/* AM/PM Column */}
                         <div className="flex flex-col items-center">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-[#5D817C] mb-1">AM/PM</span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">AM/PM</span>
                           <div
                             ref={ampmColRef}
-                            className="w-10 sm:w-11 max-h-[165px] sm:max-h-[195px] overflow-y-auto space-y-1 py-1 px-0.5 rounded-xl border border-[#D9E6E2]/70 bg-[#FAFDFD]"
+                            className="w-10 sm:w-11 max-h-[165px] sm:max-h-[195px] overflow-y-auto space-y-1 py-1 px-0.5 rounded-xl border border-slate-200 bg-slate-50/60"
                           >
                             {['am', 'pm'].map((pStr) => {
                               const isSelected = pStr === 'pm' ? selectedDateParts.hour >= 12 : selectedDateParts.hour < 12
@@ -2123,8 +2123,8 @@ export function LogVitalsForm({
                                   onClick={() => handleSelectAmPm(pStr as 'am' | 'pm')}
                                   className={`w-full py-1.5 rounded-lg text-xs sm:text-sm font-black uppercase transition-colors cursor-pointer text-center ${
                                     isSelected
-                                      ? 'bg-[#223852] text-white shadow-xs'
-                                      : 'text-[#223852] hover:bg-[#EAF4F1]'
+                                      ? 'bg-[#5B5FE8] text-white shadow-xs'
+                                      : 'text-[#1E2243] hover:bg-[#EEF0FF]'
                                   }`}
                                 >
                                   {pStr}
@@ -2142,7 +2142,7 @@ export function LogVitalsForm({
           </div>
 
           <div>
-            <label htmlFor="measurement_position" className="block text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C] mb-2">
+            <label htmlFor="measurement_position" className="block text-xs sm:text-sm font-bold uppercase tracking-wide text-slate-500 mb-2">
               Position
             </label>
             <CustomSelect
@@ -2161,7 +2161,7 @@ export function LogVitalsForm({
           </div>
 
           <div>
-            <label htmlFor="bp_arm" className="block text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C] mb-2">
+            <label htmlFor="bp_arm" className="block text-xs sm:text-sm font-bold uppercase tracking-wide text-slate-500 mb-2">
               BP Arm
             </label>
             <CustomSelect
@@ -2178,7 +2178,7 @@ export function LogVitalsForm({
           </div>
 
           <div>
-            <label htmlFor="temp_method" className="block text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C] mb-2">
+            <label htmlFor="temp_method" className="block text-xs sm:text-sm font-bold uppercase tracking-wide text-slate-500 mb-2">
               Temperature Method
             </label>
             <CustomSelect
@@ -2197,7 +2197,7 @@ export function LogVitalsForm({
           </div>
 
           <div className="sm:col-span-2">
-            <label htmlFor="oxygen_device" className="block text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C] mb-2">
+            <label htmlFor="oxygen_device" className="block text-xs sm:text-sm font-bold uppercase tracking-wide text-slate-500 mb-2">
               Oxygen Device
             </label>
             <CustomSelect
@@ -2219,15 +2219,15 @@ export function LogVitalsForm({
       </div>
 
       {/* SECTION 5: Symptoms & Clinical Observations */}
-      <div className="rounded-3xl border-2 border-[#D9E6E2] bg-white p-6 sm:p-8 shadow-sm space-y-6">
-        <h2 className="text-xl sm:text-2xl font-black text-[#223852] flex items-center gap-2.5">
-          <FileText className="h-6 w-6 text-[#5D817C] shrink-0" />
+      <div className="rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#1E2243] flex items-center gap-2.5">
+          <FileText className="h-6 w-6 text-[#5B5FE8] shrink-0" />
           5. Symptoms & Clinical Observations
         </h2>
 
         {/* Symptoms checklist chips */}
         <div>
-          <label className="block text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C] mb-2.5">
+          <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 mb-2.5">
             Reported Symptoms (Select all that apply)
           </label>
           <div className="flex flex-wrap gap-2.5">
@@ -2238,16 +2238,16 @@ export function LogVitalsForm({
                   key={symptom}
                   type="button"
                   onClick={() => handleSymptomToggle(symptom)}
-                  className={`py-2.5 px-4 rounded-xl border-2 cursor-pointer transition-colors inline-flex items-center gap-2 shadow-xs ${
+                  className={`py-2.5 px-4 rounded-xl cursor-pointer transition-all inline-flex items-center gap-2 shadow-xs ${
                     isChecked
-                      ? 'border-2 border-[#759EC7] bg-[#EDF4FA] text-[#223852] ring-2 ring-[#759EC7]/30 font-extrabold text-sm sm:text-base'
-                      : 'border-2 border-[#D9E6E2] bg-[#F5F8FA] text-[#223852] hover:border-[#759EC7] font-bold text-sm sm:text-base'
+                      ? 'border-2 border-[#5B5FE8] bg-[#EEF0FF] text-[#5B5FE8] ring-2 ring-[#5B5FE8]/20 font-bold text-sm sm:text-base'
+                      : 'border border-slate-200 bg-slate-50 text-slate-700 hover:border-[#5B5FE8]/40 hover:bg-[#EEF0FF]/40 font-semibold text-sm sm:text-base'
                   }`}
                 >
                   {isChecked ? (
-                    <Check className="h-4 w-4 text-[#36557A] stroke-[3]" />
+                    <Check className="h-4 w-4 text-[#5B5FE8] stroke-[3]" />
                   ) : (
-                    <Plus className="h-4 w-4 text-[#759EC7]" />
+                    <Plus className="h-4 w-4 text-slate-400" />
                   )}
                   <span>{symptom}</span>
                 </button>
@@ -2263,7 +2263,7 @@ export function LogVitalsForm({
                 placeholder="Specify other symptoms reported by patient..."
                 value={formData.symptoms_other}
                 onChange={handleChange}
-                className="w-full min-h-[56px] rounded-2xl border-2 border-[#D9E6E2] px-4 py-3.5 text-base sm:text-lg font-bold text-[#223852] bg-[#FAFDFD] focus:border-[#759EC7] focus:bg-white focus:ring-4 focus:ring-[#759EC7]/20 focus:outline-none transition-all placeholder:text-[#5D817C]/60 placeholder:text-base placeholder:font-normal"
+                className="w-full min-h-[56px] rounded-2xl border border-slate-200 px-4 py-3.5 text-base sm:text-lg font-semibold text-[#1E2243] bg-slate-50/50 focus:border-[#5B5FE8] focus:bg-white focus:ring-4 focus:ring-[#5B5FE8]/15 focus:outline-none transition-all placeholder:text-slate-400 placeholder:text-base placeholder:font-normal"
               />
             </div>
           )}
@@ -2271,7 +2271,7 @@ export function LogVitalsForm({
 
         {/* Medication taken before measurement */}
         <div>
-          <label htmlFor="medication_taken" className="block text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C] mb-2.5">
+          <label htmlFor="medication_taken" className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 mb-2.5">
             Medication Taken Before Measurement (Optional)
           </label>
           <input
@@ -2281,21 +2281,21 @@ export function LogVitalsForm({
             placeholder="e.g. Amlodipine 5mg at 8:00 AM, Paracetamol 500mg"
             value={formData.medication_taken}
             onChange={handleChange}
-            className="w-full min-h-[56px] rounded-2xl border-2 border-[#D9E6E2] px-4 py-3.5 text-base sm:text-lg font-bold text-[#223852] bg-[#FAFDFD] focus:border-[#759EC7] focus:bg-white focus:ring-4 focus:ring-[#759EC7]/20 focus:outline-none transition-all placeholder:text-[#5D817C]/60 placeholder:text-base placeholder:font-normal"
+            className="w-full min-h-[56px] rounded-2xl border border-slate-200 px-4 py-3.5 text-base sm:text-lg font-semibold text-[#1E2243] bg-slate-50/50 focus:border-[#5B5FE8] focus:bg-white focus:ring-4 focus:ring-[#5B5FE8]/15 focus:outline-none transition-all placeholder:text-slate-400 placeholder:text-base placeholder:font-normal"
           />
         </div>
 
         {/* Clinical Notes & Quick Observations */}
         <div>
           <div className="flex items-center justify-between mb-2.5">
-            <label htmlFor="notes" className="text-xs sm:text-sm font-black uppercase tracking-wide text-[#5D817C]">
+            <label htmlFor="notes" className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500">
               Clinical Notes & Bedside Observations
             </label>
             {formData.notes && (
               <button
                 type="button"
                 onClick={() => setFormData((prev) => ({ ...prev, notes: '' }))}
-                className="text-xs sm:text-sm font-extrabold text-[#5D817C] hover:text-[#D9776A] transition-colors cursor-pointer"
+                className="text-xs sm:text-sm font-semibold text-slate-500 hover:text-[#F25F5C] transition-colors cursor-pointer"
               >
                 Clear notes
               </button>
@@ -2311,16 +2311,16 @@ export function LogVitalsForm({
                   key={chip}
                   type="button"
                   onClick={() => handleQuickObservationClick(chip)}
-                  className={`py-2.5 px-4 rounded-xl border-2 cursor-pointer transition-colors inline-flex items-center gap-2 shadow-xs ${
+                  className={`py-2.5 px-4 rounded-xl cursor-pointer transition-all inline-flex items-center gap-2 shadow-xs ${
                     isAdded
-                      ? 'border-2 border-[#759EC7] bg-[#EDF4FA] text-[#223852] ring-2 ring-[#759EC7]/30 font-extrabold text-sm sm:text-base'
-                      : 'border-2 border-[#D9E6E2] bg-[#F5F8FA] text-[#223852] hover:border-[#759EC7] font-bold text-sm sm:text-base'
+                      ? 'border-2 border-[#5B5FE8] bg-[#EEF0FF] text-[#5B5FE8] ring-2 ring-[#5B5FE8]/20 font-bold text-sm sm:text-base'
+                      : 'border border-slate-200 bg-slate-50 text-slate-700 hover:border-[#5B5FE8]/40 hover:bg-[#EEF0FF]/40 font-semibold text-sm sm:text-base'
                   }`}
                 >
                   {isAdded ? (
-                    <Check className="h-4 w-4 text-[#36557A] stroke-[3]" />
+                    <Check className="h-4 w-4 text-[#5B5FE8] stroke-[3]" />
                   ) : (
-                    <Plus className="h-4 w-4 text-[#759EC7]" />
+                    <Plus className="h-4 w-4 text-slate-400" />
                   )}
                   <span>{chip}</span>
                 </button>
@@ -2335,23 +2335,23 @@ export function LogVitalsForm({
             placeholder="Patient reported mild dizziness after morning medication. Alert and responsive..."
             value={formData.notes}
             onChange={handleChange}
-            className="block w-full rounded-2xl border-2 border-[#D9E6E2] p-4 text-base sm:text-lg font-bold text-[#223852] min-h-[130px] bg-[#FAFDFD] focus:border-[#759EC7] focus:bg-white focus:ring-4 focus:ring-[#759EC7]/20 focus:outline-none transition-all placeholder:text-[#5D817C]/60 placeholder:text-base placeholder:font-normal"
+            className="block w-full rounded-2xl border border-slate-200 p-4 text-base sm:text-lg font-semibold text-[#1E2243] min-h-[130px] bg-slate-50/50 focus:border-[#5B5FE8] focus:bg-white focus:ring-4 focus:ring-[#5B5FE8]/15 focus:outline-none transition-all placeholder:text-slate-400 placeholder:text-base placeholder:font-normal"
           />
           {validationErrors.notes && (
-            <p className="mt-2 text-sm text-[#D9776A] font-bold">{validationErrors.notes}</p>
+            <p className="mt-2 text-sm text-[#F25F5C] font-semibold">{validationErrors.notes}</p>
           )}
         </div>
       </div>
 
       {/* Real-time Atypical Vitals Warning Banner */}
       {vitalsAssessment.isFlagged && (
-        <div className="rounded-3xl border-2 border-[#C4C674] bg-[#F6F7E4] p-5 text-[#3E4011] flex items-start gap-3.5 transition-all shadow-sm">
-          <div className="rounded-xl bg-[#C4C674] p-2.5 text-[#223852] shrink-0 mt-0.5">
+        <div className="rounded-2xl border border-[#F5A524]/40 bg-[#FFFBEB] p-5 text-amber-950 flex items-start gap-3.5 transition-all shadow-sm">
+          <div className="rounded-xl bg-[#F5A524]/20 p-2.5 text-[#D97706] shrink-0 mt-0.5">
             <AlertTriangle className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-base font-black text-[#223852]">Atypical Clinical Baseline Flagged</p>
-            <p className="mt-1 text-sm font-bold text-[#55581A]">
+            <p className="text-base font-bold text-amber-950">Atypical Clinical Baseline Flagged</p>
+            <p className="mt-1 text-sm font-medium text-amber-800">
               {vitalsAssessment.flags.map((f) => f.message).join(' • ')}. This record will be automatically highlighted in the physician triage queue.
             </p>
           </div>
@@ -2360,35 +2360,35 @@ export function LogVitalsForm({
 
       {/* Inline Feedback Alerts */}
       {serverError && (
-        <div className="rounded-3xl border-2 border-[#D9776A] bg-[#FCEFEB] p-5 text-[#8E281B] flex items-start gap-3.5 shadow-sm">
-          <AlertCircle className="h-6 w-6 text-[#D9776A] shrink-0 mt-0.5" />
+        <div className="rounded-2xl border border-[#F25F5C]/40 bg-[#FFF1F2] p-5 text-rose-950 flex items-start gap-3.5 shadow-sm">
+          <AlertCircle className="h-6 w-6 text-[#F25F5C] shrink-0 mt-0.5" />
           <div>
-            <p className="text-base font-black text-[#8E281B]">Submission Failed</p>
-            <p className="mt-1 text-sm font-bold text-[#8E281B]">{serverError}</p>
+            <p className="text-base font-bold text-rose-950">Submission Failed</p>
+            <p className="mt-1 text-sm font-medium text-rose-800">{serverError}</p>
           </div>
         </div>
       )}
 
       {successMessage && (
-        <div className="rounded-3xl border-2 border-[#8EBAAB] bg-[#EAF4F1] p-5 text-[#345B50] flex items-center gap-3.5 shadow-sm">
-          <CheckCircle2 className="h-6 w-6 text-[#5D817C] shrink-0" />
-          <p className="text-base font-black text-[#345B50]">{successMessage}</p>
+        <div className="rounded-2xl border border-[#2DD4BF]/40 bg-[#F0FDFA] p-5 text-teal-950 flex items-center gap-3.5 shadow-sm">
+          <CheckCircle2 className="h-6 w-6 text-[#0D9488] shrink-0" />
+          <p className="text-base font-bold text-teal-900">{successMessage}</p>
         </div>
       )}
 
       {/* SECTION 6: Staff Information & Primary Submit Button */}
-      <div className="rounded-2xl bg-[#36557A] p-4 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-[#223852]">
+      <div className="rounded-2xl bg-white border border-slate-200/80 p-4 text-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
         <div className="flex items-center gap-2.5">
-          <ShieldCheck className="h-6 w-6 text-[#8EBAAB] shrink-0" />
-          <span className="text-sm sm:text-base font-bold text-white">
+          <ShieldCheck className="h-6 w-6 text-[#5B5FE8] shrink-0" />
+          <span className="text-sm sm:text-base font-medium text-slate-600">
             Recorded By:{' '}
-            <strong className="text-white font-black text-base sm:text-lg">
+            <strong className="text-[#1E2243] font-bold text-base sm:text-lg">
               {currentCaregiver?.fullName || 'Bedside Caregiver'}
             </strong>{' '}
-            <span className="text-sm sm:text-base font-bold text-white/80">({currentCaregiver?.staffId || 'STF-CAREGIVER'})</span>
+            <span className="text-sm sm:text-base font-medium text-slate-400">({currentCaregiver?.staffId || 'STF-CAREGIVER'})</span>
           </span>
         </div>
-        <span className="text-xs sm:text-sm font-semibold text-[#8EBAAB]">
+        <span className="text-xs sm:text-sm font-medium text-slate-500">
           Timestamp logged automatically upon submission
         </span>
       </div>
@@ -2396,7 +2396,7 @@ export function LogVitalsForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full min-h-[60px] rounded-2xl bg-[#36557A] hover:bg-[#2C4766] active:bg-[#223852] text-white font-black text-lg sm:text-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50"
+        className="w-full min-h-[60px] rounded-2xl bg-[#5B5FE8] hover:bg-[#4A4ED4] active:bg-[#3D41BD] text-white font-bold text-lg sm:text-xl shadow-md shadow-[#5B5FE8]/25 hover:shadow-lg hover:shadow-[#5B5FE8]/30 transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50"
       >
         {isSubmitting ? (
           <>

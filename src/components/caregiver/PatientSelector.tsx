@@ -22,36 +22,36 @@ export function PatientSelector({ patients, currentPatientId }: PatientSelectorP
     if (!p) return null
 
     return (
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-sm">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+            <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#5B5FE8]">
               Assigned Patient
             </span>
             {p.relationshipLabel && (
-              <span className="text-xs text-gray-500 font-medium">
+              <span className="text-sm text-slate-400 font-medium">
                 • {p.relationshipLabel}
               </span>
             )}
           </div>
-          <h2 className="text-lg font-bold text-gray-900 mt-0.5">{p.fullName}</h2>
-          <p className="text-xs text-gray-500">
+          <h2 className="text-xl sm:text-2xl font-black text-[#1E2243] mt-0.5">{p.fullName}</h2>
+          <p className="text-sm font-medium text-slate-500">
             Condition: {p.primaryCondition || 'None documented'}
           </p>
         </div>
 
         {p.currentStatus && (
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500">Doctor-set status:</span>
+            <span className="text-sm text-slate-400 font-medium">Doctor-set status:</span>
             <span
-              className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${
+              className={`inline-flex items-center rounded-full px-3 py-1 text-xs sm:text-sm font-bold uppercase tracking-wider ${
                 p.currentStatus === 'critical'
-                  ? 'bg-red-100 text-red-800 ring-1 ring-inset ring-red-600/20'
+                  ? 'bg-[#F25F5C]/10 text-[#B91C1C] ring-1 ring-[#F25F5C]/30'
                   : p.currentStatus === 'warning'
-                  ? 'bg-amber-100 text-amber-800 ring-1 ring-inset ring-amber-600/20'
+                  ? 'bg-[#F5A524]/10 text-[#B45309] ring-1 ring-[#F5A524]/30'
                   : p.currentStatus === 'stable'
-                  ? 'bg-emerald-100 text-emerald-800 ring-1 ring-inset ring-emerald-600/20'
-                  : 'bg-gray-100 text-gray-700'
+                  ? 'bg-[#2DD4BF]/10 text-[#0F766E] ring-1 ring-[#2DD4BF]/30'
+                  : 'bg-slate-100 text-slate-600'
               }`}
             >
               {p.currentStatus}
@@ -63,13 +63,13 @@ export function PatientSelector({ patients, currentPatientId }: PatientSelectorP
   }
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm space-y-3">
+    <div className="rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-sm space-y-3">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-bold uppercase tracking-wider text-gray-500 flex items-center gap-1.5">
-          <Users className="h-4 w-4 text-blue-600" />
+        <label className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+          <Users className="h-4 w-4 text-[#5B5FE8]" />
           Select Patient ({patients.length} Assigned)
         </label>
-        <span className="text-xs text-gray-400">Click to switch timeline</span>
+        <span className="text-sm text-slate-400 font-medium">Click to switch timeline</span>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -79,26 +79,26 @@ export function PatientSelector({ patients, currentPatientId }: PatientSelectorP
             <Link
               key={p.patientId}
               href={`/history?patientId=${p.patientId}`}
-              className={`flex items-center gap-2.5 rounded-xl border min-h-[44px] px-4 py-2 text-xs font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
+              className={`flex items-center gap-2.5 rounded-xl border min-h-[44px] px-4 py-2 text-sm font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5B5FE8] focus-visible:ring-offset-1 ${
                 isSelected
-                  ? 'border-blue-600 bg-blue-50 text-blue-900 shadow-sm ring-2 ring-blue-500/20'
-                  : 'border-gray-200 bg-gray-50/50 text-gray-700 hover:border-gray-300 hover:bg-gray-100'
+                  ? 'border-2 border-[#5B5FE8] bg-[#EEF0FF] text-[#5B5FE8] shadow-xs ring-2 ring-[#5B5FE8]/20 font-bold'
+                  : 'border border-slate-200 bg-slate-50 text-slate-700 hover:border-[#5B5FE8]/40 hover:bg-[#EEF0FF]/40'
               }`}
             >
               <span>{p.fullName}</span>
               {p.relationshipLabel && (
-                <span className="text-[10px] text-gray-400">({p.relationshipLabel})</span>
+                <span className="text-xs text-slate-400">({p.relationshipLabel})</span>
               )}
               {p.currentStatus && (
                 <span
                   className={`h-2 w-2 rounded-full ${
                     p.currentStatus === 'critical'
-                      ? 'bg-red-500'
+                      ? 'bg-[#F25F5C]'
                       : p.currentStatus === 'warning'
-                      ? 'bg-amber-500'
+                      ? 'bg-[#F5A524]'
                       : p.currentStatus === 'stable'
-                      ? 'bg-emerald-500'
-                      : 'bg-gray-400'
+                      ? 'bg-[#2DD4BF]'
+                      : 'bg-slate-300'
                   }`}
                   title={`Status: ${p.currentStatus}`}
                 />

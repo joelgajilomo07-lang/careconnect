@@ -124,43 +124,43 @@ export function CareTeamAssignmentForm({
     <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6 shadow-sm space-y-5">
       {/* Header */}
       <div className="border-b border-gray-100 pb-4">
-        <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
+        <h2 className="text-lg sm:text-xl font-black text-[#1E2243] flex items-center gap-2">
           <UserPlus className="h-5 w-5 text-blue-600" />
           Assign Care Team Member
         </h2>
-        <p className="text-xs text-gray-500 mt-0.5">
+        <p className="text-sm font-medium text-slate-500 mt-1">
           Establish clinical relationships between patients and certified staff or family members.
         </p>
       </div>
 
       {/* Success Feedback */}
       {successMsg && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-800 flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-          <span className="font-semibold">{successMsg}</span>
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3.5 text-sm text-emerald-800 flex items-center gap-2">
+          <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+          <span className="font-bold">{successMsg}</span>
         </div>
       )}
 
       {/* Error Feedback */}
       {errorMsg && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-800 flex items-center gap-2">
-          <AlertCircle className="h-4 w-4 text-red-600 shrink-0" />
-          <span>{errorMsg}</span>
+        <div className="rounded-xl border border-red-200 bg-red-50 p-3.5 text-sm text-red-800 flex items-center gap-2">
+          <AlertCircle className="h-5 w-5 text-red-600 shrink-0" />
+          <span className="font-semibold">{errorMsg}</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Patient Selector */}
           <div className="space-y-1.5">
-            <label htmlFor="patient" className="text-xs font-semibold text-gray-700">
+            <label htmlFor="patient" className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 block">
               1. Enrolled Patient *
             </label>
             <select
               id="patient"
               value={selectedPatientId}
               onChange={(e) => setSelectedPatientId(e.target.value)}
-              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs text-gray-900 bg-white focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              className="w-full rounded-xl border border-gray-300 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-medium text-[#1E2243] bg-white focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
             >
               {patients.length === 0 ? (
                 <option value="">No enrolled patients found</option>
@@ -176,14 +176,14 @@ export function CareTeamAssignmentForm({
 
           {/* Care Team Role Selector */}
           <div className="space-y-1.5">
-            <label htmlFor="memberRole" className="text-xs font-semibold text-gray-700">
+            <label htmlFor="memberRole" className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 block">
               2. Care Team Role *
             </label>
             <select
               id="memberRole"
               value={selectedRole}
               onChange={(e) => handleRoleChange(e.target.value as CareTeamRole)}
-              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs text-gray-900 bg-white focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              className="w-full rounded-xl border border-gray-300 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-medium text-[#1E2243] bg-white focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
             >
               <option value="doctor">Doctor (Attending Physician)</option>
               <option value="caregiver">Caregiver (Bedside Care)</option>
@@ -193,14 +193,14 @@ export function CareTeamAssignmentForm({
 
           {/* Team Member Selector (Filtered strictly to matching role) */}
           <div className="space-y-1.5">
-            <label htmlFor="member" className="text-xs font-semibold text-gray-700">
+            <label htmlFor="member" className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 block">
               3. Assign Candidate ({selectedRole.replace('_', ' ')}) *
             </label>
             <select
               id="member"
               value={selectedMemberId}
               onChange={(e) => setSelectedMemberId(e.target.value)}
-              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs text-gray-900 bg-white focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              className="w-full rounded-xl border border-gray-300 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-medium text-[#1E2243] bg-white focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
             >
               {eligibleMembers.length === 0 ? (
                 <option value="">No active {selectedRole.replace('_', ' ')}s available</option>
@@ -219,12 +219,12 @@ export function CareTeamAssignmentForm({
         </div>
 
         {/* Relationship Label & Role-Aware Presets */}
-        <div className="space-y-2 rounded-xl bg-gray-50/70 p-3.5 border border-gray-200/80">
+        <div className="space-y-2 rounded-xl bg-gray-50/70 p-4 border border-gray-200/80">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-            <label htmlFor="label" className="text-xs font-semibold text-gray-700">
+            <label htmlFor="label" className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-500 block">
               Relationship / Specialty Label (Optional)
             </label>
-            <span className="text-[11px] text-gray-400">
+            <span className="text-xs sm:text-sm font-medium text-slate-500">
               Click preset or enter custom clinical focus
             </span>
           </div>
@@ -235,13 +235,13 @@ export function CareTeamAssignmentForm({
             placeholder={`e.g. ${rolePresets[selectedRole][0]}`}
             value={relationshipLabel}
             onChange={(e) => setRelationshipLabel(e.target.value)}
-            className="w-full rounded-xl border border-gray-300 px-3 py-2 text-xs text-gray-900 bg-white focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
+            className="w-full rounded-xl border border-gray-300 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-medium text-[#1E2243] bg-white focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600"
           />
 
           {/* Preset Buttons */}
-          <div className="flex flex-wrap items-center gap-1.5 pt-1">
-            <span className="text-[11px] font-medium text-gray-500 flex items-center gap-1">
-              <Sparkles className="h-3 w-3 text-blue-500" />
+          <div className="flex flex-wrap items-center gap-2 pt-1.5">
+            <span className="text-xs sm:text-sm font-bold text-slate-500 flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-blue-500" />
               Presets:
             </span>
             {rolePresets[selectedRole].map((preset) => (
@@ -249,10 +249,10 @@ export function CareTeamAssignmentForm({
                 key={preset}
                 type="button"
                 onClick={() => setRelationshipLabel(preset)}
-                className={`rounded-lg px-2 py-0.5 text-[11px] font-medium transition-colors duration-150 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
+                className={`rounded-lg px-2.5 py-1 text-xs sm:text-sm font-bold transition-colors duration-150 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
                   relationshipLabel === preset
                     ? 'bg-blue-100 text-blue-800 border-blue-300'
-                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-100 hover:text-gray-900'
+                    : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100 hover:text-gray-900'
                 }`}
               >
                 {preset}
@@ -266,16 +266,16 @@ export function CareTeamAssignmentForm({
           <button
             type="submit"
             disabled={isPending || !selectedPatientId || !selectedMemberId}
-            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-blue-700 active:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 min-h-[44px] text-sm sm:text-base font-bold text-white shadow-sm hover:bg-blue-700 active:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isPending ? (
               <>
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
                 <span>Pairing Team...</span>
               </>
             ) : (
               <>
-                <UserPlus className="h-3.5 w-3.5" />
+                <UserPlus className="h-4 w-4" />
                 <span>Save Care Team Pairing</span>
               </>
             )}

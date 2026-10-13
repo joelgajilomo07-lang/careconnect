@@ -17,13 +17,13 @@ export default async function AdminInvitePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <Link
           href="/admin"
-          className="inline-flex items-center gap-2 min-h-[44px] sm:min-h-0 text-xs sm:text-sm font-medium text-gray-600 hover:text-slate-900 hover:underline rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 transition-colors duration-150"
+          className="inline-flex items-center gap-2 min-h-[44px] sm:min-h-0 text-sm font-bold text-slate-600 hover:text-slate-900 hover:underline rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 transition-colors duration-150"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Admin Dashboard
         </Link>
-        <div className="flex items-center gap-1.5 text-xs text-slate-700 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-          <ShieldCheck className="h-3.5 w-3.5 text-slate-600" />
+        <div className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
+          <ShieldCheck className="h-4 w-4 text-slate-600" />
           <span>Admin Authorization Verified</span>
         </div>
       </div>

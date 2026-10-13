@@ -47,10 +47,10 @@ export default async function AdminDashboardPage() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+          <h1 className="text-2xl sm:text-3xl font-black text-[#1E2243] tracking-tight">
             System Administration
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-1">
+          <p className="text-sm sm:text-base font-medium text-slate-500 mt-1">
             Clinical oversight, care team provisioning, and security audit directory
           </p>
         </div>
@@ -59,17 +59,17 @@ export default async function AdminDashboardPage() {
         <div className="flex flex-wrap items-center gap-2">
           <Link
             href="/admin/invite"
-            className="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 text-xs font-semibold text-white shadow-sm hover:bg-slate-800 transition"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-4 py-2.5 min-h-[44px] text-sm font-bold text-white shadow-sm hover:bg-slate-800 transition"
           >
-            <UserPlus className="h-3.5 w-3.5" />
+            <UserPlus className="h-4 w-4" />
             <span>Invite New User</span>
           </Link>
-          <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 border border-emerald-200">
-            <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+          <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs sm:text-sm font-bold text-emerald-700 border border-emerald-200">
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
             <span>RLS Active</span>
           </div>
-          <div className="flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 border border-blue-200">
-            <Radio className="h-3.5 w-3.5 text-blue-600" />
+          <div className="flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-xs sm:text-sm font-bold text-blue-700 border border-blue-200">
+            <Radio className="h-4 w-4 text-blue-600" />
             <span>Realtime Armed</span>
           </div>
         </div>
@@ -78,57 +78,57 @@ export default async function AdminDashboardPage() {
       {/* Metrics Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
         <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-teal-600 text-xs font-medium mb-1">
+          <div className="flex items-center gap-2 text-teal-600 text-xs sm:text-sm font-bold uppercase tracking-wider mb-1">
             <UserCheck className="h-4 w-4" />
             <span>Patients</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{totalPatients ?? 0}</p>
-          <span className="text-[11px] text-gray-400">Enrolled Patients</span>
+          <p className="text-2xl sm:text-3xl font-black text-[#1E2243]">{totalPatients ?? 0}</p>
+          <span className="text-xs sm:text-sm font-medium text-slate-500">Enrolled Patients</span>
         </div>
 
         <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-purple-600 text-xs font-medium mb-1">
+          <div className="flex items-center gap-2 text-purple-600 text-xs sm:text-sm font-bold uppercase tracking-wider mb-1">
             <Stethoscope className="h-4 w-4" />
             <span>Doctors</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{totalDoctors ?? 0}</p>
-          <span className="text-[11px] text-gray-400">Attending Physicians</span>
+          <p className="text-2xl sm:text-3xl font-black text-[#1E2243]">{totalDoctors ?? 0}</p>
+          <span className="text-xs sm:text-sm font-medium text-slate-500">Attending Physicians</span>
         </div>
 
         <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-blue-600 text-xs font-medium mb-1">
+          <div className="flex items-center gap-2 text-blue-600 text-xs sm:text-sm font-bold uppercase tracking-wider mb-1">
             <HeartPulse className="h-4 w-4" />
             <span>Caregivers</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{totalCaregivers ?? 0}</p>
-          <span className="text-[11px] text-gray-400">Bedside Staff</span>
+          <p className="text-2xl sm:text-3xl font-black text-[#1E2243]">{totalCaregivers ?? 0}</p>
+          <span className="text-xs sm:text-sm font-medium text-slate-500">Bedside Staff</span>
         </div>
 
         <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-amber-600 text-xs font-medium mb-1">
+          <div className="flex items-center gap-2 text-amber-600 text-xs sm:text-sm font-bold uppercase tracking-wider mb-1">
             <Users className="h-4 w-4" />
             <span>Care Teams</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{totalCareTeams ?? 0}</p>
-          <span className="text-[11px] text-gray-400">Active Pairings</span>
+          <p className="text-2xl sm:text-3xl font-black text-[#1E2243]">{totalCareTeams ?? 0}</p>
+          <span className="text-xs sm:text-sm font-medium text-slate-500">Active Pairings</span>
         </div>
 
         <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-indigo-600 text-xs font-medium mb-1">
+          <div className="flex items-center gap-2 text-indigo-600 text-xs sm:text-sm font-bold uppercase tracking-wider mb-1">
             <Activity className="h-4 w-4" />
             <span>Vitals Logs</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{totalVitalsLogs ?? 0}</p>
-          <span className="text-[11px] text-gray-400">Total Recorded</span>
+          <p className="text-2xl sm:text-3xl font-black text-[#1E2243]">{totalVitalsLogs ?? 0}</p>
+          <span className="text-xs sm:text-sm font-medium text-slate-500">Total Recorded</span>
         </div>
 
         <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-emerald-600 text-xs font-medium mb-1">
+          <div className="flex items-center gap-2 text-emerald-600 text-xs sm:text-sm font-bold uppercase tracking-wider mb-1">
             <FileCheck2 className="h-4 w-4" />
             <span>Reviews</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{totalReviews ?? 0}</p>
-          <span className="text-[11px] text-gray-400">Doctor Reviews</span>
+          <p className="text-2xl sm:text-3xl font-black text-[#1E2243]">{totalReviews ?? 0}</p>
+          <span className="text-xs sm:text-sm font-medium text-slate-500">Doctor Reviews</span>
         </div>
       </div>
 
@@ -142,14 +142,14 @@ export default async function AdminDashboardPage() {
             <div className="h-10 w-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
               <Users className="h-5 w-5" />
             </div>
-            <h2 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+            <h2 className="text-lg sm:text-xl font-black text-[#1E2243] group-hover:text-blue-600 transition-colors">
               Care Team Assignments
             </h2>
-            <p className="text-xs text-gray-500 leading-relaxed">
+            <p className="text-sm font-medium text-slate-600 leading-relaxed">
               Configure patient-to-staff pairings. Assign attending physicians, dedicated caregivers, and family contacts to ensure RLS-compliant clinical access.
             </p>
           </div>
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-600">
+          <div className="flex items-center gap-1.5 text-sm font-bold text-blue-600">
             <span>Manage Care Teams</span>
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </div>
@@ -160,14 +160,14 @@ export default async function AdminDashboardPage() {
             <div className="h-10 w-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
               <ShieldCheck className="h-5 w-5" />
             </div>
-            <h2 className="text-lg font-bold text-gray-900">
+            <h2 className="text-lg sm:text-xl font-black text-[#1E2243]">
               Role-Based Access Enforcement
             </h2>
-            <p className="text-xs text-gray-500 leading-relaxed">
+            <p className="text-sm font-medium text-slate-600 leading-relaxed">
               All data access is bounded at the database layer via PostgreSQL Row Level Security policies. Users only see clinical records for patients on their verified active care team.
             </p>
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-400">
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-slate-500">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
             <span>Admin session: {user.email}</span>
           </div>
