@@ -141,15 +141,12 @@ export const vitalsLogsService = {
         .from('vitals_logs')
         .select(`
           *,
-          patient:users!vitals_logs_patient_id_fkey(
+          patient:patients!vitals_logs_patient_id_fkey(
             id,
             full_name,
-            patient_profile:patient_profiles!patient_profiles_user_id_fkey(
-              primary_condition,
-              current_status,
-              date_of_birth,
-              sex
-            )
+            diagnosis,
+            birth_date,
+            sex
           ),
           caregiver:users!vitals_logs_caregiver_id_fkey(
             id,
@@ -179,7 +176,24 @@ export const vitalsLogsService = {
         }
       }
 
-      return { data: (data as unknown as VitalsLogDetail), error: null }
+      const row = data as unknown as any
+      const transformed: VitalsLogDetail = {
+        ...row,
+        patient: row.patient
+          ? {
+              id: row.patient.id,
+              full_name: row.patient.full_name,
+              patient_profile: {
+                primary_condition: row.patient.diagnosis,
+                current_status: 'stable' as Database['public']['Enums']['patient_status'],
+                date_of_birth: row.patient.birth_date,
+                sex: row.patient.sex,
+              },
+            }
+          : null,
+      }
+
+      return { data: transformed, error: null }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Unexpected error fetching vitals log detail'
       return { data: null, error: message }
@@ -239,14 +253,10 @@ export const vitalsLogsService = {
         .from('vitals_logs')
         .select(`
           *,
-          patient:users!vitals_logs_patient_id_fkey(
+          patient:patients!vitals_logs_patient_id_fkey(
             id,
             full_name,
-            is_active,
-            patient_profile:patient_profiles!patient_profiles_user_id_fkey(
-              primary_condition,
-              current_status
-            )
+            diagnosis
           ),
           caregiver:users!vitals_logs_caregiver_id_fkey(
             id,
@@ -278,7 +288,23 @@ export const vitalsLogsService = {
         }
       }
 
-      return { data: (data as unknown as TriageQueueItem[]) || [], error: null }
+      const rows = (data || []) as unknown as any[]
+      const transformed: TriageQueueItem[] = rows.map((r) => ({
+        ...r,
+        patient: r.patient
+          ? {
+              id: r.patient.id,
+              full_name: r.patient.full_name,
+              is_active: true,
+              patient_profile: {
+                primary_condition: r.patient.diagnosis,
+                current_status: 'stable' as Database['public']['Enums']['patient_status'],
+              },
+            }
+          : null,
+      }))
+
+      return { data: transformed, error: null }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Unexpected error fetching doctor triage queue'
       return { data: null, error: message }

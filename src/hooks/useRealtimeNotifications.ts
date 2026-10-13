@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import type { NotificationRow } from '@/services/notificationsService'
+import type { NotificationWithPatient } from '@/services/notificationsService'
 import {
   getNotificationsAction,
   markNotificationReadAction,
@@ -10,7 +10,7 @@ import {
 } from '@/app/actions/notifications'
 
 export function useRealtimeNotifications(userId: string) {
-  const [notifications, setNotifications] = useState<NotificationRow[]>([])
+  const [notifications, setNotifications] = useState<NotificationWithPatient[]>([])
   const [unreadCount, setUnreadCount] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const supabaseRef = useRef(createClient())
@@ -18,11 +18,10 @@ export function useRealtimeNotifications(userId: string) {
   // 1. Initial fetch of notifications
   const fetchNotifications = useCallback(async () => {
     try {
-      setIsLoading(true)
       const res = await getNotificationsAction()
       if (res.data) {
         setNotifications(res.data)
-        const unread = res.data.filter(n => !n.is_read).length
+        const unread = res.data.filter((n) => !n.is_read).length
         setUnreadCount(unread)
       }
     } finally {
@@ -34,6 +33,11 @@ export function useRealtimeNotifications(userId: string) {
     if (!userId) return
 
     fetchNotifications()
+
+    // 30-second polling fallback
+    const pollInterval = setInterval(() => {
+      fetchNotifications()
+    }, 30000)
 
     const supabase = supabaseRef.current
     const channelName = `user-notifications:${userId}`
@@ -57,9 +61,9 @@ export function useRealtimeNotifications(userId: string) {
           filter: `recipient_id=eq.${userId}`,
         },
         (payload) => {
-          const newNotif = payload.new as NotificationRow
+          const newNotif = payload.new as NotificationWithPatient
           setNotifications((prev) => {
-            if (prev.some(n => n.id === newNotif.id)) return prev
+            if (prev.some((n) => n.id === newNotif.id)) return prev
             return [newNotif, ...prev]
           })
           if (!newNotif.is_read) {
@@ -76,10 +80,10 @@ export function useRealtimeNotifications(userId: string) {
           filter: `recipient_id=eq.${userId}`,
         },
         (payload) => {
-          const updated = payload.new as NotificationRow
+          const updated = payload.new as NotificationWithPatient
           setNotifications((prev) => {
-            const next = prev.map((n) => (n.id === updated.id ? updated : n))
-            setUnreadCount(next.filter(n => !n.is_read).length)
+            const next = prev.map((n) => (n.id === updated.id ? { ...n, ...updated } : n))
+            setUnreadCount(next.filter((n) => !n.is_read).length)
             return next
           })
         }
@@ -88,6 +92,7 @@ export function useRealtimeNotifications(userId: string) {
 
     // 3. Strict cleanup on unmount to prevent duplicate socket accumulation
     return () => {
+      clearInterval(pollInterval)
       supabase.removeChannel(channel)
     }
   }, [userId, fetchNotifications])

@@ -111,17 +111,12 @@ export const careTeamsService = {
         .select(`
           patient_id,
           relationship_label,
-          patient:users!care_teams_patient_id_fkey(
+          patient:patients!care_teams_patient_id_fkey(
             id,
             full_name,
-            is_active,
-            patient_profile:patient_profiles!patient_profiles_user_id_fkey(
-              primary_condition,
-              current_status,
-              date_of_birth,
-              sex,
-              room_bed
-            )
+            diagnosis,
+            birth_date,
+            sex
           )
         `)
         .eq('member_id', memberId)
@@ -142,26 +137,21 @@ export const careTeamsService = {
         patient: {
           id: string
           full_name: string
-          is_active: boolean
-          patient_profile: {
-            primary_condition: string | null
-            current_status: Database['public']['Enums']['patient_status'] | null
-            date_of_birth: string | null
-            sex: string | null
-            room_bed: string | null
-          } | null
+          diagnosis: string | null
+          birth_date: string | null
+          sex: string | null
         } | null
       }>)
-        .filter((row) => row.patient && row.patient.is_active === true)
+        .filter((row) => Boolean(row.patient))
         .map((row) => ({
           patientId: row.patient_id,
           fullName: row.patient?.full_name || 'Unnamed Patient',
-          primaryCondition: row.patient?.patient_profile?.primary_condition || null,
-          currentStatus: row.patient?.patient_profile?.current_status || null,
+          primaryCondition: row.patient?.diagnosis || null,
+          currentStatus: 'stable' as Database['public']['Enums']['patient_status'],
           relationshipLabel: row.relationship_label || null,
-          dateOfBirth: row.patient?.patient_profile?.date_of_birth || null,
-          sex: row.patient?.patient_profile?.sex || null,
-          roomBed: row.patient?.patient_profile?.room_bed || null,
+          dateOfBirth: row.patient?.birth_date || null,
+          sex: row.patient?.sex || null,
+          roomBed: null,
         }))
 
       return { data: result, error: null }
@@ -197,14 +187,12 @@ export const careTeamsService = {
         .select(`
           patient_id,
           relationship_label,
-          patient:users!care_teams_patient_id_fkey(
+          patient:patients!care_teams_patient_id_fkey(
             id,
             full_name,
-            is_active,
-            patient_profile:patient_profiles!patient_profiles_user_id_fkey(
-              primary_condition,
-              current_status
-            )
+            diagnosis,
+            birth_date,
+            sex
           )
         `)
         .eq('member_id', memberId)
@@ -225,19 +213,15 @@ export const careTeamsService = {
         patient: {
           id: string
           full_name: string
-          is_active: boolean
-          patient_profile: {
-            primary_condition: string | null
-            current_status: Database['public']['Enums']['patient_status'] | null
-          } | null
+          diagnosis: string | null
         } | null
       }>)
-        .filter((row) => row.patient && row.patient.is_active === true)
+        .filter((row) => Boolean(row.patient))
         .map((row) => ({
           patientId: row.patient_id,
           fullName: row.patient?.full_name || 'Unnamed Patient',
-          primaryCondition: row.patient?.patient_profile?.primary_condition || null,
-          currentStatus: row.patient?.patient_profile?.current_status || null,
+          primaryCondition: row.patient?.diagnosis || null,
+          currentStatus: 'stable' as Database['public']['Enums']['patient_status'],
           relationshipLabel: row.relationship_label || null,
         }))
 
@@ -388,7 +372,7 @@ export const careTeamsService = {
    * Fetch all care team assignments across all patients (Admin only).
    */
   async getAllCareTeams(): Promise<ServiceResult<Array<CareTeamRow & {
-    patient: Tables<'users'> | null
+    patient: Tables<'patients'> | null
     member: Tables<'users'> | null
   }>>> {
     try {
@@ -397,7 +381,7 @@ export const careTeamsService = {
         .from('care_teams')
         .select(`
           *,
-          patient:users!care_teams_patient_id_fkey(*),
+          patient:patients!care_teams_patient_id_fkey(*),
           member:users!care_teams_member_id_fkey(*)
         `)
         .order('assigned_at', { ascending: false })
@@ -406,7 +390,7 @@ export const careTeamsService = {
         return { data: null, error: error.message, code: error.code, details: error.details }
       }
 
-      return { data: (data as unknown as Array<CareTeamRow & { patient: Tables<'users'> | null; member: Tables<'users'> | null }>) || [], error: null }
+      return { data: (data as unknown as Array<CareTeamRow & { patient: Tables<'patients'> | null; member: Tables<'users'> | null }>) || [], error: null }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Unexpected error fetching all care teams'
       return { data: null, error: message }

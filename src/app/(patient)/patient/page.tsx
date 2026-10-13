@@ -1,5 +1,6 @@
 import { requireRole } from '@/lib/auth/roleGuard'
 import { usersService } from '@/services/usersService'
+import { patientsService } from '@/services/patientsService'
 import { careTeamsService } from '@/services/careTeamsService'
 import { vitalsLogsService } from '@/services/vitalsLogsService'
 import { medicalReviewsService } from '@/services/medicalReviewsService'
@@ -7,6 +8,8 @@ import { VitalsChart } from '@/components/caregiver/VitalsChart'
 import { PatientCareTeamRoster } from '@/components/patient'
 import { checkVitalsRanges } from '@/lib/utils/vitalsThresholds'
 import { format } from 'date-fns'
+import { getPatientClinicalDataAction } from '@/app/actions/doctorClinical'
+import Link from 'next/link'
 import {
   HeartPulse,
   Activity,
@@ -20,6 +23,9 @@ import {
   Sparkles,
   Stethoscope,
   Info,
+  MessageSquare,
+  Pill,
+  CheckCheck,
 } from 'lucide-react'
 
 export const metadata = {
@@ -27,22 +33,63 @@ export const metadata = {
   description: 'View your health status, recent vital trends, attending doctor instructions, and care team directory.',
 }
 
-export default async function PatientDashboardPage() {
+export default async function PatientDashboardPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ patientId?: string }>
+}) {
   const { user } = await requireRole(['patient'])
-  const patientId = user.id
 
-  // Fetch patient profile, care team, vitals logs, and medical reviews concurrently
-  const [patientRes, careTeamRes, vitalsRes, reviewsRes] = await Promise.all([
+  // Check if patient account is linked to a patient record
+  const { data: patientRecord } = await patientsService.getPatientByUserId(user.id)
+
+  if (!patientRecord) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-16 text-center space-y-4">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 border border-amber-200">
+          <Info className="h-7 w-7" />
+        </div>
+        <h1 className="text-xl font-bold text-[#1E2243]">Account Not Linked</h1>
+        <p className="text-sm text-slate-600 max-w-md mx-auto">
+          Your account is not yet linked to a patient record. Please contact the administrator.
+        </p>
+      </div>
+    )
+  }
+
+  // ACCESS RULE: Patient can ONLY open their own record.
+  // Any attempt to open another patient's ID returns 403.
+  const resolvedParams = searchParams ? await searchParams : undefined
+  if (resolvedParams?.patientId && resolvedParams.patientId !== patientRecord.id && resolvedParams.patientId !== user.id) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-16 text-center space-y-4">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-600 border border-red-200">
+          <AlertCircle className="h-7 w-7" />
+        </div>
+        <h1 className="text-xl font-bold text-[#1E2243]">403 - Access Forbidden</h1>
+        <p className="text-sm text-slate-600 max-w-md mx-auto">
+          You are not authorized to view this patient record. Patients may only view their own health records.
+        </p>
+      </div>
+    )
+  }
+
+  const patientId = patientRecord.id
+
+  // Fetch patient profile, care team, vitals logs, medical reviews, and clinical details concurrently
+  const [patientRes, careTeamRes, vitalsRes, reviewsRes, clinicalRes] = await Promise.all([
     usersService.getPatientWithProfile(patientId),
     careTeamsService.getTeamForPatient(patientId),
     vitalsLogsService.getByPatient(patientId),
     medicalReviewsService.getByPatient(patientId),
+    getPatientClinicalDataAction(patientId, 7),
   ])
 
   const patient = patientRes.data
   const careTeam = careTeamRes.data || []
   const vitalsLogs = vitalsRes.data || []
   const reviews = reviewsRes.data || []
+  const clinicalData = clinicalRes.data
 
   // Doctor-set clinical status
   const currentStatus = patient?.patient_profile?.current_status || 'unassessed'
@@ -151,8 +198,15 @@ export default async function PatientDashboardPage() {
           </p>
         </div>
 
-        {/* Status Pill in Header */}
-        <div className="shrink-0 flex items-center gap-3">
+        {/* Status Pill & Message Care Team in Header */}
+        <div className="shrink-0 flex flex-wrap items-center gap-3">
+          <Link
+            href={`/messages?patientId=${patientId}`}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#5B5FE8] text-white text-xs sm:text-sm font-bold hover:bg-[#4A4ED4] shadow-sm shadow-[#5B5FE8]/25 transition-all"
+          >
+            <MessageSquare className="h-4 w-4" />
+            Message My Care Team
+          </Link>
           <div className={`flex items-center gap-2.5 rounded-2xl border px-4 py-2.5 shadow-xs ${statusConfig.bgColor} ${statusConfig.borderColor}`}>
             <StatusIcon className={`h-6 w-6 ${statusConfig.textColor}`} />
             <div>
@@ -356,6 +410,167 @@ export default async function PatientDashboardPage() {
           </div>
         )}
       </section>
+
+      {/* Recent Care Summaries (Plain Language) */}
+      {clinicalData?.shiftReports && clinicalData.shiftReports.length > 0 && (
+        <section className="rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div>
+              <h2 className="text-lg sm:text-xl font-black text-[#1E2243] flex items-center gap-2">
+                <FileText className="h-5 w-5 text-[#5B5FE8]" />
+                Recent Care Summaries
+              </h2>
+              <p className="text-sm font-medium text-slate-500 mt-0.5">
+                Daily summaries recorded by your home caregivers
+              </p>
+            </div>
+            <span className="text-xs font-semibold text-slate-400 bg-slate-50 px-3 py-1 rounded-lg border border-slate-200">
+              {clinicalData.shiftReports.length} Recent Logs
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            {clinicalData.shiftReports.slice(0, 4).map((sr) => (
+              <div
+                key={sr.id}
+                className="rounded-xl border border-slate-200/80 bg-slate-50/50 p-4 space-y-2 hover:bg-slate-50 transition"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-black uppercase text-[#1E2243] bg-white px-2 py-0.5 rounded border border-slate-200">
+                      {sr.shift} Shift
+                    </span>
+                    <span className="text-xs font-bold text-slate-600">
+                      {format(new Date(sr.submitted_at), 'MMM dd, yyyy · HH:mm')}
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-500">
+                    Caregiver: <strong className="text-slate-700">{sr.caregiver_name}</strong>
+                  </span>
+                </div>
+
+                <p className="text-sm font-semibold text-[#1E2243]">
+                  Condition: <span className="font-normal text-slate-600">{sr.general_condition || 'Comfortable and resting well'}</span>
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1 border-t border-slate-200/60 text-slate-600">
+                  {sr.activities_care && (
+                    <div>
+                      <strong className="text-slate-700 font-bold">Daily Assistance:</strong> {sr.activities_care}
+                    </div>
+                  )}
+                  {sr.food_fluid_intake && (
+                    <div>
+                      <strong className="text-slate-700 font-bold">Meals & Nutrition:</strong> {sr.food_fluid_intake}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* My Medicines & Schedule (Plain Language) */}
+      {clinicalData?.medications && (
+        <section className="rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 border-b border-slate-100">
+            <div>
+              <h2 className="text-lg sm:text-xl font-black text-[#1E2243] flex items-center gap-2">
+                <Pill className="h-5 w-5 text-[#5B5FE8]" />
+                My Medicines & Schedule
+              </h2>
+              <p className="text-sm font-medium text-slate-500 mt-0.5">
+                Your prescribed medicines and daily dosing times
+              </p>
+            </div>
+            {clinicalData.medicationCompliance && (
+              <div className="flex items-center gap-2 bg-[#2DD4BF]/10 px-3 py-1.5 rounded-xl border border-[#2DD4BF]/30 text-xs font-bold text-[#0F766E]">
+                <CheckCheck className="h-4 w-4 text-[#2DD4BF]" />
+                <span>{clinicalData.medicationCompliance.complianceRate}% On-Time Taking</span>
+              </div>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {clinicalData.medications.map((m) => (
+              <div
+                key={m.id}
+                className="p-3.5 rounded-xl border border-slate-200/80 bg-slate-50/40 space-y-1.5"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-black text-[#1E2243]">{m.name}</span>
+                  <span className="text-xs font-bold text-[#5B5FE8] bg-[#EEF0FF] px-2 py-0.5 rounded">
+                    {m.dosage}
+                  </span>
+                </div>
+                <div className="text-xs text-slate-600 flex items-center gap-3">
+                  <span>{m.route || 'Oral'}</span>
+                  <span>•</span>
+                  <span>{m.frequency}</span>
+                </div>
+                {m.schedule_times && (
+                  <p className="text-xs text-slate-500">
+                    Times to take: <strong className="text-slate-700">{m.schedule_times.join(', ')}</strong>
+                  </p>
+                )}
+                {m.instructions && (
+                  <p className="text-xs text-slate-500 italic mt-0.5">Doctor Instructions: {m.instructions}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* My Appointments (Plain Language) */}
+      {clinicalData?.appointments && (
+        <section className="rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div>
+              <h2 className="text-lg sm:text-xl font-black text-[#1E2243] flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-[#5B5FE8]" />
+                My Upcoming Appointments
+              </h2>
+              <p className="text-sm font-medium text-slate-500 mt-0.5">
+                Scheduled doctor visits and therapy sessions
+              </p>
+            </div>
+          </div>
+
+          {clinicalData.appointments.length === 0 ? (
+            <p className="text-sm text-slate-400 py-4 text-center font-medium">No upcoming appointments scheduled.</p>
+          ) : (
+            <div className="space-y-3">
+              {clinicalData.appointments.map((ap) => (
+                <div
+                  key={ap.id}
+                  className="p-3.5 rounded-xl border border-slate-200/80 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black uppercase text-[#5B5FE8] bg-[#EEF0FF] px-2 py-0.5 rounded">
+                        {ap.type}
+                      </span>
+                      <span className="text-sm font-bold text-[#1E2243]">
+                        {format(new Date(ap.appointment_date), 'EEEE, MMMM dd, yyyy · hh:mm a')}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600">
+                      Location: <strong className="text-slate-800">{ap.location || 'Dumaguete Clinic'}</strong>
+                    </p>
+                    {ap.notes && <p className="text-xs text-slate-500 italic">{ap.notes}</p>}
+                  </div>
+
+                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#2DD4BF]/15 text-[#0F766E] border border-[#2DD4BF]/30 capitalize self-start sm:self-auto">
+                    {ap.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       {/* Care Team Contacts Roster */}
       <section>

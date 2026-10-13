@@ -35,6 +35,20 @@ export default async function CaregiverHistoryPage({
   }
 
   // 3. Resolve selected patient ID
+  if (params?.patientId && !assignedPatients.some(p => p.patientId === params.patientId)) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-16 text-center space-y-4">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-600 border border-red-200">
+          <AlertCircle className="h-7 w-7" />
+        </div>
+        <h1 className="text-xl font-bold text-[#1E2243]">403 - Access Forbidden</h1>
+        <p className="text-sm text-slate-600 max-w-md mx-auto">
+          You are not authorized to view this patient record. Caregivers may only view assigned patient records.
+        </p>
+      </div>
+    )
+  }
+
   const selectedPatientId = params?.patientId || assignedPatients[0].patientId
   const selectedPatient = assignedPatients.find(p => p.patientId === selectedPatientId) || assignedPatients[0]
 

@@ -1,16 +1,22 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useRealtimeNotifications } from '@/hooks/useRealtimeNotifications'
 import {
   Bell,
   CheckCheck,
   AlertTriangle,
+  AlertCircle,
   MessageSquare,
   Activity,
   HeartPulse,
+  Pill,
+  Calendar,
   X,
   Loader2,
+  ExternalLink,
 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -21,6 +27,7 @@ interface NotificationBellProps {
 export function NotificationBell({ userId }: NotificationBellProps) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   const {
     notifications,
@@ -45,10 +52,19 @@ export function NotificationBell({ userId }: NotificationBellProps) {
     }
   }, [isOpen])
 
-  const getNotificationIcon = (type: string) => {
+  const getNotificationIcon = (type: string, priority?: string) => {
+    if (priority === 'high') {
+      return <AlertTriangle className="h-4 w-4 text-[#F25F5C] shrink-0" />
+    }
     switch (type) {
       case 'critical_alert':
+      case 'urgent_update':
         return <AlertTriangle className="h-4 w-4 text-[#F25F5C] shrink-0" />
+      case 'medication_alert':
+        return <Pill className="h-4 w-4 text-[#F5A524] shrink-0" />
+      case 'appointment_reminder':
+        return <Calendar className="h-4 w-4 text-[#5B5FE8] shrink-0" />
+      case 'message':
       case 'feedback_issued':
         return <MessageSquare className="h-4 w-4 text-[#5B5FE8] shrink-0" />
       case 'status_update':
@@ -60,6 +76,23 @@ export function NotificationBell({ userId }: NotificationBellProps) {
     }
   }
 
+  const handleNotificationClick = async (n: {
+    id: string
+    is_read: boolean
+    link?: string | null
+    patient_id?: string
+  }) => {
+    if (!n.is_read) {
+      await markAsRead(n.id)
+    }
+    setIsOpen(false)
+    if (n.link) {
+      router.push(n.link)
+    } else {
+      router.push('/notifications')
+    }
+  }
+
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>
       {/* Bell Trigger Button */}
@@ -68,7 +101,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label="Notifications"
         aria-expanded={isOpen}
-        className="relative flex items-center justify-center h-9 w-9 rounded-xl border border-slate-200/80 bg-white text-slate-600 hover:text-[#5B5FE8] hover:bg-[#EEF0FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5B5FE8]/40 cursor-pointer transition-colors shadow-sm"
+        className="relative flex items-center justify-center h-9 w-9 rounded-xl border border-slate-200/80 bg-white text-slate-600 hover:text-[#5B5FE8] hover:bg-[#EEF0FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5B5FE8]/40 cursor-pointer transition-colors shadow-xs"
       >
         <Bell className="h-4 w-4" />
         {unreadCount > 0 && (
@@ -125,42 +158,80 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                 <Bell className="mx-auto h-8 w-8 text-slate-300 mb-2" />
                 <p className="text-sm font-semibold text-[#1E2243]">No notifications yet</p>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Doctor reviews and updates will appear here in real time.
+                  Alerts, care notes, and messages will appear here.
                 </p>
               </div>
             ) : (
-              notifications.map((n) => (
-                <div
-                  key={n.id}
-                  onClick={() => {
-                    if (!n.is_read) markAsRead(n.id)
-                  }}
-                  className={`flex items-start gap-3 p-3.5 text-left transition-colors cursor-pointer ${
-                    n.is_read ? 'bg-white hover:bg-slate-50/80' : 'bg-[#EEF0FF]/40 hover:bg-[#EEF0FF]/70'
-                  }`}
-                >
-                  <div className="mt-0.5 rounded-xl bg-slate-100 p-2">
-                    {getNotificationIcon(n.type)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-1">
-                      <p className={`text-xs font-semibold truncate ${n.is_read ? 'text-[#1E2243]' : 'text-[#5B5FE8]'}`}>
-                        {n.title}
-                      </p>
-                      <span className="text-[10px] text-slate-400 shrink-0">
-                        {formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}
-                      </span>
+              notifications.map((n) => {
+                const isHighPriority = n.priority === 'high'
+                return (
+                  <div
+                    key={n.id}
+                    onClick={() => handleNotificationClick(n)}
+                    className={`flex items-start gap-3 p-3.5 text-left transition-colors cursor-pointer ${
+                      n.is_read
+                        ? 'bg-white hover:bg-slate-50/80'
+                        : isHighPriority
+                        ? 'bg-rose-50/60 hover:bg-rose-50 border-l-4 border-[#F25F5C]'
+                        : 'bg-[#EEF0FF]/40 hover:bg-[#EEF0FF]/70'
+                    }`}
+                  >
+                    <div
+                      className={`mt-0.5 rounded-xl p-2 ${
+                        isHighPriority ? 'bg-rose-100' : 'bg-slate-100'
+                      }`}
+                    >
+                      {getNotificationIcon(n.type, n.priority)}
                     </div>
-                    <p className="mt-0.5 text-xs text-slate-600 line-clamp-2 leading-relaxed">
-                      {n.message}
-                    </p>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-1">
+                        <p
+                          className={`text-xs truncate ${
+                            n.is_read
+                              ? 'text-slate-700 font-medium'
+                              : isHighPriority
+                              ? 'text-[#F25F5C] font-bold'
+                              : 'text-[#1E2243] font-bold'
+                          }`}
+                        >
+                          {n.title}
+                        </p>
+                        <span className="text-[10px] text-slate-400 shrink-0">
+                          {formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}
+                        </span>
+                      </div>
+                      {n.patient?.full_name && (
+                        <p className="text-[11px] font-semibold text-[#5B5FE8] mt-0.5">
+                          Patient: {n.patient.full_name}
+                        </p>
+                      )}
+                      <p className="mt-0.5 text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                        {n.message}
+                      </p>
+                    </div>
+                    {!n.is_read && (
+                      <span
+                        className={`h-2 w-2 rounded-full shrink-0 mt-1.5 ${
+                          isHighPriority ? 'bg-[#F25F5C]' : 'bg-[#5B5FE8]'
+                        }`}
+                      />
+                    )}
                   </div>
-                  {!n.is_read && (
-                    <span className="h-2 w-2 rounded-full bg-[#5B5FE8] shrink-0 mt-1.5" />
-                  )}
-                </div>
-              ))
+                )
+              })
             )}
+          </div>
+
+          {/* Footer: View all notifications */}
+          <div className="border-t border-slate-100 bg-slate-50/60 p-2 text-center">
+            <Link
+              href="/notifications"
+              onClick={() => setIsOpen(false)}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#5B5FE8] hover:text-[#4A4ED4] py-1.5 px-3 rounded-lg hover:bg-[#EEF0FF] transition-colors"
+            >
+              <span>View all notifications</span>
+              <ExternalLink className="h-3 w-3" />
+            </Link>
           </div>
         </div>
       )}

@@ -7,6 +7,11 @@ const FAMILY_NAV_ITEMS: NavItem[] = [
     href: '/family',
     icon: 'users',
   },
+  {
+    name: 'Messages',
+    href: '/messages',
+    icon: 'message-square',
+  },
 ]
 
 export default async function FamilyLayout({
@@ -17,7 +22,7 @@ export default async function FamilyLayout({
   const { user, role } = await requireRole(['family_member'])
 
   return (
-    <AppShell user={user} role={role} navItems={FAMILY_NAV_ITEMS}>
+    <AppShell user={user} role={role} navItems={FAMILY_NAV_ITEMS} showNotifications={true}>
       {children}
     </AppShell>
   )

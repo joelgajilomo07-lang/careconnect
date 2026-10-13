@@ -144,16 +144,57 @@ export const usersService = {
   /**
    * Fetch a single patient with profile by user ID.
    */
-  async getPatientWithProfile(userId: string): Promise<ServiceResult<PatientWithProfile>> {
+  async getPatientWithProfile(idOrUserId: string): Promise<ServiceResult<PatientWithProfile>> {
     try {
       const supabase = await createClient()
+
+      // 1. Try finding in patients table first (by id or user_id)
+      const { data: patientRecord } = await supabase
+        .from('patients')
+        .select(`
+          *,
+          user:users!patients_user_id_fkey(*)
+        `)
+        .or(`id.eq.${idOrUserId},user_id.eq.${idOrUserId}`)
+        .maybeSingle()
+
+      if (patientRecord) {
+        const shaped: PatientWithProfile = {
+          id: patientRecord.id,
+          full_name: patientRecord.full_name,
+          email: patientRecord.user?.email || '',
+          role: 'patient',
+          is_active: patientRecord.user?.is_active ?? true,
+          created_at: patientRecord.created_at,
+          updated_at: patientRecord.updated_at,
+          phone: patientRecord.emergency_contact_phone,
+          avatar_url: null,
+          failed_login_attempts: 0,
+          locked_until: null,
+          patient_profile: {
+            user_id: patientRecord.user_id || patientRecord.id,
+            created_at: patientRecord.created_at,
+            updated_at: patientRecord.updated_at,
+            current_status: 'stable',
+            primary_condition: patientRecord.diagnosis,
+            date_of_birth: patientRecord.birth_date,
+            sex: patientRecord.sex,
+            room_bed: null,
+            status_updated_at: null,
+            status_updated_by: null,
+          },
+        }
+        return { data: shaped, error: null }
+      }
+
+      // 2. Fallback to existing users + patient_profiles lookup
       const { data, error } = await supabase
         .from('users')
         .select(`
           *,
           patient_profile:patient_profiles!patient_profiles_user_id_fkey(*)
         `)
-        .eq('id', userId)
+        .eq('id', idOrUserId)
         .eq('role', 'patient')
         .single()
 

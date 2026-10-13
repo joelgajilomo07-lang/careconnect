@@ -7,6 +7,11 @@ const PATIENT_NAV_ITEMS: NavItem[] = [
     href: '/patient',
     icon: 'user',
   },
+  {
+    name: 'Messages',
+    href: '/messages',
+    icon: 'message-square',
+  },
 ]
 
 export default async function PatientLayout({
@@ -17,7 +22,7 @@ export default async function PatientLayout({
   const { user, role } = await requireRole(['patient'])
 
   return (
-    <AppShell user={user} role={role} navItems={PATIENT_NAV_ITEMS}>
+    <AppShell user={user} role={role} navItems={PATIENT_NAV_ITEMS} showNotifications={true}>
       {children}
     </AppShell>
   )

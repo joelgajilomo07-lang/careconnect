@@ -2,9 +2,10 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { loginAction } from '@/app/actions/auth'
 import { createClient } from '@/lib/supabase/client'
 import {
-  Activity,
+  HeartPulse,
   Mail,
   Lock,
   Eye,
@@ -15,7 +16,6 @@ import {
   KeyRound,
   X,
   ShieldCheck,
-  UserPlus,
 } from 'lucide-react'
 
 function LoginForm() {
@@ -32,9 +32,6 @@ function LoginForm() {
   const [isResetting, setIsResetting] = useState(false)
   const [resetError, setResetError] = useState<string | null>(null)
   const [resetSuccess, setResetSuccess] = useState<string | null>(null)
-
-  // Account creation info modal state
-  const [isAccountInfoOpen, setIsAccountInfoOpen] = useState(false)
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -60,7 +57,7 @@ function LoginForm() {
   const getDisplayError = () => {
     if (error) return error
     if (queryError === 'invalid_or_expired_link') {
-      return 'Your invitation or recovery link is invalid, expired, or has already been used. Please contact your clinic administrator for a new invitation.'
+      return 'Your invitation or recovery link is invalid, expired, or has already been used. Please contact your clinic administrator.'
     }
     if (queryError === 'account_not_configured') {
       return 'Your account profile has not been configured yet. Please contact an administrator.'
@@ -86,21 +83,26 @@ function LoginForm() {
       // Ignore localStorage write failures
     }
 
-    const supabase = createClient()
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    })
+    try {
+      const result = await loginAction({
+        email: email.trim(),
+        password,
+      })
 
-    if (authError) {
-      setError(authError.message)
+      if (!result.success) {
+        setError(result.error || 'Invalid email or password.')
+        setIsLoading(false)
+        return
+      }
+
+      // Successful login -> route to role's dashboard
+      router.push(result.redirectTo || redirectTo)
+      router.refresh()
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'An unexpected error occurred during login.'
+      setError(msg)
       setIsLoading(false)
-      return
     }
-
-    // Redirect to requested path or root for role-based routing
-    router.push(redirectTo)
-    router.refresh()
   }
 
   const handleOpenForgotPassword = () => {
@@ -139,7 +141,7 @@ function LoginForm() {
         setResetError(resetErr.message)
       } else {
         setResetSuccess(
-          `Password recovery instructions have been sent to ${resetEmail.trim()}. Please check your inbox and junk folders.`
+          `Password reset instructions have been dispatched to ${resetEmail.trim()}. Please check your email inbox.`
         )
       }
     } catch (err: unknown) {
@@ -155,50 +157,43 @@ function LoginForm() {
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4 sm:p-6 lg:p-8">
-      {/* Main Authentication Card */}
+      {/* Centered Authentication Card */}
       <div className="w-full max-w-[420px] rounded-2xl border border-slate-200/90 bg-white p-7 sm:p-9 shadow-xl shadow-slate-900/5 transition-all">
-        {/* Healthcare Identity & Header */}
+        {/* CareConnect Logo & System Identity */}
         <div className="text-center mb-7">
-          <div className="inline-flex items-center gap-2 rounded-full border border-teal-200/70 bg-teal-50/70 px-3 py-1 mb-4">
-            <Activity className="h-4 w-4 text-teal-600" />
-            <span className="text-xs font-semibold tracking-wide text-teal-800">
-              CareConnect Clinical Portal
-            </span>
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EEF0FF] text-[#5B5FE8] border border-[#5B5FE8]/20 shadow-xs mb-3.5">
+            <HeartPulse className="h-7 w-7 text-[#5B5FE8]" />
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
-            Sign in
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#1E2243]">
+            CareConnect
           </h1>
 
-          <p className="mt-2 text-sm text-slate-500">
-            or{' '}
-            <button
-              type="button"
-              onClick={() => setIsAccountInfoOpen(true)}
-              className="font-medium text-teal-600 hover:text-teal-700 underline-offset-2 hover:underline transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/30 rounded"
-            >
-              create an account
-            </button>
+          <p className="mt-1 text-xs sm:text-sm font-semibold text-slate-600">
+            Tender Touch Home Care Services
+          </p>
+          <p className="text-[11px] font-medium text-slate-400 mt-0.5">
+            Caregiver Reporting & Patient Monitoring System
           </p>
         </div>
 
-        {/* Existing & Role-based Error Messages */}
+        {/* Error Notification Alert */}
         {displayError && (
-          <div className="mb-6 rounded-xl border border-red-200 bg-red-50/95 p-3.5 text-xs sm:text-sm text-red-800 flex items-start gap-2.5 shadow-sm">
+          <div className="mb-6 rounded-xl border border-red-200 bg-red-50/95 p-3.5 text-xs sm:text-sm text-red-800 flex items-start gap-2.5 shadow-xs">
             <AlertCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
-            <span className="leading-relaxed">{displayError}</span>
+            <span className="leading-relaxed font-medium">{displayError}</span>
           </div>
         )}
 
-        {/* Form Controls */}
+        {/* Login Form Controls */}
         <form onSubmit={handleLogin} className="space-y-4">
           {/* Email Input */}
           <div>
             <label
               htmlFor="email"
-              className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5"
+              className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5"
             >
-              Email
+              E-mail Address
             </label>
             <div className="relative">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
@@ -211,20 +206,29 @@ function LoginForm() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@gmail.com"
-                className="block w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 transition duration-150 ease-in-out focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                placeholder="name@example.com"
+                className="block w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-[#1E2243] placeholder-slate-400 transition duration-150 ease-in-out focus:border-[#5B5FE8] focus:outline-none focus:ring-2 focus:ring-[#5B5FE8]/20"
               />
             </div>
           </div>
 
           {/* Password Input with Visibility Toggle */}
           <div>
-            <label
-              htmlFor="password"
-              className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5"
-            >
-              Password
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label
+                htmlFor="password"
+                className="block text-xs font-bold uppercase tracking-wider text-slate-700"
+              >
+                Password
+              </label>
+              <button
+                type="button"
+                onClick={handleOpenForgotPassword}
+                className="text-xs font-semibold text-[#5B5FE8] hover:text-[#4B4FD8] hover:underline transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B5FE8]/30 rounded cursor-pointer"
+              >
+                Forgot Password?
+              </button>
+            </div>
             <div className="relative">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                 <Lock className="h-4 w-4" />
@@ -237,7 +241,7 @@ function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="block w-full rounded-xl border border-slate-300 bg-white pl-10 pr-10 py-2.5 text-sm text-slate-900 placeholder-slate-400 transition duration-150 ease-in-out focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                className="block w-full rounded-xl border border-slate-300 bg-white pl-10 pr-10 py-2.5 text-sm text-[#1E2243] placeholder-slate-400 transition duration-150 ease-in-out focus:border-[#5B5FE8] focus:outline-none focus:ring-2 focus:ring-[#5B5FE8]/20"
               />
               <button
                 type="button"
@@ -262,7 +266,7 @@ function LoginForm() {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500 focus:ring-offset-0 transition cursor-pointer"
+              className="h-4 w-4 rounded border-slate-300 text-[#5B5FE8] focus:ring-[#5B5FE8] focus:ring-offset-0 transition cursor-pointer"
             />
             <label
               htmlFor="remember-me"
@@ -272,38 +276,30 @@ function LoginForm() {
             </label>
           </div>
 
-          {/* Primary Submit Button */}
+          {/* Log In Button */}
           <button
             type="submit"
             disabled={isLoading}
-            className="mt-3 flex w-full min-h-[46px] items-center justify-center rounded-xl border border-transparent bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-teal-700/20 hover:bg-teal-700 active:bg-teal-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed transition duration-150 cursor-pointer"
+            className="mt-3 flex w-full min-h-[46px] items-center justify-center rounded-xl border border-transparent bg-[#5B5FE8] px-4 py-2.5 text-sm font-bold text-white shadow-sm shadow-[#5B5FE8]/20 hover:bg-[#4B4FD8] active:bg-[#3D41C8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5B5FE8] focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed transition duration-150 cursor-pointer"
           >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Signing in...
+                Logging In...
               </>
             ) : (
-              'Sign in'
+              'Log In'
             )}
           </button>
         </form>
 
-        {/* Secondary Action: Forgot Password Link */}
-        <div className="mt-6 text-center">
-          <button
-            type="button"
-            onClick={handleOpenForgotPassword}
-            className="text-sm font-medium text-teal-600 hover:text-teal-700 hover:underline transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/30 rounded cursor-pointer"
-          >
-            Forgotten your password?
-          </button>
-        </div>
-
-        {/* Healthcare Security Notice */}
-        <div className="mt-8 pt-5 border-t border-slate-100 flex items-center justify-center gap-1.5 text-slate-400 text-xs">
-          <ShieldCheck className="h-3.5 w-3.5 text-teal-600/70" />
-          <span>Encrypted HIPAA-ready clinical portal</span>
+        {/* Security Notice & Dumaguete City Footer */}
+        <div className="mt-8 pt-5 border-t border-slate-100 flex flex-col items-center justify-center gap-1 text-slate-400 text-xs text-center">
+          <div className="flex items-center gap-1.5 text-slate-500 font-medium">
+            <ShieldCheck className="h-4 w-4 text-[#5B5FE8]" />
+            <span>Authorized Clinical Access Only</span>
+          </div>
+          <span className="text-[11px] text-slate-400">Accounts are issued by agency administrators</span>
         </div>
       </div>
 
@@ -319,18 +315,18 @@ function LoginForm() {
             {/* Modal Header */}
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-50 text-teal-600 border border-teal-100">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF0FF] text-[#5B5FE8] border border-[#5B5FE8]/20">
                   <KeyRound className="h-5 w-5" />
                 </div>
                 <div>
                   <h2
                     id="forgot-password-title"
-                    className="text-lg font-bold text-slate-900"
+                    className="text-lg font-bold text-[#1E2243]"
                   >
-                    Reset password
+                    Reset Password
                   </h2>
                   <p className="text-xs text-slate-500">
-                    Recover access to your CareConnect account
+                    Send reset instructions to your registered email
                   </p>
                 </div>
               </div>
@@ -338,7 +334,7 @@ function LoginForm() {
                 type="button"
                 onClick={() => setIsForgotModalOpen(false)}
                 aria-label="Close dialog"
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors focus:outline-none"
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -351,7 +347,7 @@ function LoginForm() {
                   <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
                   <div className="space-y-1">
                     <p className="font-semibold text-emerald-900">
-                      Reset link dispatched
+                      Reset Link Sent
                     </p>
                     <p className="leading-relaxed">{resetSuccess}</p>
                   </div>
@@ -359,16 +355,16 @@ function LoginForm() {
                 <button
                   type="button"
                   onClick={() => setIsForgotModalOpen(false)}
-                  className="w-full flex items-center justify-center rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-700 transition duration-150 cursor-pointer"
+                  className="w-full flex items-center justify-center rounded-xl bg-[#5B5FE8] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#4B4FD8] transition duration-150 cursor-pointer"
                 >
-                  Return to sign in
+                  Return to Log In
                 </button>
               </div>
             ) : (
               /* Reset Form */
               <form onSubmit={handleResetPassword} className="space-y-4">
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Enter the email address tied to your clinical or patient profile. We will send you a secure link to update your password.
+                  Enter the email address tied to your CareConnect account. We will dispatch a secure password reset link.
                 </p>
 
                 {resetError && (
@@ -383,7 +379,7 @@ function LoginForm() {
                     htmlFor="reset-email"
                     className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5"
                   >
-                    Email address
+                    E-mail Address
                   </label>
                   <div className="relative">
                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
@@ -395,8 +391,8 @@ function LoginForm() {
                       required
                       value={resetEmail}
                       onChange={(e) => setResetEmail(e.target.value)}
-                      placeholder="name@gmail.com"
-                      className="block w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/20"
+                      placeholder="name@example.com"
+                      className="block w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3.5 py-2.5 text-sm text-[#1E2243] placeholder-slate-400 focus:border-[#5B5FE8] focus:outline-none focus:ring-2 focus:ring-[#5B5FE8]/20"
                     />
                   </div>
                 </div>
@@ -412,7 +408,7 @@ function LoginForm() {
                   <button
                     type="submit"
                     disabled={isResetting || !resetEmail.trim()}
-                    className="flex-1 flex items-center justify-center rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 disabled:opacity-60 disabled:cursor-not-allowed transition duration-150 cursor-pointer"
+                    className="flex-1 flex items-center justify-center rounded-xl bg-[#5B5FE8] px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#4B4FD8] disabled:opacity-60 disabled:cursor-not-allowed transition duration-150 cursor-pointer"
                   >
                     {isResetting ? (
                       <>
@@ -420,71 +416,12 @@ function LoginForm() {
                         Sending...
                       </>
                     ) : (
-                      'Send reset link'
+                      'Send Reset Link'
                     )}
                   </button>
                 </div>
               </form>
             )}
-          </div>
-        </div>
-      )}
-
-      {/* Clinical Account Creation Info Modal */}
-      {isAccountInfoOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="account-info-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs transition-opacity"
-        >
-          <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 sm:p-7 shadow-2xl space-y-5">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-50 text-teal-600 border border-teal-100">
-                  <UserPlus className="h-5 w-5" />
-                </div>
-                <div>
-                  <h2
-                    id="account-info-title"
-                    className="text-lg font-bold text-slate-900"
-                  >
-                    Clinical Account Access
-                  </h2>
-                  <p className="text-xs text-slate-500">
-                    Registration & onboarding information
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsAccountInfoOpen(false)}
-                aria-label="Close dialog"
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors focus:outline-none"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-4 space-y-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
-              <p className="font-semibold text-slate-800">
-                CareConnect operates as an invitation-only healthcare network.
-              </p>
-              <p>
-                Account profiles for doctors, caregivers, patients, and family members are created and managed by authorized hospital and clinic administrators to protect patient health records.
-              </p>
-              <p className="pt-1 text-slate-500">
-                If you have not received an activation invitation or need to be registered, please reach out to your clinic administrator or care coordination supervisor.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setIsAccountInfoOpen(false)}
-              className="w-full flex items-center justify-center rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-700 transition duration-150 cursor-pointer"
-            >
-              Back to sign in
-            </button>
           </div>
         </div>
       )}
@@ -497,7 +434,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="min-h-screen flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-teal-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-[#5B5FE8]" />
         </div>
       }
     >

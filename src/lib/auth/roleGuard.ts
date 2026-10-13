@@ -5,11 +5,10 @@ import type { Database } from '@/types/database.types'
 
 export type UserRole = Database['public']['Enums']['user_role']
 
-// Fallback home routes per role if they hit an unauthorized route
 const ROLE_HOME_ROUTES: Record<UserRole, string> = {
   admin: '/admin',
-  doctor: '/triage',
-  caregiver: '/log-vitals', 
+  doctor: '/doctor',
+  caregiver: '/caregiver', 
   patient: '/patient', 
   family_member: '/family',
 }

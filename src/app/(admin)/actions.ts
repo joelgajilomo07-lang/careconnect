@@ -43,10 +43,10 @@ export async function inviteUserAction(params: InviteUserParams) {
     p_email: params.email,
     p_full_name: params.fullName,
     p_role: params.role,
-    p_phone: params.phone || null,
-    p_dob: params.dateOfBirth || null,
-    p_sex: params.sex || null,
-    p_condition: params.primaryCondition || null
+    p_phone: params.phone || undefined,
+    p_dob: params.dateOfBirth || undefined,
+    p_sex: params.sex || undefined,
+    p_condition: params.primaryCondition || undefined
   })
 
   if (rpcError) {

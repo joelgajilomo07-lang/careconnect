@@ -14,6 +14,10 @@ import {
   Users,
   LayoutDashboard,
   UserPlus,
+  MessageSquare,
+  Bell,
+  ClipboardList,
+  FileText,
 } from 'lucide-react'
 import { NotificationBell } from './NotificationBell'
 import { SignOutButton } from './SignOutButton'
@@ -26,6 +30,10 @@ export type NavIconKey =
   | 'users'
   | 'dashboard'
   | 'user-plus'
+  | 'message-square'
+  | 'bell'
+  | 'clipboard-list'
+  | 'file-text'
 
 const ICON_MAP: Record<NavIconKey, React.ComponentType<{ className?: string }>> = {
   'heart-pulse': HeartPulse,
@@ -35,6 +43,10 @@ const ICON_MAP: Record<NavIconKey, React.ComponentType<{ className?: string }>> 
   users: Users,
   dashboard: LayoutDashboard,
   'user-plus': UserPlus,
+  'message-square': MessageSquare,
+  'bell': Bell,
+  'clipboard-list': ClipboardList,
+  'file-text': FileText,
 }
 
 export interface NavItem {

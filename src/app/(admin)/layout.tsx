@@ -8,14 +8,29 @@ const ADMIN_NAV_ITEMS: NavItem[] = [
     icon: 'dashboard',
   },
   {
-    name: 'Invite User',
-    href: '/admin/invite',
+    name: 'User Management',
+    href: '/admin/users',
     icon: 'user-plus',
   },
   {
-    name: 'Care Teams',
-    href: '/care-teams',
+    name: 'Patients & Care Teams',
+    href: '/admin/patients',
     icon: 'users',
+  },
+  {
+    name: 'Audit Logs',
+    href: '/admin/audit-logs',
+    icon: 'clipboard-list',
+  },
+  {
+    name: 'Reports',
+    href: '/admin/reports',
+    icon: 'file-text',
+  },
+  {
+    name: 'Messages',
+    href: '/messages',
+    icon: 'message-square',
   },
 ]
 
@@ -31,7 +46,7 @@ export default async function AdminLayout({
       user={user}
       role={role}
       navItems={ADMIN_NAV_ITEMS}
-      showNotifications={false}
+      showNotifications={true}
     >
       {children}
     </AppShell>

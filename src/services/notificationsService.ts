@@ -1,6 +1,6 @@
 import 'server-only'
 import { createClient } from '@/lib/supabase/server'
-import type { Tables, TablesInsert, TablesUpdate } from '@/types/database.types'
+import type { Database, Tables, TablesInsert, TablesUpdate } from '@/types/database.types'
 
 export type NotificationRow = Tables<'notifications'>
 export type NotificationInsert = TablesInsert<'notifications'>
@@ -10,12 +10,19 @@ export type ServiceResult<T> =
   | { data: T; error: null }
   | { data: null; error: string; code?: string; details?: string }
 
+export type NotificationWithPatient = NotificationRow & {
+  patient?: {
+    id: string
+    full_name: string
+  } | null
+}
+
 export const notificationsService = {
   /**
    * Fetch all notifications for the authenticated user, newest first.
    * If userId is omitted, derives it server-side from the authenticated session.
    */
-  async getForUser(userId?: string): Promise<ServiceResult<NotificationRow[]>> {
+  async getForUser(userId?: string): Promise<ServiceResult<NotificationWithPatient[]>> {
     try {
       const supabase = await createClient()
       let targetUserId = userId
@@ -28,7 +35,13 @@ export const notificationsService = {
 
       const { data, error } = await supabase
         .from('notifications')
-        .select('*')
+        .select(`
+          *,
+          patient:patients!notifications_patient_id_fkey(
+            id,
+            full_name
+          )
+        `)
         .eq('recipient_id', targetUserId)
         .order('created_at', { ascending: false })
 
@@ -41,7 +54,7 @@ export const notificationsService = {
         }
       }
 
-      return { data: data || [], error: null }
+      return { data: (data as unknown as NotificationWithPatient[]) || [], error: null }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Unexpected error fetching notifications'
       return { data: null, error: message }
@@ -142,6 +155,54 @@ export const notificationsService = {
       return { data: null, error: null }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Unexpected error marking all notifications read'
+      return { data: null, error: message }
+    }
+  },
+
+  /**
+   * Create and dispatch a notification.
+   * Can be called by server actions or background services.
+   * If priority is 'high', flags for immediate attention.
+   */
+  async createNotification(params: {
+    recipientId: string
+    patientId: string
+    type: Database['public']['Enums']['notification_type']
+    priority?: 'high' | 'normal'
+    title: string
+    message: string
+    link?: string
+    relatedVitalsLogId?: string
+    relatedReviewId?: string
+  }): Promise<ServiceResult<NotificationRow>> {
+    try {
+      const { createAdminClient } = await import('@/lib/supabase/admin')
+      const adminClient = createAdminClient()
+
+      const { data, error } = await adminClient
+        .from('notifications')
+        .insert({
+          recipient_id: params.recipientId,
+          patient_id: params.patientId,
+          type: params.type,
+          priority: params.priority || 'normal',
+          title: params.title,
+          message: params.message,
+          link: params.link || null,
+          related_vitals_log_id: params.relatedVitalsLogId || null,
+          related_review_id: params.relatedReviewId || null,
+          is_read: false,
+        })
+        .select()
+        .single()
+
+      if (error) {
+        return { data: null, error: error.message }
+      }
+
+      return { data, error: null }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Error creating notification'
       return { data: null, error: message }
     }
   },

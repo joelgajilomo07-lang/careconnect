@@ -10,9 +10,9 @@ export default async function HomePage() {
     case 'admin':
       redirect('/admin')
     case 'doctor':
-      redirect('/triage')
+      redirect('/doctor')
     case 'caregiver':
-      redirect('/log-vitals')
+      redirect('/caregiver')
     case 'patient':
       redirect('/patient')
     case 'family_member':
