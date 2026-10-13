@@ -18,7 +18,31 @@ export async function submitVitalsLog(payload: Omit<VitalsLogInsert, 'caregiver_
     return { data: null, error: 'Forbidden: Only caregivers are authorized to log vitals.' }
   }
 
-  const result = await vitalsLogsService.create(payload)
+  // Fetch verified user full_name from public.users table or auth metadata
+  const { data: userData } = await supabase
+    .from('users')
+    .select('full_name')
+    .eq('id', user.id)
+    .single()
+
+  const recordedByName =
+    userData?.full_name ||
+    user.user_metadata?.full_name ||
+    payload.recorded_by_name ||
+    'Bedside Caregiver'
+
+  const staffIdCode =
+    payload.staff_id_code ||
+    `STF-${user.id.slice(0, 8).toUpperCase()}`
+
+  const enrichedPayload: Omit<VitalsLogInsert, 'caregiver_id'> = {
+    ...payload,
+    recorded_by_name: recordedByName,
+    staff_id_code: staffIdCode,
+    measured_at: payload.measured_at || new Date().toISOString(),
+  }
+
+  const result = await vitalsLogsService.create(enrichedPayload)
   if (!result.error) revalidatePath('/history')
   return result
 }

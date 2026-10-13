@@ -269,6 +269,7 @@ export type Database = {
           current_status: Database["public"]["Enums"]["patient_status"]
           date_of_birth: string | null
           primary_condition: string | null
+          room_bed: string | null
           sex: string | null
           status_updated_at: string | null
           status_updated_by: string | null
@@ -280,6 +281,7 @@ export type Database = {
           current_status?: Database["public"]["Enums"]["patient_status"]
           date_of_birth?: string | null
           primary_condition?: string | null
+          room_bed?: string | null
           sex?: string | null
           status_updated_at?: string | null
           status_updated_by?: string | null
@@ -291,6 +293,7 @@ export type Database = {
           current_status?: Database["public"]["Enums"]["patient_status"]
           date_of_birth?: string | null
           primary_condition?: string | null
+          room_bed?: string | null
           sex?: string | null
           status_updated_at?: string | null
           status_updated_by?: string | null
@@ -441,43 +444,88 @@ export type Database = {
       }
       vitals_logs: {
         Row: {
+          bmi: number | null
+          bp_arm: string | null
           bp_diastolic: number | null
           bp_systolic: number | null
           caregiver_id: string
           created_at: string
           heart_rate: number | null
+          height_cm: number | null
           id: string
           logged_at: string
+          measured_at: string | null
+          measurement_position: string | null
+          medication_taken: string | null
           notes: string | null
+          oxygen_device: string | null
+          pain_score: number | null
           patient_id: string
+          recorded_by_name: string | null
+          respiratory_rate: number | null
           spo2: number | null
+          staff_id_code: string | null
+          symptoms: string[] | null
+          symptoms_other: string | null
+          temp_method: string | null
           temperature_c: number | null
+          weight_kg: number | null
         }
         Insert: {
+          bmi?: number | null
+          bp_arm?: string | null
           bp_diastolic?: number | null
           bp_systolic?: number | null
           caregiver_id: string
           created_at?: string
           heart_rate?: number | null
+          height_cm?: number | null
           id?: string
           logged_at?: string
+          measured_at?: string | null
+          measurement_position?: string | null
+          medication_taken?: string | null
           notes?: string | null
+          oxygen_device?: string | null
+          pain_score?: number | null
           patient_id: string
+          recorded_by_name?: string | null
+          respiratory_rate?: number | null
           spo2?: number | null
+          staff_id_code?: string | null
+          symptoms?: string[] | null
+          symptoms_other?: string | null
+          temp_method?: string | null
           temperature_c?: number | null
+          weight_kg?: number | null
         }
         Update: {
+          bmi?: number | null
+          bp_arm?: string | null
           bp_diastolic?: number | null
           bp_systolic?: number | null
           caregiver_id?: string
           created_at?: string
           heart_rate?: number | null
+          height_cm?: number | null
           id?: string
           logged_at?: string
+          measured_at?: string | null
+          measurement_position?: string | null
+          medication_taken?: string | null
           notes?: string | null
+          oxygen_device?: string | null
+          pain_score?: number | null
           patient_id?: string
+          recorded_by_name?: string | null
+          respiratory_rate?: number | null
           spo2?: number | null
+          staff_id_code?: string | null
+          symptoms?: string[] | null
+          symptoms_other?: string | null
+          temp_method?: string | null
           temperature_c?: number | null
+          weight_kg?: number | null
         }
         Relationships: [
           {

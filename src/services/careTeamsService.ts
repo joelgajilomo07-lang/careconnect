@@ -92,6 +92,9 @@ export const careTeamsService = {
     primaryCondition: string | null
     currentStatus: Database['public']['Enums']['patient_status'] | null
     relationshipLabel: string | null
+    dateOfBirth: string | null
+    sex: string | null
+    roomBed: string | null
   }>>> {
     try {
       const supabase = await createClient()
@@ -114,7 +117,10 @@ export const careTeamsService = {
             is_active,
             patient_profile:patient_profiles!patient_profiles_user_id_fkey(
               primary_condition,
-              current_status
+              current_status,
+              date_of_birth,
+              sex,
+              room_bed
             )
           )
         `)
@@ -130,14 +136,32 @@ export const careTeamsService = {
         }
       }
 
-      const result = (data || [])
-        .filter((row: any) => row.patient && row.patient.is_active === true)
-        .map((row: any) => ({
+      const result = ((data || []) as unknown as Array<{
+        patient_id: string
+        relationship_label: string | null
+        patient: {
+          id: string
+          full_name: string
+          is_active: boolean
+          patient_profile: {
+            primary_condition: string | null
+            current_status: Database['public']['Enums']['patient_status'] | null
+            date_of_birth: string | null
+            sex: string | null
+            room_bed: string | null
+          } | null
+        } | null
+      }>)
+        .filter((row) => row.patient && row.patient.is_active === true)
+        .map((row) => ({
           patientId: row.patient_id,
           fullName: row.patient?.full_name || 'Unnamed Patient',
           primaryCondition: row.patient?.patient_profile?.primary_condition || null,
           currentStatus: row.patient?.patient_profile?.current_status || null,
           relationshipLabel: row.relationship_label || null,
+          dateOfBirth: row.patient?.patient_profile?.date_of_birth || null,
+          sex: row.patient?.patient_profile?.sex || null,
+          roomBed: row.patient?.patient_profile?.room_bed || null,
         }))
 
       return { data: result, error: null }
@@ -195,9 +219,21 @@ export const careTeamsService = {
         }
       }
 
-      const result = (data || [])
-        .filter((row: any) => row.patient && row.patient.is_active === true)
-        .map((row: any) => ({
+      const result = ((data || []) as unknown as Array<{
+        patient_id: string
+        relationship_label: string | null
+        patient: {
+          id: string
+          full_name: string
+          is_active: boolean
+          patient_profile: {
+            primary_condition: string | null
+            current_status: Database['public']['Enums']['patient_status'] | null
+          } | null
+        } | null
+      }>)
+        .filter((row) => row.patient && row.patient.is_active === true)
+        .map((row) => ({
           patientId: row.patient_id,
           fullName: row.patient?.full_name || 'Unnamed Patient',
           primaryCondition: row.patient?.patient_profile?.primary_condition || null,
